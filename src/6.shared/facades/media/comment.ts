@@ -44,6 +44,7 @@ class Comment extends Media {
 
         if (content) {
             this._content = content
+            this.setIsEdited()
         }
     }
 
@@ -83,7 +84,7 @@ class OwnedComment extends Comment {
         return await deleteComment(this.id)
     }
 
-    // Methods
+    // Static constructors
 
     public static async create(target: MediaId, content: string): Promise<OwnedComment | ExError> {
         const comment: IComment | ExError = await createComment(target, content)
@@ -94,8 +95,6 @@ class OwnedComment extends Comment {
 
         return new OwnedComment(comment)
     }
-
-    // Static constructors
 
     public static tryOccupyComment(comment: Comment): Comment | OwnedComment {
         if (comment.from.id === OwnedUser.instance.id.id) {

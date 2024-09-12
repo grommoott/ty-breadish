@@ -1,6 +1,6 @@
 import { AvgRate, ItemId, ItemInfo, Price, ProductId } from "@shared/model/types/primitives";
 import { Item } from "./item";
-import { IListProduct, IProduct } from "@shared/model/interfaces";
+import { IListProduct, IProduct, ISerializedListProduct } from "@shared/model/interfaces";
 import { ExError } from "@shared/helpers";
 import { createProduct, createProductImage, deleteProduct, deleteProductImage, getProduct, getProductsList, putProduct, putProductImage } from "@shared/api/products";
 import { backendBaseUrl } from "@shared/config";
@@ -138,6 +138,19 @@ class ListProduct {
         return `${backendBaseUrl}/api/products/images/id/${this.id}`
     }
 
+    // Methods
+
+    public serialize(): ISerializedListProduct {
+        return {
+            id: this.id.id,
+            price: this.price.price,
+            itemId: this.itemId.id,
+            name: this.name,
+            avgRate: this.avgRate.avgRate,
+            itemInfo: this.itemInfo.toNormalView()
+        }
+    }
+
     // Static constructors
 
     public static async getProductsList(): Promise<Array<ListProduct> | ExError> {
@@ -148,6 +161,28 @@ class ListProduct {
         }
 
         return products.map(product => new ListProduct(product))
+    }
+
+    public static parse(product: ISerializedListProduct): ListProduct | ExError {
+        if (!(
+            "id" in product &&
+            "price" in product &&
+            "itemId" in product &&
+            "name" in product &&
+            "avgRate" in product &&
+            "itemInfo" in product
+        )) {
+            return new ExError("Invalid object to parse into list product", -400)
+        }
+
+        return new ListProduct({
+            id: new ProductId(product.id),
+            price: new Price(product.price),
+            itemId: new ItemId(product.itemId),
+            name: product.name,
+            avgRate: new AvgRate(product.avgRate),
+            itemInfo: ItemInfo.fromObject(product.itemInfo)
+        })
     }
 
     // Constructor

@@ -1,4 +1,4 @@
-import { IListRecipe, IRecipe } from "@shared/model/interfaces";
+import { IListRecipe, IRecipe, ISerializedListRecipe } from "@shared/model/interfaces";
 import { Item } from "./item";
 import { AvgRate, ItemId, ItemInfo, RecipeId } from "@shared/model/types/primitives";
 import { ExError } from "@shared/helpers";
@@ -130,6 +130,18 @@ class ListRecipe {
         return this._listRecipe.itemInfo
     }
 
+    // Methods
+
+    public serialize(): ISerializedListRecipe {
+        return {
+            id: this.id.id,
+            itemId: this.itemId.id,
+            name: this.name,
+            avgRate: this.avgRate.avgRate,
+            itemInfo: this.itemInfo.toNormalView()
+        }
+    }
+
     // Static constructors
 
     public static async getRecipesList(): Promise<Array<ListRecipe> | ExError> {
@@ -140,6 +152,16 @@ class ListRecipe {
         }
 
         return recipes.map(recipe => new ListRecipe(recipe))
+    }
+
+    public static parse(recipe: ISerializedListRecipe): ListRecipe | ExError {
+        return new ListRecipe({
+            id: new RecipeId(recipe.id),
+            itemId: new ItemId(recipe.itemId),
+            name: recipe.name,
+            avgRate: new AvgRate(recipe.avgRate),
+            itemInfo: ItemInfo.fromObject(recipe.itemInfo)
+        })
     }
 
     // Constructor

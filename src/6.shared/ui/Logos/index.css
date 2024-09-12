@@ -1,0 +1,13 @@
+.logo-path-default {
+    stroke: white;
+    stroke-linecap: round;
+    fill: transparent;
+}
+
+.logo-path-width-default {
+    stroke-width: 0.5rem;
+}
+
+.logo-text-default {
+    fill: white;
+}

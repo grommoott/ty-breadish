@@ -1,5 +1,5 @@
 import { AvgRate, ItemId, ItemInfo, Price, ProductId } from "@shared/model/types/primitives"
-import { IItem } from "./item"
+import { IItem, ISerializedItem } from "./item"
 import { ExError } from "@shared/helpers"
 
 interface IProduct extends IItem {
@@ -8,6 +8,11 @@ interface IProduct extends IItem {
 }
 
 interface IListProduct extends Omit<IProduct, "description"> { }
+
+interface ISerializedListProduct extends ISerializedItem {
+    id: number,
+    price: number
+}
 
 function isItemIsProduct(item: IItem): item is IProduct {
     return (item as IProduct)?.id instanceof ProductId &&
@@ -60,4 +65,4 @@ function responseDataToListProduct(data: any): IListProduct {
     }
 }
 
-export { IProduct, IListProduct, isItemIsProduct, responseDataToProduct, responseDataToListProduct } 
+export { IProduct, IListProduct, ISerializedListProduct, isItemIsProduct, responseDataToProduct, responseDataToListProduct } 

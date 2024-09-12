@@ -1,4 +1,4 @@
-import { ItemId, AvgRate, ItemInfo } from "@shared/model/types/primitives"
+import { ItemId, AvgRate, ItemInfo, ItemInfoJson } from "@shared/model/types/primitives"
 
 interface IItem {
     itemId: ItemId,
@@ -8,4 +8,11 @@ interface IItem {
     itemInfo: ItemInfo
 }
 
-export { IItem }
+interface ISerializedItem {
+    itemId: number,
+    name: string,
+    avgRate: number,
+    itemInfo: ItemInfoJson
+}
+
+export { IItem, ISerializedItem }

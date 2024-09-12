@@ -1,4 +1,4 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { ILike, responseDataToLike } from "@shared/model/interfaces";
 import { LikeType } from "@shared/model/types/enums";
@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function getLikes(): Promise<Array<ILike> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/likes`)
+        const response = await axios.get(`${backendBaseUrl}/api/likes`, defaultAxiosRequestConfig)
 
         return response.data.map(responseDataToLike)
     } catch (e) {
@@ -17,7 +17,7 @@ async function getLikes(): Promise<Array<ILike> | ExError> {
 
 async function getLikesCount(target: Id, type: LikeType): Promise<number | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/likes/count/target/${target}/type/${type}`)
+        const response = await axios.get(`${backendBaseUrl}/api/likes/count/target/${target}/type/${type}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -29,8 +29,8 @@ async function createLike(target: Id, type: LikeType): Promise<ILike | ExError> 
     try {
         const response = await axios.post(`${backendBaseUrl}/api/likes/create`, {
             target: target.id,
-            likeType: type
-        })
+            type
+        }, defaultAxiosRequestConfig)
 
         return responseDataToLike(response.data)
     } catch (e) {
@@ -40,7 +40,7 @@ async function createLike(target: Id, type: LikeType): Promise<ILike | ExError> 
 
 async function deleteLike(id: LikeId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/likes/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/api/likes/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteLike")
     }

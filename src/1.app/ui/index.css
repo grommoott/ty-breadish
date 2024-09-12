@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --main-color: #ff6519;
+    --dark-color: #161619;
+}
+
+.neucha {
+    font-family: "Neucha", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.nunito {
+    font-family: "Nunito", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.nunito-bold {
+    font-family: "Nunito", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+.focus-visible-default {
+    transition: 0.1s ease-in-out;
+}
+
+.focus-visible-default:focus-visible {
+    scale: 1.2;
+    outline: none;
+
+    transition: 0.1s ease-in-out;
+}
+
+* {
+    outline: red 2px;
+}

@@ -9,6 +9,13 @@ interface IFeatured {
     itemType: ItemType
 }
 
+interface ISerializedFeatured {
+    id: number,
+    from: number,
+    target: number,
+    itemType: ItemType
+}
+
 function responseDataToFeatured(data: any): IFeatured {
     if (!(
         "id" in data &&
@@ -27,4 +34,4 @@ function responseDataToFeatured(data: any): IFeatured {
     }
 }
 
-export { IFeatured, responseDataToFeatured }
+export { IFeatured, ISerializedFeatured, responseDataToFeatured }

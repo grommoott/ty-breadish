@@ -1,4 +1,4 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IFeatured, responseDataToFeatured } from "@shared/model/interfaces";
 import { ItemType } from "@shared/model/types/enums";
@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function getFeatured(): Promise<Array<IFeatured> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/featured`)
+        const response = await axios.get(`${backendBaseUrl}/api/featured`, defaultAxiosRequestConfig)
 
         return response.data.map(responseDataToFeatured)
     } catch (e) {
@@ -20,7 +20,7 @@ async function createFeatured(target: ItemId, itemType: ItemType): Promise<IFeat
         const response = await axios.post(`${backendBaseUrl}/api/featured/create`, {
             target: target.id,
             itemType
-        })
+        }, defaultAxiosRequestConfig)
 
         return responseDataToFeatured(response.data)
     } catch (e) {
@@ -30,7 +30,7 @@ async function createFeatured(target: ItemId, itemType: ItemType): Promise<IFeat
 
 async function deleteFeatured(id: FeaturedId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/featured/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/api/featured/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteFeatured")
     }

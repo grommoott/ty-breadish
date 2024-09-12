@@ -1,4 +1,4 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IReview, responseDataToReview } from "@shared/model/interfaces";
 import { Rate, ReviewsSortOrder } from "@shared/model/types/enums";
@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page: number): Promise<Array<IReview> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/reviews/target/${target}/sortOrder/${sortOrder}/page/${page}`)
+        const response = await axios.get(`${backendBaseUrl}/reviews/target/${target}/sortOrder/${sortOrder}/page/${page}`, defaultAxiosRequestConfig)
 
         return response.data.map(responseDataToReview)
     } catch (e) {
@@ -21,7 +21,7 @@ async function createReview(target: ItemId, content: string, rate: Rate): Promis
             target: target.id,
             content,
             rate
-        })
+        }, defaultAxiosRequestConfig)
 
         return responseDataToReview(response.data)
     } catch (e) {
@@ -31,7 +31,7 @@ async function createReview(target: ItemId, content: string, rate: Rate): Promis
 
 async function deleteReview(id: ReviewId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/reviews/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/reviews/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteReview")
     }
@@ -43,7 +43,7 @@ async function putReview(id: ReviewId, content?: string, rate?: Rate): Promise<v
             id: id.id,
             content,
             rate
-        })
+        }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putReview")
     }

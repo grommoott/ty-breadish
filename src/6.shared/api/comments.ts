@@ -1,4 +1,4 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IComment, responseDataToComment } from "@shared/model/interfaces";
 import { CommentsSortOrder } from "@shared/model/types/enums";
@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, page: number): Promise<Array<IComment> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/comments/target/${target}/sortOrder/${sortOrder}/page/${page}`)
+        const response = await axios.get(`${backendBaseUrl}/api/comments/target/${target}/sortOrder/${sortOrder}/page/${page}`, defaultAxiosRequestConfig)
 
         return response.data.map(responseDataToComment)
     } catch (e) {
@@ -20,7 +20,7 @@ async function createComment(target: MediaId, content: string): Promise<IComment
         const response = await axios.post(`${backendBaseUrl}/api/comments/create`, {
             target: target.id,
             content
-        })
+        }, defaultAxiosRequestConfig)
 
         return responseDataToComment(response.data)
     } catch (e) {
@@ -30,7 +30,7 @@ async function createComment(target: MediaId, content: string): Promise<IComment
 
 async function deleteComment(id: CommentId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/comments/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/api/comments/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteComment")
     }
@@ -41,7 +41,7 @@ async function putComment(id: CommentId, content?: string): Promise<void | ExErr
         await axios.put(`${backendBaseUrl}/api/comments`, {
             id: id.id,
             content
-        })
+        }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putComment")
     }

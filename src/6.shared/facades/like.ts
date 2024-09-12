@@ -1,8 +1,10 @@
 import { createLike, deleteLike, getLikes, getLikesCount } from "@shared/api/likes";
 import { ExError } from "@shared/helpers";
-import { ILike } from "@shared/model/interfaces";
+import { ILike, ISerializedLike } from "@shared/model/interfaces";
 import { LikeType } from "@shared/model/types/enums";
 import { Id, LikeId, UserId } from "@shared/model/types/primitives";
+import store from "@shared/store";
+import { addLike, removeLike } from "@shared/store/actionCreators/like";
 
 class Like {
 
@@ -31,7 +33,20 @@ class Like {
     // Methods
 
     public async delete(): Promise<void | ExError> {
+
+        // Removing like from global store
+        store.dispatch(removeLike(this.id))
+
         return await deleteLike(this.id)
+    }
+
+    public serialize(): ISerializedLike {
+        return {
+            id: this.id.id,
+            from: this.from.id,
+            target: this.target.id,
+            type: this.type
+        }
     }
 
     // Static constructors
@@ -51,13 +66,36 @@ class Like {
     }
 
     public static async create(target: Id, type: LikeType): Promise<Like | ExError> {
-        const like: ILike | ExError = await createLike(target, type)
+        const ilike: ILike | ExError = await createLike(target, type)
 
-        if (like instanceof ExError) {
-            return like
+        if (ilike instanceof ExError) {
+            return ilike
         }
 
-        return new Like(like)
+        const like: Like = new Like(ilike)
+
+        // Adding like to global store
+        store.dispatch(addLike(like.serialize()))
+
+        return like
+    }
+
+    public static parse(like: ISerializedLike): Like | ExError {
+        if (!(
+            "id" in like &&
+            "from" in like &&
+            "target" in like &&
+            "type" in like
+        )) {
+            return new ExError("Invalid object to parse into like", -400)
+        }
+
+        return new Like({
+            id: new LikeId(like.id),
+            from: new UserId(like.from),
+            target: new Id(like.target),
+            type: like.type
+        })
     }
 
     // Constructor

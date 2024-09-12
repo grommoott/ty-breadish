@@ -1,12 +1,12 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
-import { IListProduct, IProduct, responseDataToProduct } from "@shared/model/interfaces";
+import { IListProduct, IProduct, responseDataToListProduct, responseDataToProduct } from "@shared/model/interfaces";
 import { ItemInfo, Price, ProductId } from "@shared/model/types/primitives";
 import axios from "axios";
 
 async function getProduct(id: ProductId): Promise<IProduct | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/products/id/${id}`)
+        const response = await axios.get(`${backendBaseUrl}/api/products/id/${id}`, defaultAxiosRequestConfig)
 
         return responseDataToProduct(response.data)
     } catch (e) {
@@ -16,9 +16,9 @@ async function getProduct(id: ProductId): Promise<IProduct | ExError> {
 
 async function getProductsList(): Promise<Array<IListProduct> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/products/list`)
+        const response = await axios.get(`${backendBaseUrl}/api/products/list`, defaultAxiosRequestConfig)
 
-        return response.data.map(responseDataToProduct)
+        return response.data.map(responseDataToListProduct)
     } catch (e) {
         return errorWrapper(e, "getProductsList")
     }
@@ -31,7 +31,7 @@ async function createProduct(price: Price, name: string, description: string, it
             name,
             description,
             itemInfo
-        })
+        }, defaultAxiosRequestConfig)
 
         return responseDataToProduct(response.data)
     } catch (e) {
@@ -41,7 +41,7 @@ async function createProduct(price: Price, name: string, description: string, it
 
 async function deleteProduct(id: ProductId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/products/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/api/products/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteProduct")
     }
@@ -55,7 +55,7 @@ async function putProduct(id: ProductId, price?: Price, name?: string, descripti
             name,
             description,
             itemInfo
-        })
+        }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putproduct")
     }
@@ -63,7 +63,7 @@ async function putProduct(id: ProductId, price?: Price, name?: string, descripti
 
 async function checkProductImage(id: ProductId): Promise<void | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/products/images/id/${id}`)
+        await axios.get(`${backendBaseUrl}/api/products/images/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "getProductImage")
     }
@@ -75,7 +75,7 @@ async function createProductImage(id: ProductId, image: File): Promise<void | Ex
         formData.append("id", id.toString())
         formData.append("image", image)
 
-        await axios.postForm(`${backendBaseUrl}/api/products/images/create`, formData)
+        await axios.postForm(`${backendBaseUrl}/api/products/images/create`, formData, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "createProductImage")
     }
@@ -83,7 +83,7 @@ async function createProductImage(id: ProductId, image: File): Promise<void | Ex
 
 async function deleteProductImage(id: ProductId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/products/images/id/${id}`)
+        await axios.delete(`${backendBaseUrl}/api/products/images/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteProductImage")
     }
@@ -95,7 +95,7 @@ async function putProductImage(id: ProductId, image: File): Promise<void | ExErr
         formData.append("id", id.toString())
         formData.append("image", image)
 
-        await axios.putForm(`${backendBaseUrl}/api/products/images`, formData)
+        await axios.putForm(`${backendBaseUrl}/api/products/images`, formData, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putProductImage")
     }

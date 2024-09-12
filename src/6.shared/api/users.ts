@@ -1,4 +1,4 @@
-import { backendBaseUrl } from "@shared/config";
+import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IUser } from "@shared/model/interfaces";
 import { Email, UserId } from "@shared/model/types/primitives";
@@ -6,7 +6,7 @@ import axios from "axios";
 
 async function isUsernameAvailable(username: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${username}`)
+        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${username}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -16,7 +16,7 @@ async function isUsernameAvailable(username: string): Promise<boolean | ExError>
 
 async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${email.email}`)
+        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${email.email}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -26,7 +26,7 @@ async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
 
 async function isPasswordIsValid(password: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${password}`)
+        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${password}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -36,7 +36,7 @@ async function isPasswordIsValid(password: string): Promise<boolean | ExError> {
 
 async function getUsername(id: UserId): Promise<string | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/username/id/${id}`)
+        const response = await axios.get(`${backendBaseUrl}/api/users/username/id/${id}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -46,7 +46,7 @@ async function getUsername(id: UserId): Promise<string | ExError> {
 
 async function getUser(): Promise<IUser | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users`)
+        const response = await axios.get(`${backendBaseUrl}/api/users`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -56,7 +56,7 @@ async function getUser(): Promise<IUser | ExError> {
 
 async function deleteUser(verificationCode: number, password: string): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${password}`)
+        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${password}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteUser")
     }
@@ -71,7 +71,7 @@ async function putUser(password: string, username?: string, newPassword?: string
             email: email?.email,
             code,
             newCode
-        })
+        }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putUser")
     }
@@ -79,7 +79,7 @@ async function putUser(password: string, username?: string, newPassword?: string
 
 async function checkAvatar(id: UserId): Promise<void | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/users/avatars/id/${id}`)
+        await axios.get(`${backendBaseUrl}/api/users/avatars/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "checkAvatar")
     }
@@ -90,7 +90,7 @@ async function createAvatar(image: File): Promise<void | ExError> {
         const formData = new FormData()
         formData.append("image", image)
 
-        await axios.postForm(`${backendBaseUrl}/api/users/avatars/create`, formData)
+        await axios.postForm(`${backendBaseUrl}/api/users/avatars/create`, formData, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "createAvatar")
     }
@@ -98,7 +98,7 @@ async function createAvatar(image: File): Promise<void | ExError> {
 
 async function deleteAvatar(): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/users/avatars`)
+        await axios.delete(`${backendBaseUrl}/api/users/avatars`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteAvatar")
     }
@@ -109,7 +109,7 @@ async function putAvatar(image: File): Promise<void | ExError> {
         const formData = new FormData()
         formData.append("image", image)
 
-        await axios.putForm(`${backendBaseUrl}/api/users/avatars`, formData)
+        await axios.putForm(`${backendBaseUrl}/api/users/avatars`, formData, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putAvatar")
     }

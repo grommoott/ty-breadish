@@ -9,7 +9,7 @@ type PFC = {
 }
 
 type ItemInfoJson = {
-    cooking_method: CookingMethod,
+    cookingMethod: CookingMethod,
     ingredients: Ingredient[],
     pfc: {
         kkal: number,
@@ -31,11 +31,11 @@ class ItemInfo {
 
         const pfc: PFC = { ...itemInfo.pfc }
 
-        return new ItemInfo(itemInfo.cooking_method, itemInfo.ingredients, pfc)
+        return new ItemInfo(itemInfo.cookingMethod, itemInfo.ingredients, pfc)
     }
 
     public static fromObject(obj: ItemInfoJson): ItemInfo {
-        return new ItemInfo(obj.cooking_method, obj.ingredients, obj.pfc)
+        return new ItemInfo(obj.cookingMethod, obj.ingredients, obj.pfc)
     }
 
     public toJSON(): string {
@@ -44,7 +44,7 @@ class ItemInfo {
         return JSON.stringify(itemInfo)
     }
 
-    public toNormalView(): object {
+    public toNormalView(): ItemInfoJson {
         return {
             cookingMethod: this.cookingMethod,
             ingredients: this.ingredients,
@@ -59,4 +59,4 @@ class ItemInfo {
     }
 }
 
-export { ItemInfo }
+export { ItemInfo, ItemInfoJson }

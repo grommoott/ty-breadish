@@ -27,6 +27,10 @@ class Media {
 
     // Methods
 
+    protected setIsEdited() {
+        this._media.isEdited = true
+    }
+
     public async getLikesCount(): Promise<number | ExError> {
         if (!this._likesCount) {
             const likesCount: number | ExError = await Like.getLikesCount(this._media.mediaId, LikeTypes.Media)

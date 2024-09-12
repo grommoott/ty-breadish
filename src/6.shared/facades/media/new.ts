@@ -55,6 +55,10 @@ class New extends Media {
         if (content) {
             this._content = content
         }
+
+        if (title || content) {
+            this.setIsEdited()
+        }
     }
 
     public async delete(): Promise<void | ExError> {

@@ -9,6 +9,13 @@ interface ILike {
     type: LikeType
 }
 
+interface ISerializedLike {
+    id: number,
+    from: number,
+    target: number,
+    type: LikeType
+}
+
 function responseDataToLike(data: any): ILike {
     if (!(
         "id" in data &&
@@ -27,4 +34,4 @@ function responseDataToLike(data: any): ILike {
     }
 }
 
-export { ILike, responseDataToLike }
+export { ILike, ISerializedLike, responseDataToLike }

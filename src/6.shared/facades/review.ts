@@ -1,8 +1,10 @@
-import { deleteReview, getReviewsPage, putReview } from "@shared/api/reviews"
+import { getLikesCount } from "@shared/api/likes"
+import { createReview, deleteReview, getReviewsPage, putReview } from "@shared/api/reviews"
 import { ExError } from "@shared/helpers"
 import { IReview } from "@shared/model/interfaces"
-import { Rate, ReviewsSortOrder } from "@shared/model/types/enums"
+import { LikeTypes, Rate, ReviewsSortOrder } from "@shared/model/types/enums"
 import { ItemId, Moment, ReviewId, UserId } from "@shared/model/types/primitives"
+import { OwnedUser } from "./user"
 
 class Review {
 
@@ -39,10 +41,6 @@ class Review {
 
     // Methods
 
-    protected async delete(): Promise<void | ExError> {
-        return await deleteReview(this.id)
-    }
-
     protected async edit(content?: string, rate?: Rate): Promise<void | ExError> {
         const edit: void | ExError = await putReview(this.id, content, rate)
 
@@ -59,6 +57,20 @@ class Review {
         }
     }
 
+    public async getLikesCount(): Promise<number | ExError> {
+        if (!this._likesCount) {
+            const likesCount: number | ExError = await getLikesCount(this.id, LikeTypes.Review)
+
+            if (likesCount instanceof ExError) {
+                return likesCount
+            }
+
+            this._likesCount = likesCount
+        }
+
+        return this._likesCount
+    }
+
     // Static constructors
 
     public static async getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page: number): Promise<Array<Review> | ExError> {
@@ -73,13 +85,48 @@ class Review {
 
     // Constructor
 
-    private constructor({ id, from, target, content, rate, moment }: IReview) {
+    protected constructor({ id, from, target, content, rate, moment }: IReview) {
         this._review = { id, from, target, content, rate, moment }
     }
 }
 
-class OwnedReview {
+class OwnedReview extends Review {
 
+    // Methods
+
+    public async edit(content?: string, rate?: Rate) {
+        return await super.edit(content, rate)
+    }
+
+    public async delete(): Promise<void | ExError> {
+        return await deleteReview(this.id)
+    }
+
+    // Static constructors
+
+    public static async create(target: ItemId, content: string, rate: Rate): Promise<OwnedReview | ExError> {
+        const review: IReview | ExError = await createReview(target, content, rate)
+
+        if (review instanceof ExError) {
+            return review
+        }
+
+        return new OwnedReview(review)
+    }
+
+    public static tryOccupyReview(review: Review): Review | OwnedReview {
+        if (review.from.id === OwnedUser.instance.id.id) {
+            return new OwnedReview(review)
+        } else {
+            return review
+        }
+    }
+
+    // Constructor
+
+    private constructor({ id, from, target, content, rate, moment }: IReview) {
+        super({ id, from, target, content, rate, moment })
+    }
 }
 
 export { Review, OwnedReview }

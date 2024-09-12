@@ -1,5 +1,5 @@
 import { AvgRate, ItemId, ItemInfo, RecipeId } from "@shared/model/types/primitives"
-import { IItem } from "./item"
+import { IItem, ISerializedItem } from "./item"
 import { ExError } from "@shared/helpers"
 
 interface IRecipe extends IItem {
@@ -8,6 +8,10 @@ interface IRecipe extends IItem {
 }
 
 interface IListRecipe extends Omit<IRecipe, "description" | "recipe"> { }
+
+interface ISerializedListRecipe extends ISerializedItem {
+    id: number,
+}
 
 function isItemIsRecipe(item: IItem): item is IRecipe {
     return (item as IRecipe)?.id instanceof RecipeId
@@ -58,4 +62,4 @@ function responseDataToListRecipe(data: any): IListRecipe {
     }
 }
 
-export { IRecipe, IListRecipe, isItemIsRecipe, responseDataToRecipe, responseDataToListRecipe }
+export { IRecipe, IListRecipe, ISerializedListRecipe, isItemIsRecipe, responseDataToRecipe, responseDataToListRecipe }

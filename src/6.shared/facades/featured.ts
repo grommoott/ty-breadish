@@ -1,8 +1,10 @@
 import { createFeatured, deleteFeatured, getFeatured } from "@shared/api/featured"
 import { ExError } from "@shared/helpers"
-import { IFeatured } from "@shared/model/interfaces"
+import { IFeatured, ISerializedFeatured } from "@shared/model/interfaces"
 import { ItemType } from "@shared/model/types/enums"
 import { FeaturedId, ItemId, UserId } from "@shared/model/types/primitives"
+import store from "@shared/store"
+import { addFeatured, removeFeatured } from "@shared/store/actionCreators/featured"
 
 class Featured {
 
@@ -31,7 +33,20 @@ class Featured {
     // Methods
 
     public async delete(): Promise<void | ExError> {
+
+        // Removing featured from global store 
+        store.dispatch(removeFeatured(this.id))
+
         return await deleteFeatured(this.id)
+    }
+
+    public serialize(): ISerializedFeatured {
+        return {
+            id: this.id.id,
+            from: this.from.id,
+            target: this.target.id,
+            itemType: this.itemType
+        }
     }
 
     // Static constructors
@@ -47,13 +62,36 @@ class Featured {
     }
 
     public static async create(target: ItemId, itemType: ItemType): Promise<Featured | ExError> {
-        const featured: IFeatured | ExError = await createFeatured(target, itemType)
+        const ifeatured: IFeatured | ExError = await createFeatured(target, itemType)
 
-        if (featured instanceof ExError) {
-            return featured
+        if (ifeatured instanceof ExError) {
+            return ifeatured
         }
 
-        return new Featured(featured)
+        const featured: Featured = new Featured(ifeatured)
+
+        // Adding featured to global store
+        store.dispatch(addFeatured(featured.serialize()))
+
+        return featured
+    }
+
+    public static parse(featured: ISerializedFeatured): Featured | ExError {
+        if (!(
+            "id" in featured &&
+            "from" in featured &&
+            "target" in featured &&
+            "itemType" in featured
+        )) {
+            return new ExError("Invalid object to parse into featured", -400)
+        }
+
+        return new Featured({
+            id: new FeaturedId(featured.id),
+            from: new UserId(featured.from),
+            target: new ItemId(featured.target),
+            itemType: featured.itemType
+        })
     }
 
     // Constructor
