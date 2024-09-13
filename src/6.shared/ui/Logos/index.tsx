@@ -114,7 +114,7 @@ const AnimatedFullLogo: FC = () => {
 	const pageSize = usePageSize()
 	const circleControls = useAnimationControls()
 
-	const sizeMultiplier = pageSize >= PageSizes.Small ? 1 : 0.7
+	const sizeMultiplier = pageSize >= PageSizes.Small ? 1 : 0.6
 
 	const circleSizeMultiplied = circleSize * sizeMultiplier
 	const breadSizeMultiplied = breadSize * sizeMultiplier

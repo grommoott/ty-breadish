@@ -39,7 +39,7 @@ const FoldableItem: FC<FoldableItemProps> = ({
 
 	return (
 		<div
-			className="flex flex-col items-center justify-center overflow-hidden m-2 rounded-2xl bg-[var(--dark-color)]"
+			className="flex flex-col items-center justify-center m-2 rounded-2xl bg-[var(--dark-color)]"
 			style={{ width }}
 		>
 			<button
