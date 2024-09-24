@@ -5,6 +5,8 @@
 :root {
     --main-color: #ff6519;
     --dark-color: #161619;
+    --zinc-900: #18181b;
+    --zinc-800: #27272a;
 }
 
 .neucha {
@@ -40,4 +42,5 @@
 
 * {
     outline: red 2px;
+    scrollbar-color: var(--zinc-800) var(--zinc-900);
 }

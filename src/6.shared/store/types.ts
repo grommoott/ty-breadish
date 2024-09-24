@@ -14,4 +14,6 @@ type ProductsState = BasicStorageState<Array<ISerializedListProduct>>
 
 type RecipesState = BasicStorageState<Array<ISerializedListRecipe>>
 
-export { LikesState, FeaturedState, ProductsState, RecipesState }
+type BasketState = { [id: number]: number | undefined } // {[id: ProductId.id]: count}
+
+export { LikesState, FeaturedState, ProductsState, RecipesState, BasketState }

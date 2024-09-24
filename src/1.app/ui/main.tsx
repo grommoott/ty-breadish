@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
 import { Provider } from "react-redux"
@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import Test from "@pages/Test"
 import { PageSizeProvider } from "@shared/contexts"
 import { PageSize, PageSizes } from "@shared/enums"
+import { OwnedUser } from "@shared/facades"
 
 const router = createBrowserRouter([
 	{
@@ -14,6 +15,9 @@ const router = createBrowserRouter([
 		element: <Test />,
 	},
 ])
+
+await OwnedUser.login("grommoott", "1234")
+await OwnedUser.instance?.initialize()
 
 function matchPageSize(pageWidth: number): PageSize {
 	if (pageWidth < PageSizes.ExtraSmall) {

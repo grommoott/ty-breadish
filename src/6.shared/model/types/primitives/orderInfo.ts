@@ -3,13 +3,16 @@ import { CourierOrderState, PickUpOrderState, PickUpOrderStates } from "../enums
 
 interface PickUpOrderInfo {
     bakeryAddress: string,
-    state: PickUpOrderState
+    state: PickUpOrderState,
+    productCounts: { [id: number]: number }
+
 }
 
 interface CourierOrderInfo {
     bakeryAddress: string,
     deliveryAddress: string,
-    state: CourierOrderState
+    state: CourierOrderState,
+    productCounts: { [id: number]: number }
 }
 
 function isOrderInfoIsPickUpOrderInfo(orderInfo: OrderInfo): orderInfo is PickUpOrderInfo {

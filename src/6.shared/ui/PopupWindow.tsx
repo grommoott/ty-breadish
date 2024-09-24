@@ -45,12 +45,12 @@ const PopupWindow: FC<PopupWindowProps> = ({
 							? { opacity: 1, y: "0rem" }
 							: { opacity: 0, y: "-10rem" }
 					}
-					className="p-4 bg-zinc-900 rounded-2xl flex flex-col items-center justify-center"
+					className="p-2 bg-zinc-900 rounded-2xl flex flex-col items-center justify-center"
 				>
 					<svg
 						viewBox="0 0 100 100"
 						xmlns="http://www.w3.org/2000/svg"
-						className="h-6 self-end cursor-pointer hover:scale-125 active:scale-75 duration-100"
+						className="h-4 self-end cursor-pointer hover:scale-125 active:scale-75 duration-100"
 						onClick={() => setIsVisible(false)}
 					>
 						<path
@@ -63,7 +63,7 @@ const PopupWindow: FC<PopupWindowProps> = ({
 					</svg>
 
 					<div
-						className="flex flex-col overflow-y-scroll m-2"
+						className="flex flex-col overflow-y-scroll m-2 pr-2"
 						style={{ maxHeight: "80vh" }}
 					>
 						{children}

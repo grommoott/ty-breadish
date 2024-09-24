@@ -33,6 +33,10 @@ class Comment extends Media {
         return this._content
     }
 
+    public get isOwned(): boolean {
+        return false
+    }
+
     // Methods
 
     protected async edit(content?: string): Promise<void | ExError> {
@@ -50,7 +54,7 @@ class Comment extends Media {
 
     // Static constructors
 
-    public async getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, page: number): Promise<Array<Comment> | ExError> {
+    public static async getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, page: number): Promise<Array<Comment> | ExError> {
         const comments: Array<IComment> | ExError = await getCommentsPage(target, sortOrder, page)
 
         if (comments instanceof ExError) {
@@ -73,6 +77,12 @@ class Comment extends Media {
 }
 
 class OwnedComment extends Comment {
+
+    // Getters
+
+    public get isOwned(): boolean {
+        return true
+    }
 
     // Methods
 
@@ -97,7 +107,7 @@ class OwnedComment extends Comment {
     }
 
     public static tryOccupyComment(comment: Comment): Comment | OwnedComment {
-        if (comment.from.id === OwnedUser.instance.id.id) {
+        if (comment.from.id === OwnedUser.instance?.id.id) {
             return new OwnedComment(comment)
         } else {
             return comment

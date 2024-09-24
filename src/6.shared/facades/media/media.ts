@@ -3,6 +3,7 @@ import { MediaId, Moment } from "@shared/model/types/primitives";
 import { Like } from "../like";
 import { LikeTypes } from "@shared/model/types/enums";
 import { ExError } from "@shared/helpers";
+import { getCommentsCount } from "@shared/api/comments";
 
 class Media {
 
@@ -10,6 +11,7 @@ class Media {
 
     private _media: IMedia
     private _likesCount: number | undefined
+    private _commentsCount: number | undefined
 
     // Getters
 
@@ -43,6 +45,20 @@ class Media {
         }
 
         return this._likesCount
+    }
+
+    public async getCommentsCount(): Promise<number | ExError> {
+        if (!this._commentsCount) {
+            const commentsCount: number | ExError = await getCommentsCount(this._media.mediaId)
+
+            if (commentsCount instanceof ExError) {
+                return commentsCount
+            }
+
+            this._commentsCount = commentsCount
+        }
+
+        return this._commentsCount
     }
 
     // Constructor

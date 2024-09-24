@@ -3,7 +3,10 @@ import { deleteAvatar, deleteUser, getUser, getUsername, isEmailAvailable, isPas
 import { backendBaseUrl } from "@shared/config"
 import { ExError } from "@shared/helpers"
 import { IUser } from "@shared/model/interfaces"
+import { Role } from "@shared/model/types/enums"
 import { Email, Moment, UserId } from "@shared/model/types/primitives"
+import { Like } from "./like"
+import { Featured } from "./featured"
 
 class User {
 
@@ -23,7 +26,7 @@ class User {
     }
 
     public get avatarLink(): string {
-        return `${backendBaseUrl}/users/avatars/id/${this.id}`
+        return `${backendBaseUrl}/api/users/avatars/id/${this.id}`
     }
 
     // Static methods
@@ -61,8 +64,9 @@ class OwnedUser {
     // Private fields
 
     private _user: IUser
-    // private _likes: Array<Like> | undefined = undefined
-    // private _featured: Array<Featured> | undefined = undefined
+    private _likes: Array<Like> | undefined = undefined
+    private _featured: Array<Featured> | undefined = undefined
+    private _role: Role | undefined = undefined
     private static _instance: OwnedUser | undefined = undefined
 
     // Getters
@@ -85,6 +89,14 @@ class OwnedUser {
 
     public get avatarLink(): string {
         return `${backendBaseUrl}/users/avatars/id/${this.id}`
+    }
+
+    public get likes(): Array<Like> | undefined {
+        return this._likes
+    }
+
+    public get featured(): Array<Featured> | undefined {
+        return this._featured
     }
 
     // Methods
@@ -112,7 +124,17 @@ class OwnedUser {
     }
 
     public async initialize(): Promise<void | ExError> {
+        const likes: Array<Like> | ExError = await Like.getList()
 
+        if (!(likes instanceof ExError)) {
+            this._likes = likes
+        }
+
+        const featured: Array<Featured> | ExError = await Featured.getFeatured()
+
+        if (!(featured instanceof ExError)) {
+            this._featured = featured
+        }
     }
 
     // Static initializers
@@ -165,9 +187,9 @@ class OwnedUser {
         return this._instance === undefined
     }
 
-    public static get instance(): OwnedUser {
+    public static get instance(): OwnedUser | undefined {
         if (!this._instance) {
-            throw new ExError("OwnedUser isn't initialized", -400)
+            return undefined
         }
 
         return this._instance

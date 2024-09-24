@@ -15,6 +15,16 @@ async function getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, pa
     }
 }
 
+async function getCommentsCount(target: MediaId): Promise<number | ExError> {
+    try {
+        const response = await axios.get(`${backendBaseUrl}/api/comments/count/target/${target.id}`)
+
+        return response.data.count
+    } catch (e) {
+        return errorWrapper(e, "getCommentsCount")
+    }
+}
+
 async function createComment(target: MediaId, content: string): Promise<IComment | ExError> {
     try {
         const response = await axios.post(`${backendBaseUrl}/api/comments/create`, {
@@ -49,6 +59,7 @@ async function putComment(id: CommentId, content?: string): Promise<void | ExErr
 
 export {
     getCommentsPage,
+    getCommentsCount,
     createComment,
     deleteComment,
     putComment

@@ -4,6 +4,9 @@ import { Media } from "./media"
 import { ExError } from "@shared/helpers"
 import { createNew, createNewImage, deleteNew, deleteNewImage, getNew, getNewsPage, putNew, putNewImage } from "@shared/api/news"
 import { backendBaseUrl } from "@shared/config"
+import { Like } from "../like"
+import { LikeTypes } from "@shared/model/types/enums"
+import { getCommentsCount } from "@shared/api/comments"
 
 class New extends Media {
 
@@ -119,6 +122,8 @@ class ListNew {
     // Private fields
 
     private _listNew: IListNew
+    private _likesCount: number | undefined
+    private _commentsCount: number | undefined
 
     // Getters
 
@@ -144,6 +149,37 @@ class ListNew {
 
     public get imageLink(): string {
         return `${backendBaseUrl}/api/news/images/id/${this.id}`
+    }
+
+    // Methods
+
+
+    public async getLikesCount(): Promise<number | ExError> {
+        if (!this._likesCount) {
+            const likesCount: number | ExError = await Like.getLikesCount(this.mediaId, LikeTypes.Media)
+
+            if (likesCount instanceof ExError) {
+                return likesCount
+            }
+
+            this._likesCount = likesCount
+        }
+
+        return this._likesCount
+    }
+
+    public async getCommentsCount(): Promise<number | ExError> {
+        if (!this._commentsCount) {
+            const commentsCount: number | ExError = await getCommentsCount(this.mediaId)
+
+            if (commentsCount instanceof ExError) {
+                return commentsCount
+            }
+
+            this._commentsCount = commentsCount
+        }
+
+        return this._commentsCount
     }
 
     // Static constructors

@@ -1,79 +1,58 @@
-import { AccentButton, Button } from "@shared/ui/Buttons"
-import Checkbox from "@shared/ui/Checkbox"
-import FoldableItem from "@shared/ui/FoldableItem"
-import { SearchInput, ValidatedInput } from "@shared/ui/Inputs"
-import Loading from "@shared/ui/Loading"
+import CommentWrapper from "@entities/CommentWrapper"
+import LikeButton from "@features/LikeButton"
+import { Comment } from "@shared/facades"
+import { ExError } from "@shared/helpers"
+import { CommentsSortOrders, LikeTypes } from "@shared/model/types/enums"
+import { MediaId } from "@shared/model/types/primitives"
 import { AnimatedFullLogo } from "@shared/ui/Logos"
-import PopupWindow from "@shared/ui/PopupWindow"
-import PriceSlider from "@shared/ui/PriceSlider"
-import { ReactElement, useState } from "react"
+import { ReactElement, useEffect, useState } from "react"
 
 export default function Test(): ReactElement {
-	const [value, setValue] = useState([0, 0])
-	const [isPopupVisible, setPopupVisible] = useState(false)
+	const [comment, setComment] = useState<Array<Comment>>(new Array<Comment>())
+
+	useEffect(() => {
+		;(async () => {
+			const array = new Array<Comment>()
+
+			const prod = await Comment.getCommentsPage(
+				new MediaId(0),
+				CommentsSortOrders.NewFirst,
+				0,
+			)
+
+			if (prod instanceof ExError) {
+				return
+			}
+
+			setComment(array.concat(prod))
+		})()
+	}, [])
 
 	return (
 		<div className="bg-zinc-900 flex flex-col items-center justify-center">
 			<AnimatedFullLogo />
-			<Loading />
 
-			<Button onClick={() => setPopupVisible(!isPopupVisible)}>
-				Открыть всплывающее окно
-			</Button>
+			{comment.map((comm, id) => (
+				<CommentWrapper
+					comment={comm}
+					key={id}
+					likeButton={(onChange) => (
+						<LikeButton
+							onChange={onChange}
+							id={comm.mediaId}
+							likeType={LikeTypes.Media}
+						/>
+					)}
+				></CommentWrapper>
+			))}
 
-			<PopupWindow
-				isVisible={isPopupVisible}
-				setIsVisible={setPopupVisible}
-			>
-				<Button>Перейти</Button>
-				<AccentButton>Оформить заказ</AccentButton>
+			<div className="h-60" />
 
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-				<Checkbox>Чечбокс</Checkbox>
-
-				<FoldableItem
-					title="Элементы"
-					width="20rem"
-				>
-					<Checkbox>Чечбокс</Checkbox>
-					<Checkbox>Чечбокс</Checkbox>
-					<Checkbox>Чечбокс</Checkbox>
-					<Checkbox>Чечбокс</Checkbox>
-					<Checkbox>Чечбокс</Checkbox>
-
-					<PriceSlider
-						min={0}
-						max={100}
-						width={15}
-						onValueChanged={setValue}
-					/>
-
-					<p>
-						Min: {value[0]}, Max: {value[1]}
-					</p>
-
-					<ValidatedInput
-						validator={async (val) => {
-							if (val == "f") {
-								return "fadsfasdflj asdf"
-							} else if (val == "a") {
-								return "Error, sorry!"
-							}
-
-							return ""
-						}}
-					/>
-
-					<SearchInput />
-				</FoldableItem>
-			</PopupWindow>
+			{/* 	isVisible={true} */}
+			{/* 	setIsVisible={() => {}} */}
+			{/* > */}
+			{/* 	<div className="size-96 bg-blue-500" /> */}
+			{/* </PopupWindow> */}
 		</div>
 	)
 }
