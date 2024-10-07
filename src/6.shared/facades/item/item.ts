@@ -53,4 +53,12 @@ class Item {
     }
 }
 
-export { Item }
+type ListItem = {
+    itemId: ItemId
+    name: string
+    avgRate: AvgRate
+    itemInfo: ItemInfo
+    imageLink: string
+}
+
+export { Item, ListItem }

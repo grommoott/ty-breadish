@@ -1,22 +1,23 @@
-import { Item, Product, Recipe } from "@shared/facades"
+import { ListItem, ListProduct, ListRecipe } from "@shared/facades"
 import Star from "@shared/ui/Star"
 import { FC, ReactNode, useEffect, useState } from "react"
 import { motion, useAnimationControls } from "framer-motion"
 import Loading from "@shared/ui/Loading"
-import { Navigate, RouterProvider, useNavigate } from "react-router-dom"
-import { RouterChildContext } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { ItemId } from "@shared/model/types/primitives"
+import { ItemType, ItemTypes } from "@shared/model/types/enums"
 
-interface ItemWrapperProps {
-	item?: Item
-	featuredButton?: ReactNode
+interface ListItemWrapperProps {
+	item?: ListItem
+	featuredButton?: (itemId: ItemId, itemType: ItemType) => ReactNode
 	undernameNodes?: ReactNode
 	imageLink?: string
 	itemLink?: string
 }
 
-const ItemWrapper: FC<ItemWrapperProps> = ({
+const ItemWrapper: FC<ListItemWrapperProps> = ({
 	item,
-	featuredButton,
+	featuredButton = () => {},
 	undernameNodes,
 	imageLink,
 	itemLink,
@@ -73,6 +74,19 @@ const ItemWrapper: FC<ItemWrapperProps> = ({
 					<p className="text ml-2">
 						{item.avgRate.avgRate.toFixed(1)}
 					</p>
+
+					<>
+						{featuredButton(
+							item.itemId,
+							(() => {
+								if (item instanceof ListRecipe) {
+									return ItemTypes.Recipe
+								} else {
+									return ItemTypes.Product
+								}
+							})(),
+						)}
+					</>
 				</div>
 
 				{/*There will be featured button*/}
@@ -139,12 +153,15 @@ const ItemWrapper: FC<ItemWrapperProps> = ({
 	)
 }
 
-interface ProductWrapper {
-	product?: Product
-	featuredButton?: ReactNode
+interface ListProductWrapperProps {
+	product?: ListProduct
+	featuredButton?: (itemId: ItemId, itemType: ItemType) => ReactNode
 }
 
-const ProductWrapper: FC<ProductWrapper> = ({ product, featuredButton }) => {
+const ListProductWrapper: FC<ListProductWrapperProps> = ({
+	product,
+	featuredButton,
+}) => {
 	return (
 		<ItemWrapper
 			undernameNodes={
@@ -153,22 +170,25 @@ const ProductWrapper: FC<ProductWrapper> = ({ product, featuredButton }) => {
 				</p>
 			}
 			featuredButton={featuredButton}
-			item={product as Item}
+			item={product as ListItem}
 			imageLink={product?.imageLink}
 			itemLink={`/products/id/${product?.id.id}`}
 		/>
 	)
 }
 
-interface RecipeWrapper {
-	recipe?: Recipe
-	featuredButton?: ReactNode
+interface ListRecipeWrapperProps {
+	recipe?: ListRecipe
+	featuredButton?: (itemId: ItemId, itemType: ItemType) => ReactNode
 }
 
-const RecipeWrapper: FC<RecipeWrapper> = ({ recipe, featuredButton }) => {
+const ListRecipeWrapper: FC<ListRecipeWrapperProps> = ({
+	recipe,
+	featuredButton,
+}) => {
 	return (
 		<ItemWrapper
-			item={recipe as Item}
+			item={recipe as ListItem}
 			featuredButton={featuredButton}
 			imageLink={recipe?.imageLink}
 			itemLink={`/recipes/id/${recipe?.id.id}`}
@@ -176,4 +196,4 @@ const RecipeWrapper: FC<RecipeWrapper> = ({ recipe, featuredButton }) => {
 	)
 }
 
-export { ProductWrapper }
+export { ListProductWrapper, ListRecipeWrapper }

@@ -23,10 +23,11 @@ function responseDataToReview(data: any): IReview {
         throw new ExError("Invalid response data to convert into IReview", 500)
     }
 
+
     return {
         id: new ReviewId(data.id),
         from: new UserId(data.from),
-        target: new ItemId(data.itemId),
+        target: new ItemId(data.target),
         content: data.content,
         rate: data.rate,
         moment: new Moment(data.moment)

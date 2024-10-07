@@ -3,8 +3,8 @@ import { ExError } from "@shared/helpers"
 import { IFeatured, ISerializedFeatured } from "@shared/model/interfaces"
 import { ItemType } from "@shared/model/types/enums"
 import { FeaturedId, ItemId, UserId } from "@shared/model/types/primitives"
-import store from "@shared/store"
-import { addFeatured, removeFeatured } from "@shared/store/actionCreators/featured"
+// import store from "@shared/store"
+// import { addFeatured, removeFeatured } from "@shared/store/actionCreators/featured"
 
 class Featured {
 
@@ -34,8 +34,8 @@ class Featured {
 
     public async delete(): Promise<void | ExError> {
 
-        // Removing featured from global store 
-        store.dispatch(removeFeatured(this.id))
+        // Removing featured from global store (deprecated)
+        // store.dispatch(removeFeatured(this.id))
 
         return await deleteFeatured(this.id)
     }
@@ -70,8 +70,8 @@ class Featured {
 
         const featured: Featured = new Featured(ifeatured)
 
-        // Adding featured to global store
-        store.dispatch(addFeatured(featured.serialize()))
+        // Adding featured to global store (deprecated)
+        // store.dispatch(addFeatured(featured.serialize()))
 
         return featured
     }

@@ -9,7 +9,9 @@ interface ValidatedInputProps {
 	validator?: (value: string) => string | Promise<string>
 	placeholder?: string
 	width?: string
+	margin?: string
 	displayErrors?: boolean
+	value?: string
 }
 
 const ValidatedInput: FC<ValidatedInputProps> = ({
@@ -18,7 +20,9 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 	validator = () => "",
 	placeholder = "",
 	width = "min(20rem,80%)",
+	margin,
 	displayErrors = true,
+	value,
 }) => {
 	const [isValid, setIsValid] = useState(true)
 	const [isLoading, setIsLoading] = useState(false)
@@ -28,11 +32,13 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 	return (
 		<BaseInput
 			width={width}
+			margin={margin}
 			placeholder={placeholder}
 			placeholderClass={
 				isValid ? "placeholder-zinc-700" : "placeholder-red-700"
 			}
 			bgClass={isValid ? "bg-zinc-800" : "bg-red-500"}
+			value={value}
 			childrenLeft={
 				displayErrors && (
 					<AnimatePresence>

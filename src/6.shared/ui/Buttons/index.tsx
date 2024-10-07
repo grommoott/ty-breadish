@@ -1,7 +1,7 @@
-import { CSSProperties, ReactNode } from "react"
+import { ButtonHTMLAttributes, CSSProperties, ReactNode } from "react"
 import "./index.css"
 
-interface ButtonProps {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	onClick?: () => void
 	children?: ReactNode
 	style?: CSSProperties
@@ -52,4 +52,14 @@ function AccentButton({ className, style, ...props }: ButtonProps) {
 	)
 }
 
-export { Button, AccentButton }
+function SimpleButton({ className, style, ...props }: ButtonProps) {
+	return (
+		<ButtonBase
+			className={`hover:scale-110 active:scale-90 duration-100 focus-visible-default ${className}`}
+			style={style}
+			{...props}
+		/>
+	)
+}
+
+export { Button, AccentButton, SimpleButton }

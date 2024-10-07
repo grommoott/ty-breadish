@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { LikesState } from "../types";
 import { ISerializedLike } from "@shared/model/interfaces";
-import { LikeId } from "@shared/model/types/primitives";
 
 const initialState: LikesState = {
     isLoading: false,
@@ -29,8 +28,8 @@ const likesSlice = createSlice({
         addLike(state, action: { type: string, payload: ISerializedLike }) {
             state.data?.push(action.payload)
         },
-        removeLike(state, action: { type: string, payload: LikeId }) {
-            const id = state.data?.findIndex(like => like.id === action.payload.id) || -1
+        removeLike(state, action: { type: string, payload: number }) {
+            const id = state.data?.findIndex(like => like.id === action.payload) || -1
 
             if (id != -1) {
                 state.data?.splice(id, 1)

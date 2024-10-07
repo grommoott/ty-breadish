@@ -34,8 +34,8 @@ class Like {
 
     public async delete(): Promise<void | ExError> {
 
-        // Removing like from global store
-        store.dispatch(removeLike(this.id))
+        // Removing like from global store (deprecated)
+        // store.dispatch(removeLike(this.id))
 
         return await deleteLike(this.id)
     }
@@ -74,8 +74,8 @@ class Like {
 
         const like: Like = new Like(ilike)
 
-        // Adding like to global store
-        store.dispatch(addLike(like.serialize()))
+        // Adding like to global store (deprecated)
+        // store.dispatch(addLike(like.serialize()))
 
         return like
     }

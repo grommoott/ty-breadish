@@ -130,6 +130,10 @@ class ListRecipe {
         return this._listRecipe.itemInfo
     }
 
+    public get imageLink(): string {
+        return `${backendBaseUrl}/api/recipes/images/id/${this.id}`
+    }
+
     // Methods
 
     public serialize(): ISerializedListRecipe {

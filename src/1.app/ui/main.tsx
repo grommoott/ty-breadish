@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react"
+import React, { FC, useState } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
 import { Provider } from "react-redux"

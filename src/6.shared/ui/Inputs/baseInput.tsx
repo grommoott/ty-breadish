@@ -3,10 +3,12 @@ import { ChangeEvent, FC, ReactNode } from "react"
 interface InputBaseProps {
 	placeholder?: string
 	width?: string
+	margin?: string
 	childrenLeft?: ReactNode
 	childrenRight?: ReactNode
 	bgClass?: string
 	placeholderClass?: string
+	value?: string
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 	onFocus?: () => void
 	onBlur?: () => void
@@ -15,19 +17,22 @@ interface InputBaseProps {
 const BaseInput: FC<InputBaseProps> = ({
 	placeholder,
 	width,
+	margin = "1rem",
 	childrenLeft,
 	childrenRight,
 	bgClass = "bg-zinc-800",
 	placeholderClass = "placeholder-zinc-700",
+	value,
 	onChange = () => {},
 	onFocus,
 	onBlur,
 }) => {
 	return (
 		<div
-			className="flex flex-row items-center justify-center m-4 relative"
+			className={`flex flex-row items-center justify-center relative`}
 			style={{
 				width: width,
+				margin: margin,
 			}}
 		>
 			<div
@@ -41,6 +46,7 @@ const BaseInput: FC<InputBaseProps> = ({
 					onChange={onChange}
 					onFocus={onFocus}
 					onBlur={onBlur}
+					value={value}
 				/>
 				{childrenRight}
 			</div>

@@ -3,7 +3,6 @@ import { AppDispatch } from "..";
 import likesSlice from "../slices/likesSlice";
 import { ExError } from "@shared/helpers";
 import { ISerializedLike } from "@shared/model/interfaces";
-import { LikeId } from "@shared/model/types/primitives";
 
 function fetchLikes() {
     return async (dispatch: AppDispatch) => {
@@ -26,7 +25,7 @@ function addLike(like: ISerializedLike) {
     }
 }
 
-function removeLike(id: LikeId) {
+function removeLike(id: number) {
     return async (dispatch: AppDispatch) => {
         dispatch(likesSlice.actions.removeLike(id))
     }

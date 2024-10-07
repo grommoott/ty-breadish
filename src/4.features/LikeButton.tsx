@@ -25,33 +25,41 @@ const LikeButton: FC<LikeButtonProps> = ({
 		OwnedUser.instance?.likes?.find((val) => val.target.id == id.id),
 	)
 
+	const onClick = async () => {
+		const isLikedBuf = !isLiked
+		setLiked(isLikedBuf)
+		onChange(isLikedBuf)
+
+		if (isLikedBuf) {
+			const response = await Like.create(id, likeType)
+
+			if (response instanceof ExError) {
+				console.error(response)
+				return
+			}
+
+			setLike(response)
+		} else {
+			const response = await like?.delete()
+
+			if (response instanceof ExError) {
+				console.error(response)
+				return
+			}
+
+			setLike(undefined)
+		}
+	}
+
 	return (
 		<img
 			src={isLiked ? likedImage : likeImage}
-			className="focus-visible-default h-12"
-			onClick={async () => {
-				const isLikedBuf = !isLiked
-				setLiked(isLikedBuf)
-				onChange(isLikedBuf)
-
-				if (isLikedBuf) {
-					const response = await Like.create(id, likeType)
-
-					if (response instanceof ExError) {
-						console.error(response)
-						return
-					}
-
-					setLike(response)
-				} else {
-					const response = await like?.delete()
-
-					if (response instanceof ExError) {
-						console.error(response)
-						return
-					}
-
-					setLike(undefined)
+			tabIndex={0}
+			className="focus-visible-default h-12 hover:scale-110 active:scale-90 duration-100"
+			onClick={onClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter") {
+					onClick()
 				}
 			}}
 		/>

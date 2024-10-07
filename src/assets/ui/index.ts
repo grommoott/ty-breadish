@@ -7,7 +7,9 @@ import crossImage from "./cross.svg"
 //@ts-ignore
 import featuredImage from "./featured.svg"
 //@ts-ignore
-import featuredActivatedImage from "./featuredActivated.svg"
+import featuredActivatedImage from "./featured-activated.svg"
+//@ts-ignore
+import fileUploadImage from "./file-upload.svg"
 //@ts-ignore
 import filterImage from "./filter.svg"
 //@ts-ignore
@@ -38,6 +40,8 @@ import starshineImage from "./starshine.svg"
 import tickImage from "./tick.svg"
 //@ts-ignore
 import searchImage from "./search.svg"
+//@ts-ignore
+import trashImage from "./trash.svg"
 
 export {
     basketImage,
@@ -45,6 +49,7 @@ export {
     crossImage,
     featuredImage,
     featuredActivatedImage,
+    fileUploadImage,
     filterImage,
     likeImage,
     likedImage,
@@ -59,5 +64,6 @@ export {
     starImage,
     starshineImage,
     tickImage,
-    searchImage
+    searchImage,
+    trashImage
 }

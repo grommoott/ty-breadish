@@ -57,6 +57,10 @@ class Review {
         }
     }
 
+    public async delete(): Promise<void | ExError> {
+        return await deleteReview(this.id)
+    }
+
     public async getLikesCount(): Promise<number | ExError> {
         if (!this._likesCount) {
             const likesCount: number | ExError = await getLikesCount(this.id, LikeTypes.Review)
@@ -80,7 +84,7 @@ class Review {
             return reviews
         }
 
-        return reviews.map(review => new Review(review))
+        return reviews.map(review => OwnedReview.tryOccupyReview(new Review(review)))
     }
 
     // Constructor
@@ -98,10 +102,6 @@ class OwnedReview extends Review {
         return await super.edit(content, rate)
     }
 
-    public async delete(): Promise<void | ExError> {
-        return await deleteReview(this.id)
-    }
-
     // Static constructors
 
     public static async create(target: ItemId, content: string, rate: Rate): Promise<OwnedReview | ExError> {
@@ -115,7 +115,7 @@ class OwnedReview extends Review {
     }
 
     public static tryOccupyReview(review: Review): Review | OwnedReview {
-        if (review.from.id === OwnedUser.instance.id.id) {
+        if (review.from.id === OwnedUser.instance?.id.id) {
             return new OwnedReview(review)
         } else {
             return review

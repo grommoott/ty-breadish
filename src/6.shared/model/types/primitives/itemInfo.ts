@@ -11,6 +11,7 @@ type PFC = {
 type ItemInfoJson = {
     cookingMethod: CookingMethod,
     ingredients: Ingredient[],
+    mass: number,
     pfc: {
         kkal: number,
         protein: number,
@@ -26,16 +27,18 @@ class ItemInfo {
 
     public pfc: PFC
 
+    public mass: number
+
     public static fromJSON(json: string): ItemInfo {
         const itemInfo: ItemInfoJson = JSON.parse(json)
 
         const pfc: PFC = { ...itemInfo.pfc }
 
-        return new ItemInfo(itemInfo.cookingMethod, itemInfo.ingredients, pfc)
+        return new ItemInfo(itemInfo.cookingMethod, itemInfo.ingredients, pfc, itemInfo.mass)
     }
 
     public static fromObject(obj: ItemInfoJson): ItemInfo {
-        return new ItemInfo(obj.cookingMethod, obj.ingredients, obj.pfc)
+        return new ItemInfo(obj.cookingMethod, obj.ingredients, obj.pfc, obj.mass)
     }
 
     public toJSON(): string {
@@ -48,14 +51,16 @@ class ItemInfo {
         return {
             cookingMethod: this.cookingMethod,
             ingredients: this.ingredients,
-            pfc: this.pfc
+            pfc: this.pfc,
+            mass: this.mass
         }
     }
 
-    public constructor(cookingMethod: CookingMethod, ingredients: Ingredient[], pfc: PFC) {
+    public constructor(cookingMethod: CookingMethod, ingredients: Ingredient[], pfc: PFC, mass: number) {
         this.cookingMethod = cookingMethod
         this.ingredients = ingredients
         this.pfc = pfc
+        this.mass = mass
     }
 }
 

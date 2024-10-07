@@ -52,6 +52,10 @@ class Comment extends Media {
         }
     }
 
+    public async delete(): Promise<void | ExError> {
+        return await deleteComment(this.id)
+    }
+
     // Static constructors
 
     public static async getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, page: number): Promise<Array<Comment> | ExError> {
@@ -88,10 +92,6 @@ class OwnedComment extends Comment {
 
     public async edit(content?: string): Promise<void | ExError> {
         return await super.edit(content)
-    }
-
-    public async delete(): Promise<void | ExError> {
-        return await deleteComment(this.id)
     }
 
     // Static constructors

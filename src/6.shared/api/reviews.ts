@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page: number): Promise<Array<IReview> | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/reviews/target/${target}/sortOrder/${sortOrder}/page/${page}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/reviews/target/${target}/sortOrder/${sortOrder}/page/${page}`, defaultAxiosRequestConfig)
 
         return response.data.map(responseDataToReview)
     } catch (e) {
@@ -17,7 +17,7 @@ async function getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page:
 
 async function createReview(target: ItemId, content: string, rate: Rate): Promise<IReview | ExError> {
     try {
-        const response = await axios.post(`${backendBaseUrl}/reviews/create`, {
+        const response = await axios.post(`${backendBaseUrl}/api/reviews/create`, {
             target: target.id,
             content,
             rate
@@ -31,7 +31,7 @@ async function createReview(target: ItemId, content: string, rate: Rate): Promis
 
 async function deleteReview(id: ReviewId): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/reviews/id/${id}`, defaultAxiosRequestConfig)
+        await axios.delete(`${backendBaseUrl}/api/reviews/id/${id}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteReview")
     }
@@ -39,7 +39,7 @@ async function deleteReview(id: ReviewId): Promise<void | ExError> {
 
 async function putReview(id: ReviewId, content?: string, rate?: Rate): Promise<void | ExError> {
     try {
-        await axios.put(`${backendBaseUrl}/reviews`, {
+        await axios.put(`${backendBaseUrl}/api/reviews`, {
             id: id.id,
             content,
             rate
