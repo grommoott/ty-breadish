@@ -18,7 +18,7 @@ function ButtonBase({
 	return (
 		<button
 			style={style}
-			className={`select-none caret-transparent buttons-base ${className}`}
+			className={`select-none overflow-visible caret-transparent buttons-base ${className}`}
 			onClick={onClick}
 			onKeyDown={(e) => {
 				if (e.key == "enter" && onClick) {

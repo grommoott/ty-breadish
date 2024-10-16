@@ -23,6 +23,8 @@ const MultilineFlatInput: FC<MultilineInputProps> = ({
 		const textarea = ref.current as HTMLTextAreaElement
 
 		textarea.selectionStart = textarea.selectionEnd = textarea.value.length
+
+		setContentWrapper(content)
 	}, [])
 
 	function setContentWrapper(value: string) {

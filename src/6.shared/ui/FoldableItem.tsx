@@ -5,16 +5,32 @@ interface FoldableItemProps {
 	title?: string
 	children?: ReactNode
 	width?: string
+	contentAlign?: "center" | "stretch"
+	contentPadding?: string
 }
 
 const FoldableItem: FC<FoldableItemProps> = ({
 	title,
 	children,
 	width = "10rem",
+	contentAlign = "center",
+	contentPadding = "0rem",
 }) => {
 	const [isFolded, setIsFolded] = useState(true)
 	const outerDivControls = useAnimationControls()
+	const [height, setHeight] = useState(0)
 	const innterDiv = useRef(null)
+
+	useEffect(() => {
+		if (!isFolded) {
+			outerDivControls.start({
+				maxHeight: height,
+				opacity: 1,
+			})
+		} else {
+			outerDivControls.start({ maxHeight: 0, opacity: 0 })
+		}
+	}, [isFolded, height])
 
 	useEffect(() => {
 		if (innterDiv.current == null) {
@@ -23,27 +39,26 @@ const FoldableItem: FC<FoldableItemProps> = ({
 
 		const inner = innterDiv.current as HTMLDivElement
 
-		if (!isFolded) {
-			outerDivControls.start({
-				maxHeight: inner.scrollHeight,
-				opacity: 1,
-			})
-		} else {
-			outerDivControls.start({ maxHeight: 0, opacity: 0 })
-		}
-	}, [isFolded])
+		setHeight(inner.scrollHeight)
 
-	useEffect(() => {
+		const interval = setInterval(() => {
+			setHeight(inner.scrollHeight)
+		}, 0.05)
+
 		outerDivControls.set({ maxHeight: 0 })
+
+		return () => {
+			clearInterval(interval)
+		}
 	}, [])
 
 	return (
 		<div
-			className="flex flex-col items-center justify-center m-2 rounded-2xl bg-[var(--dark-color)]"
+			className="flex flex-col items-center justify-center m-2 rounded-2xl border-2 border-zinc-800"
 			style={{ width }}
 		>
 			<button
-				className="px-3 h-10 w-full focus-visible-default flex flex-row items-center justify-between gap-2"
+				className="px-3 h-10 w-full focus-visible:text-[var(--main-color)] duration-100 outline-none flex flex-row items-center justify-between gap-2"
 				onClick={() => setIsFolded(!isFolded)}
 			>
 				<p>{title}</p>
@@ -68,11 +83,16 @@ const FoldableItem: FC<FoldableItemProps> = ({
 
 			<motion.div
 				animate={outerDivControls}
-				className="overflow-hidden"
+				className={`${isFolded && "overflow-hidden"} self-stretch`}
 			>
 				<div
 					ref={innterDiv}
-					className="flex flex-col items-center justify-center"
+					className="flex flex-col justify-center"
+					style={{
+						alignItems: contentAlign,
+						paddingLeft: contentPadding,
+						paddingRight: contentPadding,
+					}}
 				>
 					{children}
 				</div>

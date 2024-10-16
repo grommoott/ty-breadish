@@ -11,12 +11,14 @@ async function checkImage(id: ImageId): Promise<void | ExError> {
     }
 }
 
-async function createImage(image: File): Promise<void | ExError> {
+async function createImage(image: File): Promise<ImageId | ExError> {
     try {
         const formData = new FormData()
         formData.append("image", image)
 
-        await axios.postForm(`${backendBaseUrl}/api/images/create`, formData, defaultAxiosRequestConfig)
+        const response = await axios.postForm(`${backendBaseUrl}/api/images/create`, formData, defaultAxiosRequestConfig)
+
+        return new ImageId(response.data._image.id)
     } catch (e) {
         return errorWrapper(e, "createImage")
     }
@@ -32,6 +34,7 @@ async function deleteImage(id: ImageId): Promise<void | ExError> {
 
 async function putImage(id: ImageId, image: File): Promise<void | ExError> {
     try {
+        console.log(id)
         const formData = new FormData()
         formData.append("id", id.toString())
         formData.append("image", image)

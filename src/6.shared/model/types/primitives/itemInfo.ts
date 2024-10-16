@@ -9,7 +9,7 @@ type PFC = {
 }
 
 type ItemInfoJson = {
-    cookingMethod: CookingMethod,
+    cookingMethod: CookingMethod[],
     ingredients: Ingredient[],
     mass: number,
     pfc: {
@@ -21,7 +21,7 @@ type ItemInfoJson = {
 }
 
 class ItemInfo {
-    public cookingMethod: CookingMethod
+    public cookingMethod: CookingMethod[]
 
     public ingredients: Ingredient[]
 
@@ -56,7 +56,7 @@ class ItemInfo {
         }
     }
 
-    public constructor(cookingMethod: CookingMethod, ingredients: Ingredient[], pfc: PFC, mass: number) {
+    public constructor(cookingMethod: CookingMethod[], ingredients: Ingredient[], pfc: PFC, mass: number) {
         this.cookingMethod = cookingMethod
         this.ingredients = ingredients
         this.pfc = pfc

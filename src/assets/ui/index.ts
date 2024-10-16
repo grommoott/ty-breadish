@@ -13,6 +13,8 @@ import fileUploadImage from "./file-upload.svg"
 //@ts-ignore
 import filterImage from "./filter.svg"
 //@ts-ignore
+import imageImage from "./image.svg"
+//@ts-ignore
 import likeImage from "./like.svg"
 //@ts-ignore
 import likedImage from "./liked.svg"
@@ -51,6 +53,7 @@ export {
     featuredActivatedImage,
     fileUploadImage,
     filterImage,
+    imageImage,
     likeImage,
     likedImage,
     loginImage,

@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Loading from "../Loading"
 import BaseInput from "./baseInput"
@@ -12,6 +12,7 @@ interface ValidatedInputProps {
 	margin?: string
 	displayErrors?: boolean
 	value?: string
+	error?: string
 }
 
 const ValidatedInput: FC<ValidatedInputProps> = ({
@@ -23,11 +24,20 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 	margin,
 	displayErrors = true,
 	value,
+	error = "",
 }) => {
-	const [isValid, setIsValid] = useState(true)
+	const [isValid, setIsValid] = useState(error == "")
 	const [isLoading, setIsLoading] = useState(false)
 	const [isFocused, setIsFocused] = useState(false)
-	const [errorMessage, setErrorMessage] = useState("")
+	const [errorMessage, setErrorMessage] = useState(error)
+
+	useEffect(() => {
+		setErrorMessage(error)
+	}, [error])
+
+	useEffect(() => {
+		setIsValid(errorMessage == "")
+	}, [errorMessage])
 
 	return (
 		<BaseInput

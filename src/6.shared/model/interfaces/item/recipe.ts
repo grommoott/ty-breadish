@@ -37,7 +37,7 @@ function responseDataToRecipe(data: any): IRecipe {
         name: data.name,
         description: data.description,
         avgRate: new AvgRate(data.avgRate),
-        itemInfo: ItemInfo.fromObject(data.itemInfo)
+        itemInfo: ItemInfo.fromJSON(data.itemInfo)
     }
 
 }
@@ -58,7 +58,7 @@ function responseDataToListRecipe(data: any): IListRecipe {
         itemId: new ItemId(data.itemId),
         name: data.name,
         avgRate: new AvgRate(data.avgRate),
-        itemInfo: ItemInfo.fromObject(data.itemIndo)
+        itemInfo: ItemInfo.fromJSON(data.itemInfo)
     }
 }
 

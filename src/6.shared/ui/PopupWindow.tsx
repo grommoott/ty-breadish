@@ -1,5 +1,10 @@
-import { FC, ReactNode } from "react"
+import { createContext, FC, ReactNode, useEffect, useState } from "react"
 import { motion } from "framer-motion"
+
+type PopupWindow = {
+	content: ReactNode
+	onClose: (result: any) => void
+}
 
 interface PopupWindowProps {
 	children?: ReactNode
@@ -7,7 +12,7 @@ interface PopupWindowProps {
 	setIsVisible: (value: boolean) => void
 }
 
-const PopupWindow: FC<PopupWindowProps> = ({
+const PopupWindowElement: FC<PopupWindowProps> = ({
 	isVisible,
 	children,
 	setIsVisible,
@@ -74,4 +79,90 @@ const PopupWindow: FC<PopupWindowProps> = ({
 	)
 }
 
-export default PopupWindow
+const Context = createContext<
+	(content: (closeWindow: (result: any) => void) => ReactNode) => Promise<any>
+>(() => Promise.resolve())
+
+interface PopupWindowProviderProps {
+	children?: ReactNode
+}
+
+const PopupWindowProvider: FC<PopupWindowProviderProps> = ({ children }) => {
+	const [windowsQueue, setWindowsQueue] = useState(new Array<PopupWindow>())
+	const [currentWindow, setCurrentWindow] = useState<PopupWindow>()
+	const [isVisible, setVisible] = useState(false)
+	const [closeWindowResult, setCloseWindowResult] = useState<any>()
+
+	function pushWindow(window: PopupWindow) {
+		setWindowsQueue((prev) => {
+			const queueTmp = prev.map((v) => v)
+			queueTmp.push(window)
+			return queueTmp
+		})
+	}
+
+	function shiftWindow(): PopupWindow | undefined {
+		const result = windowsQueue.shift()
+
+		setWindowsQueue(windowsQueue)
+
+		return result
+	}
+
+	function closeWindow(result: any) {
+		setVisible(false)
+		setCloseWindowResult(result)
+	}
+
+	useEffect(() => {
+		let timeout: NodeJS.Timeout
+
+		if (!isVisible && currentWindow) {
+			currentWindow.onClose(closeWindowResult)
+			setCloseWindowResult(undefined)
+		}
+
+		if (!isVisible && windowsQueue.length != 0) {
+			timeout = setTimeout(() => {
+				setCurrentWindow(shiftWindow())
+				setVisible(true)
+			}, 100)
+		}
+
+		return () => {
+			clearTimeout(timeout)
+		}
+	}, [isVisible, windowsQueue])
+
+	return (
+		<Context.Provider
+			value={(
+				content: (closeWindow: (result: any) => void) => ReactNode,
+			) => {
+				const popupWindow: PopupWindow = {
+					content: content(closeWindow),
+					onClose: () => {},
+				}
+
+				const result = new Promise((resolve) => {
+					popupWindow.onClose = resolve
+				})
+
+				pushWindow(popupWindow)
+
+				return result
+			}}
+		>
+			<PopupWindowElement
+				isVisible={isVisible}
+				setIsVisible={setVisible}
+			>
+				{currentWindow?.content}
+			</PopupWindowElement>
+			{children}
+		</Context.Provider>
+	)
+}
+
+export default PopupWindowProvider
+export { Context as PopupWindowContext }

@@ -1,15 +1,20 @@
 import { FC } from "react"
 import { motion } from "framer-motion"
 
-const Loading: FC<{ size?: number; color?: string }> = ({
+const Loading: FC<{ size?: number; color?: string; inline?: boolean }> = ({
 	size = 2,
 	color = "white",
+	inline = false,
 }) => {
 	return (
 		<svg
 			viewBox="0 0 100 100"
 			xmlns="http://www.w3.org/2000/svg"
-			style={{ height: `${size}rem`, userSelect: "none" }}
+			style={{
+				height: `${size}rem`,
+				userSelect: "none",
+				display: inline ? "inline" : "block",
+			}}
 		>
 			<motion.circle
 				cx={50}
