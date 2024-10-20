@@ -1,17 +1,19 @@
 import { minusImage, plusImage } from "@assets/ui"
 import { Product } from "@shared/facades"
-import { useAppDispatch, useAppSelector } from "@shared/hooks"
+import {
+	useAppDispatch,
+	useAppSelector,
+	useDefaultWidgetWidth,
+} from "@shared/hooks"
 import basketSlice from "@shared/store/slices/basketSlice"
 import { Button, SimpleButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
-import { FC, ReactNode, useEffect, useState } from "react"
+import { FC, ReactNode } from "react"
 import NumberInput from "./ui/NumberInput"
 import Star from "@shared/ui/Star"
 import { translateCookingMethod } from "@shared/model/types/enums/itemInfo/cookingMethod"
 import Tag from "@shared/ui/Tag"
 import { translateIngredient } from "@shared/model/types/enums/itemInfo/ingredient"
-import { usePageSize } from "@shared/contexts"
-import { PageSizes } from "@shared/enums"
 import { ItemType, ItemTypes } from "@shared/model/types/enums"
 import { ItemId } from "@shared/model/types/primitives"
 
@@ -33,8 +35,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 	}
 
 	const basket = useAppSelector((state) => state.basket)
-	const pageSize = usePageSize()
-	const [width, setWidth] = useState(50)
+	const width = useDefaultWidgetWidth()
 	const dispatch = useAppDispatch()
 
 	const setCountInBasket = (count?: number) => {
@@ -77,27 +78,13 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 		setCountInBasket(count - 1)
 	}
 
-	useEffect(() => {
-		if (pageSize > PageSizes.XXL) {
-			setWidth(40)
-		} else if (pageSize > PageSizes.XL) {
-			setWidth(50)
-		} else if (pageSize > PageSizes.Medium) {
-			setWidth(60)
-		} else if (pageSize > PageSizes.SmallMedium) {
-			setWidth(75)
-		} else if (pageSize > PageSizes.Small) {
-			setWidth(90)
-		}
-	}, [pageSize])
-
 	return (
 		<div
 			className="flex flex-col bg-[var(--dark-color)] p-4 rounded-3xl"
 			style={{ width: `${width}vw` }}
 		>
 			<div className="flex flex-col sm:flex-row gap-2 sm:gap-16 items-center sm:items-stretch justify-center sm:justify-between">
-				<div className="p-2 rounded-3xl bg-zinc-900">
+				<div className="p-2 rounded-3xl bg-zinc-900 h-min">
 					<img
 						src={product.imageLink}
 						className="w-60 sm:w-80 object-cover drop-shadow-2xl"
@@ -106,7 +93,12 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 
 				<div className="flex flex-col items-center sm:items-end flex-1">
 					<div className="flex flex-row items-center gap-4">
-						<h1 className="text-3xl ml-2">{product.name}</h1>
+						<h1
+							className="text-3xl ml-2"
+							style={{ overflowWrap: "anywhere" }}
+						>
+							{product.name}
+						</h1>
 						<>{featuredButton(product.itemId, ItemTypes.Product)}</>
 					</div>
 
@@ -183,6 +175,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 					</div>
 				</div>
 			</div>
+
 			<div className="p-2 mt-4">
 				<h1 className="text-2xl">Описание</h1>
 				<p>{product.description}</p>
@@ -193,15 +186,16 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 
 				<div className="flex flex-row flex-wrap items-center">
 					<p className="mr-1">Способ приготовления:</p>
-					<Tag>
-						{(() => {
-							const method = translateCookingMethod(
-								product.itemInfo.cookingMethod,
-							)
+					{product.itemInfo.cookingMethod.map((method) => {
+						const translated = translateCookingMethod(method)
 
-							return method[0].toUpperCase() + method.slice(1)
-						})()}
-					</Tag>
+						return (
+							<Tag>
+								{translated[0].toUpperCase() +
+									translated.slice(1)}
+							</Tag>
+						)
+					})}
 				</div>
 
 				<div style={{ height: "0.25rem" }} />

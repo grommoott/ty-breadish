@@ -57,6 +57,7 @@ const FeaturedButton: FC<FeaturedButtonProps> = ({ itemId, itemType }) => {
 					OwnedUser.instance?.featured?.push(response)
 				}
 			}}
+			className="size-12"
 		>
 			<img
 				src={isFeatured ? featuredActivatedImage : featuredImage}

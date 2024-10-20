@@ -1,0 +1,76 @@
+.markdown-container h1 {
+    font-size: 2rem;
+    line-height: 4rem;
+}
+
+.markdown-container h2 {
+    font-size: 1.8rem;
+    line-height: 3.6rem;
+}
+
+
+.markdown-container h3 {
+    font-size: 1.6rem;
+    line-height: 3.2rem;
+}
+
+.markdown-container h4 {
+    font-size: 1.4rem;
+    line-height: 2.8rem;
+}
+
+.markdown-container h5 {
+    font-size: 1.2rem;
+    line-height: 2.4rem;
+}
+
+.markdown-container ul,
+ol {
+    padding-left: 1rem;
+}
+
+.markdown-container ol {
+    counter-reset: item;
+}
+
+.markdown-container ul li::before {
+    content: "•︎ ";
+    color: var(--main-color)
+}
+
+.markdown-container ol li::before {
+    content: counter(item) ". ";
+    color: var(--main-color);
+    counter-increment: item;
+}
+
+.markdown-container table {
+    margin: 1rem 0;
+}
+
+.markdown-container th {
+    padding: 0 1rem;
+    color: var(--main-color);
+}
+
+.markdown-container tr {
+    border-bottom: 2px solid var(--zinc-800);
+}
+
+.markdown-container td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.markdown-container hr {
+    margin: 1rem 0;
+    border-top: 2px solid var(--zinc-800);
+    border-radius: 1px;
+}
+
+.markdown-container img {
+    border-radius: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20rem;
+}

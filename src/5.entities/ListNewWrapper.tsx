@@ -1,8 +1,7 @@
 import { commentImage } from "@assets/ui"
-import { usePageSize } from "@shared/contexts"
-import { PageSizes } from "@shared/enums"
 import { ListNew, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
+import { useListNewWidth } from "@shared/hooks"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
@@ -16,20 +15,7 @@ const ListNewWrapper: FC<ListNewWrapperProps> = ({
 	aNew,
 	likeButton = () => {},
 }) => {
-	const pageSize = usePageSize()
-	const [width, setWidth] = useState(0)
-
-	useEffect(() => {
-		if (pageSize < PageSizes.SmallMedium) {
-			setWidth(90)
-		} else if (pageSize < PageSizes.XL) {
-			setWidth(70)
-		} else {
-			setWidth(50)
-		}
-
-		return
-	}, [pageSize])
+	const width = useListNewWidth()
 
 	if (!aNew) {
 		return (

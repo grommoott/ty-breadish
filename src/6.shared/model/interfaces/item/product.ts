@@ -39,7 +39,7 @@ function responseDataToProduct(data: any): IProduct {
         name: data.name,
         description: data.description,
         avgRate: new AvgRate(data.avgRate),
-        itemInfo: ItemInfo.fromJSON(data.itemInfo)
+        itemInfo: ItemInfo.fromObject(data.itemInfo)
     }
 }
 

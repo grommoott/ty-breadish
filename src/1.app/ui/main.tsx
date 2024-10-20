@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
+import "./markdown-container.css"
 import { Provider } from "react-redux"
 import store from "@shared/store"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"

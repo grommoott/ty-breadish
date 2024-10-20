@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactNode } from "react"
+import { ChangeEvent, FC, ReactNode, useEffect, useRef } from "react"
 
 interface InputBaseProps {
 	placeholder?: string
@@ -27,6 +27,18 @@ const BaseInput: FC<InputBaseProps> = ({
 	onFocus,
 	onBlur,
 }) => {
+	const inputRef = useRef(null)
+
+	useEffect(() => {
+		if (!inputRef.current || value == undefined) {
+			return
+		}
+
+		const input = inputRef.current as HTMLInputElement
+
+		input.value = value
+	}, [inputRef])
+
 	return (
 		<div
 			className={`flex flex-row items-center justify-center relative`}
@@ -40,13 +52,13 @@ const BaseInput: FC<InputBaseProps> = ({
 			>
 				{childrenLeft}
 				<input
+					ref={inputRef}
 					type="text"
 					className={`bg-transparent outline-none w-full ${placeholderClass}`}
 					placeholder={placeholder}
 					onChange={onChange}
 					onFocus={onFocus}
 					onBlur={onBlur}
-					value={value}
 				/>
 				{childrenRight}
 			</div>
