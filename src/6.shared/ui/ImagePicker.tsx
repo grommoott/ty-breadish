@@ -94,7 +94,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
 							openFilePicker()
 						}
 					}}
-					className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl hover:bg-zinc-900 active:bg-zinc-800 duration-100 focus-visible-default"
+					className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-10 active:bg-opacity-20 duration-100 focus-visible-default"
 				>
 					<img
 						src={fileUploadImage}
@@ -125,7 +125,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
 								setLoading(false)
 							}
 						}}
-						className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl hover:bg-zinc-900 active:bg-zinc-800 duration-100 focus-visible-default"
+						className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-10 active:bg-opacity-20 duration-100 focus-visible-default"
 					>
 						<img
 							src={trashImage}

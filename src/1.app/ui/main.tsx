@@ -8,9 +8,9 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import Test from "@pages/Test"
 import { PageSizeProvider } from "@shared/contexts"
 import { PageSize, PageSizes } from "@shared/enums"
-import { OwnedUser } from "@shared/facades"
 import NotificationsProvider from "@shared/ui/Notification"
 import PopupWindowProvider from "@shared/ui/PopupWindow"
+import { OwnedUser } from "@shared/facades"
 
 const router = createBrowserRouter([
 	{

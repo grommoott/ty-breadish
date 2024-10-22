@@ -1,43 +1,45 @@
-import { New } from "@shared/facades"
+import { Recipe } from "@shared/facades"
 import { ExError } from "@shared/helpers"
-import { NewId } from "@shared/model/types/primitives"
-import { AnimatedFullLogo } from "@shared/ui/Logos"
+import { RecipeId } from "@shared/model/types/primitives"
 import { ReactElement, useEffect, useState } from "react"
-import NewWrapper from "@entities/NewWrapper"
-import LikeButton from "@features/LikeButton"
-import { LikeTypes } from "@shared/model/types/enums"
+import RecipeWrapper from "@entities/RecipeWrapper"
+import CreateReviewForm from "@entities/CreateReviewForm"
+import CreateReviewButton from "@features/CreateReviewButton"
 
 export default function Test(): ReactElement {
-	const [aNew, setNew] = useState<New>()
+	const [recipe, setRecipe] = useState<Recipe>()
 
 	useEffect(() => {
 		;(async () => {
-			const response = await New.fromId(new NewId(0))
+			const recipe = await Recipe.fromId(new RecipeId(19))
 
-			if (response instanceof ExError) {
-				console.error(response)
+			if (recipe instanceof ExError) {
+				console.error(recipe)
 				return
 			}
 
-			setNew(response)
+			setRecipe(recipe)
 		})()
 	}, [])
 
 	return (
 		<div className="bg-zinc-900 flex flex-col items-center justify-center">
-			<AnimatedFullLogo />
+			{/* <AnimatedFullLogo /> */}
 
-			{aNew && (
-				<NewWrapper
-					aNew={aNew}
-					likeButton={(onChange) => (
-						<LikeButton
-							likeType={LikeTypes.Media}
-							id={aNew.id}
-							onChange={onChange}
-						/>
-					)}
-				/>
+			{recipe && (
+				<>
+					<RecipeWrapper recipe={recipe} />
+					<CreateReviewForm
+						createReviewButton={(getContent, getRate) => (
+							<CreateReviewButton
+								getContent={getContent}
+								getRate={getRate}
+								target={recipe.itemId}
+								onReview={console.log}
+							/>
+						)}
+					/>
+				</>
 			)}
 
 			<div className="h-60" />

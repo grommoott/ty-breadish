@@ -5,6 +5,7 @@ interface MultilineInputProps {
 	setContent?: (value: string) => void
 	className?: string
 	autoHeight?: boolean
+	placeholder?: string
 }
 
 const MultilineFlatInput: FC<MultilineInputProps> = ({
@@ -12,6 +13,7 @@ const MultilineFlatInput: FC<MultilineInputProps> = ({
 	setContent = () => {},
 	className = "",
 	autoHeight = false,
+	placeholder = "",
 }) => {
 	const ref = useRef(null)
 
@@ -42,9 +44,10 @@ const MultilineFlatInput: FC<MultilineInputProps> = ({
 
 	return (
 		<textarea
+			placeholder={placeholder}
 			autoFocus
 			ref={ref}
-			className={`outline-none bg-transparent resize-none p-0 ${className}`}
+			className={`outline-none bg-transparent resize-none placeholder-zinc-700 p-0 ${className}`}
 			onChange={(e) => setContentWrapper(e.target.value)}
 			value={content}
 		></textarea>

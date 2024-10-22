@@ -88,7 +88,7 @@ class OwnedUser {
     }
 
     public get avatarLink(): string {
-        return `${backendBaseUrl}/users/avatars/id/${this.id}`
+        return `${backendBaseUrl}/api/users/avatars/id/${this.id}`
     }
 
     public get likes(): Array<Like> | undefined {

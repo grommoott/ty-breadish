@@ -3,6 +3,7 @@ import { Like, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { LikeType } from "@shared/model/types/enums"
 import { Id } from "@shared/model/types/primitives"
+import { SimpleButton } from "@shared/ui/Buttons"
 import { FC, useState } from "react"
 
 interface LikeButtonProps {
@@ -52,17 +53,15 @@ const LikeButton: FC<LikeButtonProps> = ({
 	}
 
 	return (
-		<img
-			src={isLiked ? likedImage : likeImage}
-			tabIndex={0}
-			className="focus-visible-default h-12 hover:scale-110 active:scale-90 duration-100"
+		<SimpleButton
+			className="size-12"
 			onClick={onClick}
-			onKeyDown={(e) => {
-				if (e.key === "Enter") {
-					onClick()
-				}
-			}}
-		/>
+		>
+			<img
+				src={isLiked ? likedImage : likeImage}
+				className="h-12"
+			/>
+		</SimpleButton>
 	)
 }
 

@@ -53,6 +53,25 @@ const useListNewWidth = () => {
     return width
 }
 
+const useSmallWidgetWidth = () => {
+    const pageSize = usePageSize()
+    const [width, setWidth] = useState(70)
+
+    useEffect(() => {
+        if (pageSize < PageSizes.Large) {
+            setWidth(90)
+        } else if (pageSize < PageSizes.XL) {
+            setWidth(70)
+        } else if (pageSize < PageSizes.XXL) {
+            setWidth(60)
+        } else {
+            setWidth(50)
+        }
+    }, [pageSize])
+
+    return width
+}
+
 const useAppDispatch = useDispatch<AppDispatch>
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
@@ -62,5 +81,6 @@ export {
     useNotification,
     usePopupWindow,
     useDefaultWidgetWidth,
-    useListNewWidth
+    useListNewWidth,
+    useSmallWidgetWidth
 }

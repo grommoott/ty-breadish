@@ -7,6 +7,7 @@ import { LikeTypes, Rate } from "@shared/model/types/enums"
 import { SimpleButton } from "@shared/ui/Buttons"
 import { MultilineFlatInput } from "@shared/ui/Inputs"
 import Loading from "@shared/ui/Loading"
+import RateSelector from "@shared/ui/RateSelector"
 import Star from "@shared/ui/Star"
 import { FC, ReactNode, useEffect, useState } from "react"
 
@@ -46,7 +47,6 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 	const [width, setWidth] = useState(70)
 	const [isEditing, setEditing] = useState(false)
 	const [content, setContent] = useState(review.content)
-	const [editingRate, setEditingRate] = useState(review.rate)
 	const [rate, setRate] = useState(review.rate)
 
 	useEffect(() => {
@@ -116,26 +116,10 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 						<div className="flex-1" />
 
 						{isEditing ? (
-							<div
-								onMouseLeave={() => setEditingRate(rate)}
-								onBlur={() => setEditingRate(rate)}
-								className="max-h-8 flex flex-row"
-							>
-								{[0, 1, 2, 3, 4].map((val) => (
-									<SimpleButton
-										key={val}
-										onPointerDown={() => {
-											setEditingRate((val + 1) as Rate)
-											setRate((val + 1) as Rate)
-										}}
-										onMouseEnter={() =>
-											setEditingRate((val + 1) as Rate)
-										}
-									>
-										<Star fillRatio={editingRate - val} />
-									</SimpleButton>
-								))}
-							</div>
+							<RateSelector
+								rate={rate}
+								setRate={setRate}
+							/>
 						) : (
 							<div className="max-h-8 flex flex-row">
 								{[0, 1, 2, 3, 4].map((val) => (

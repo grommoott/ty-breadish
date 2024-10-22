@@ -5,9 +5,10 @@ import { AccentButton, Button, SimpleButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode, useEffect, useRef, useState } from "react"
 import { motion, useAnimationControls } from "framer-motion"
-import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
 import { MultilineFlatInput } from "@shared/ui/Inputs"
+import { useSmallWidgetWidth } from "@shared/hooks"
+import { usePageSize } from "@shared/contexts"
 
 interface CommentWrapperProps {
 	comment?: Comment
@@ -49,8 +50,8 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 	const childrenControls = useAnimationControls()
 	const childrenDiv = useRef(null)
 
+	const width = useSmallWidgetWidth()
 	const pageSize = usePageSize()
-	const [width, setWidth] = useState(70)
 
 	useEffect(() => {
 		;(async () => {
@@ -104,18 +105,6 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 			})
 		}
 	}, [isUnwraped])
-
-	useEffect(() => {
-		if (pageSize < PageSizes.Large) {
-			setWidth(90)
-		} else if (pageSize < PageSizes.XL) {
-			setWidth(70)
-		} else if (pageSize < PageSizes.XXL) {
-			setWidth(60)
-		} else {
-			setWidth(50)
-		}
-	}, [pageSize])
 
 	return (
 		<div
