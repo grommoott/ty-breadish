@@ -19,8 +19,10 @@ const router = createBrowserRouter([
 	},
 ])
 
-await OwnedUser.login("grommoott", "1234")
-await OwnedUser.instance?.initialize()
+async function initialization(): Promise<void> {
+	await OwnedUser.login("grommoott", "1234")
+	await OwnedUser.instance?.initialize()
+}
 
 function matchPageSize(pageWidth: number): PageSize {
 	if (pageWidth < PageSizes.ExtraSmall) {
@@ -58,14 +60,16 @@ const PageSizeProviderWrapper: FC = () => {
 	)
 }
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<NotificationsProvider>
-				<PopupWindowProvider>
-					<PageSizeProviderWrapper />
-				</PopupWindowProvider>
-			</NotificationsProvider>
-		</Provider>
-	</React.StrictMode>,
+initialization().then(() =>
+	ReactDOM.createRoot(document.getElementById("root")!).render(
+		<React.StrictMode>
+			<Provider store={store}>
+				<NotificationsProvider>
+					<PopupWindowProvider>
+						<PageSizeProviderWrapper />
+					</PopupWindowProvider>
+				</NotificationsProvider>
+			</Provider>
+		</React.StrictMode>,
+	),
 )
