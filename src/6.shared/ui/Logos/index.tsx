@@ -1,11 +1,6 @@
-import { CSSProperties, FC, useEffect, useState } from "react"
+import { CSSProperties, FC, useEffect } from "react"
 import { fullLogo } from "@assets/index"
-import {
-	motion,
-	Variants,
-	useAnimationControls,
-	AnimatePresence,
-} from "framer-motion"
+import { motion, Variants, useAnimationControls } from "framer-motion"
 import "./index.css"
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"

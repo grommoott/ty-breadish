@@ -3,8 +3,6 @@ import { ExError } from "@shared/helpers";
 import { ILike, ISerializedLike } from "@shared/model/interfaces";
 import { LikeType } from "@shared/model/types/enums";
 import { Id, LikeId, UserId } from "@shared/model/types/primitives";
-import store from "@shared/store";
-import { addLike, removeLike } from "@shared/store/actionCreators/like";
 
 class Like {
 

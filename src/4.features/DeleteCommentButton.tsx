@@ -1,10 +1,10 @@
-import { Comment } from "@shared/facades"
+import { OwnedComment } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { AccentButton } from "@shared/ui/Buttons"
 import { FC } from "react"
 
 interface DeleteCommentButtonProps {
-	comment: Comment
+	comment: OwnedComment
 }
 
 const DeleteCommentButton: FC<DeleteCommentButtonProps> = ({ comment }) => {

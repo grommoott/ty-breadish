@@ -82,14 +82,6 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 		})
 	}
 
-	const insertChildrenComment = (comment: Comment) => {
-		setChildrenComments((prev) => {
-			const tmp = prev?.map((v) => v)
-
-			return new Array(comment).concat(tmp || [])
-		})
-	}
-
 	const width = useSmallWidgetWidth()
 	const pageSize = usePageSize()
 

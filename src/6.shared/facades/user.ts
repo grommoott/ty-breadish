@@ -3,7 +3,6 @@ import { deleteAvatar, deleteUser, getUser, getUsername, isEmailAvailable, isPas
 import { backendBaseUrl } from "@shared/config"
 import { ExError } from "@shared/helpers"
 import { IUser } from "@shared/model/interfaces"
-import { Role } from "@shared/model/types/enums"
 import { Email, Moment, UserId } from "@shared/model/types/primitives"
 import { Like } from "./like"
 import { Featured } from "./featured"
@@ -66,7 +65,7 @@ class OwnedUser {
     private _user: IUser
     private _likes: Array<Like> | undefined = undefined
     private _featured: Array<Featured> | undefined = undefined
-    private _role: Role | undefined = undefined
+    // private _role: Role | undefined = undefined
     private static _instance: OwnedUser | undefined = undefined
 
     // Getters
