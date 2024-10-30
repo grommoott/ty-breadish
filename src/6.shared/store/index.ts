@@ -3,7 +3,7 @@ import { likesReducer } from "./slices/likesSlice"
 import { featuredReducer } from "./slices/featuredSlice"
 import { productsReducer } from "./slices/productsSlice"
 import { recipesReducer } from "./slices/recipesSlice"
-import { basketReducer } from "./slices/basketSlice"
+import { basketReducer, basketSavingMiddleware } from "./slices/basketSlice"
 
 const rootReducer = combineReducers({
     likes: likesReducer,
@@ -15,6 +15,7 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(basketSavingMiddleware)
 })
 
 type RootState = ReturnType<typeof rootReducer>

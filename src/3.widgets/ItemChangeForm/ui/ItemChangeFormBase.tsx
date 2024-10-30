@@ -22,6 +22,7 @@ import {
 } from "@shared/hooks"
 import { ExError } from "@shared/helpers"
 import { BaseErrorData, BaseFormData } from "../types"
+import { agreeWindow } from "@shared/ui/PopupWindows"
 
 interface ItemChangeFormBaseProps<
 	T extends BaseFormData,
@@ -358,32 +359,9 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 							className="w-full flex flex-row items-center justify-center"
 							onClick={async () => {
 								const result = await popupWindow(
-									(closeWindow) => {
-										return (
-											<div className="flex flex-col items-center text-center">
-												Вы уверены, что хотите удалить
-												рецепт?
-												<div className="flex flex-row items-center justify-center">
-													<Button
-														onClick={() =>
-															closeWindow(
-																undefined,
-															)
-														}
-													>
-														Нет
-													</Button>
-													<Button
-														onClick={() =>
-															closeWindow("yes")
-														}
-													>
-														Да
-													</Button>
-												</div>
-											</div>
-										)
-									},
+									agreeWindow(
+										`Вы уверены, что хотите удалить ${subjectNameOf}?`,
+									),
 								)
 
 								if (!result) {

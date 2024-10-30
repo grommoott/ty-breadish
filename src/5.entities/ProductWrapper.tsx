@@ -1,4 +1,3 @@
-import { minusImage, plusImage } from "@assets/ui"
 import { Product } from "@shared/facades"
 import {
 	useAppDispatch,
@@ -6,16 +5,16 @@ import {
 	useDefaultWidgetWidth,
 } from "@shared/hooks"
 import basketSlice from "@shared/store/slices/basketSlice"
-import { Button, SimpleButton } from "@shared/ui/Buttons"
+import { Button } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode } from "react"
-import NumberInput from "./ui/NumberInput"
 import Star from "@shared/ui/Star"
 import { translateCookingMethod } from "@shared/model/types/enums/itemInfo/cookingMethod"
 import Tag from "@shared/ui/Tag"
 import { translateIngredient } from "@shared/model/types/enums/itemInfo/ingredient"
 import { ItemType, ItemTypes } from "@shared/model/types/enums"
 import { ItemId } from "@shared/model/types/primitives"
+import CountInput from "@shared/ui/Inputs/countInput"
 
 interface ProductWrapperProps {
 	product?: Product
@@ -58,29 +57,9 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 		)
 	}
 
-	const incrementCountInBasket = () => {
-		const count = basket[product.id.id]
-
-		if (count == undefined) {
-			return
-		}
-
-		setCountInBasket(count + 1)
-	}
-
-	const decrementCountInBasket = () => {
-		const count = basket[product.id.id]
-
-		if (count == undefined) {
-			return
-		}
-
-		setCountInBasket(count - 1)
-	}
-
 	return (
 		<div
-			className="flex flex-col bg-[var(--dark-color)] p-4 rounded-3xl"
+			className="flex flex-col bg-[var(--dark-color)] p-4 rounded-3xl my-4"
 			style={{ width: `${width}vw` }}
 		>
 			<div className="flex flex-col sm:flex-row gap-2 sm:gap-16 items-center sm:items-stretch justify-center sm:justify-between">
@@ -121,43 +100,10 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 
 					<div className="flex flex-col items-center">
 						{basket[product.id.id] ? (
-							<>
-								<div className="flex flex-row items-center">
-									<SimpleButton
-										onClick={decrementCountInBasket}
-									>
-										<img
-											src={minusImage}
-											className="size-8"
-										/>
-									</SimpleButton>
-
-									<NumberInput
-										value={basket[product.id.id] || 0}
-										setValue={setCountInBasket}
-										predicate={(val) =>
-											val > 0 && val % 1 == 0
-										}
-									/>
-
-									<SimpleButton>
-										<img
-											onClick={incrementCountInBasket}
-											src={plusImage}
-											className="size-8"
-										/>
-									</SimpleButton>
-								</div>
-
-								<p className="text-2xl">
-									К оплате:{" "}
-									<span className="text-[var(--main-color)]">
-										{(basket[product.id.id] || 1) *
-											product.price.price}
-										₽
-									</span>
-								</p>
-							</>
+							<CountInput
+								onChange={setCountInBasket}
+								initial={basket[product.id.id]}
+							/>
 						) : (
 							<Button
 								onClick={() =>

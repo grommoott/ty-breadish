@@ -39,7 +39,7 @@ class Comment extends Media {
 
     // Methods
 
-    protected async edit(content?: string): Promise<void | ExError> {
+    protected async _edit(content?: string): Promise<void | ExError> {
         const edit: void | ExError = await putComment(this.id, content)
 
         if (edit instanceof ExError) {
@@ -52,7 +52,7 @@ class Comment extends Media {
         }
     }
 
-    public async delete(): Promise<void | ExError> {
+    protected async _delete(): Promise<void | ExError> {
         return await deleteComment(this.id)
     }
 
@@ -91,7 +91,11 @@ class OwnedComment extends Comment {
     // Methods
 
     public async edit(content?: string): Promise<void | ExError> {
-        return await super.edit(content)
+        return await super._edit(content)
+    }
+
+    public async delete(): Promise<void | ExError> {
+        return await super._delete()
     }
 
     // Static constructors

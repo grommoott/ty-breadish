@@ -5,7 +5,6 @@ interface PickUpOrderInfo {
     bakeryAddress: string,
     state: PickUpOrderState,
     productCounts: { [id: number]: number }
-
 }
 
 interface CourierOrderInfo {

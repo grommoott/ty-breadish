@@ -4,32 +4,49 @@ import { ExError } from "@shared/helpers"
 import { AccentButton, Button, SimpleButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode, useEffect, useRef, useState } from "react"
-import { motion, useAnimationControls } from "framer-motion"
+import { motion, useAnimationControls, useInView } from "framer-motion"
 import { PageSizes } from "@shared/enums"
 import { MultilineFlatInput } from "@shared/ui/Inputs"
-import { useSmallWidgetWidth } from "@shared/hooks"
+import { usePopupWindow, useSmallWidgetWidth } from "@shared/hooks"
 import { usePageSize } from "@shared/contexts"
+import {
+	CommentsSortOrder,
+	CommentsSortOrders,
+	LikeType,
+	LikeTypes,
+} from "@shared/model/types/enums"
+import { Id, MediaId } from "@shared/model/types/primitives"
+import { agreeWindow } from "@shared/ui/PopupWindows"
 
 interface CommentWrapperProps {
 	comment?: Comment
-	likeButton?: (onChange: (value: boolean) => void) => ReactNode
-	changeCommentButton?: (
+	likeButton: (
+		type: LikeType,
+		id: Id,
+		onChange: (value: boolean) => void,
+	) => ReactNode
+	changeCommentButton: (
 		comment: Comment,
 		onValueChange: (value: boolean) => void,
 		getCommentContent: () => string,
 	) => ReactNode
-	onReply?: () => void
-	onDelete?: () => void
-	children?: ReactNode
+	onDelete?: (comment: OwnedComment) => void
+	onSizeChange?: () => void
+	replyCommentForm: (
+		target: MediaId,
+		onComment: (comment: OwnedComment) => void,
+	) => ReactNode
+	sortOrder?: CommentsSortOrder
 }
 
 const CommentWrapper: FC<CommentWrapperProps> = ({
 	comment,
-	likeButton = () => {},
-	changeCommentButton = () => {},
-	onReply = () => {},
+	likeButton,
+	changeCommentButton,
+	onSizeChange = () => {},
 	onDelete = () => {},
-	children,
+	replyCommentForm,
+	sortOrder = CommentsSortOrders.LikedFirst,
 }) => {
 	if (!comment) {
 		return <div></div>
@@ -50,8 +67,36 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 	const childrenControls = useAnimationControls()
 	const childrenDiv = useRef(null)
 
+	const [childrenComments, setChildrenComments] = useState<Comment[]>()
+	const [childrenCommentsPage, setChildrenCommentsPage] = useState(0)
+	const [isLoadingChildrenComments, setLoadingChildrenComments] =
+		useState(false)
+
+	const [isReplying, setReplying] = useState(false)
+
+	const appendChildrenComments = (comments: Comment[]) => {
+		setChildrenComments((prev) => {
+			const tmp = prev?.map((v) => v) || new Array<Comment>()
+
+			return tmp?.concat(comments)
+		})
+	}
+
+	const insertChildrenComment = (comment: Comment) => {
+		setChildrenComments((prev) => {
+			const tmp = prev?.map((v) => v)
+
+			return new Array(comment).concat(tmp || [])
+		})
+	}
+
 	const width = useSmallWidgetWidth()
 	const pageSize = usePageSize()
+
+	const popupWindow = usePopupWindow()
+
+	const observerRef = useRef(null)
+	const isObserverInView = useInView(observerRef)
 
 	useEffect(() => {
 		;(async () => {
@@ -68,6 +113,7 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 			const likesCount = await comment.getLikesCount()
 
 			if (likesCount instanceof ExError) {
+				console.error(likesCount)
 				return
 			}
 
@@ -77,10 +123,26 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 			const commentsCount = await comment.getCommentsCount()
 
 			if (commentsCount instanceof ExError) {
+				console.error(commentsCount)
 				return
 			}
 
 			setCommentsCount(commentsCount)
+		})()
+		;(async () => {
+			const childrenComments = await Comment.getCommentsPage(
+				comment.mediaId,
+				sortOrder,
+				childrenCommentsPage,
+			)
+
+			if (childrenComments instanceof ExError) {
+				console.error(childrenComments)
+				return
+			}
+
+			setChildrenComments(childrenComments)
+			setChildrenCommentsPage(1)
 		})()
 	}, [])
 
@@ -104,7 +166,62 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 				pointerEvents: "none",
 			})
 		}
+
+		updateHeight()
 	}, [isUnwraped])
+
+	const updateHeight = () => {
+		if (!childrenDiv.current || !isUnwraped) {
+			return
+		}
+
+		const div = childrenDiv.current as HTMLDivElement
+
+		childrenControls.start({
+			maxHeight: div.scrollHeight,
+			opacity: 1,
+			pointerEvents: "all",
+		})
+
+		onSizeChange()
+	}
+
+	useEffect(() => {
+		if (!isObserverInView || !isUnwraped) {
+			return
+		}
+
+		;(async () => {
+			if (isLoadingChildrenComments) {
+				return
+			}
+
+			setLoadingChildrenComments(true)
+			const comments = await Comment.getCommentsPage(
+				comment.mediaId,
+				sortOrder,
+				childrenCommentsPage,
+			)
+
+			if (comments instanceof ExError) {
+				console.error(comments)
+				setLoadingChildrenComments(false)
+				return
+			}
+
+			setChildrenCommentsPage((prev) => prev + 1)
+			appendChildrenComments(comments)
+			setLoadingChildrenComments(false)
+		})()
+	}, [isObserverInView])
+
+	useEffect(() => {
+		if (isReplying) {
+			setUnwraped(true)
+		}
+	}, [isReplying])
+
+	useEffect(updateHeight, [childrenComments])
 
 	return (
 		<div
@@ -140,7 +257,26 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 					{comment instanceof OwnedComment && (
 						<SimpleButton
 							className="size-10"
-							onClick={onDelete}
+							onClick={async () => {
+								const result = await popupWindow(
+									agreeWindow(
+										"Вы уверены, что хотите удалить комментарий?",
+									),
+								)
+
+								if (!result) {
+									return
+								}
+
+								const response = await comment.delete()
+
+								if (response instanceof ExError) {
+									console.error(response)
+									return
+								}
+
+								onDelete(comment)
+							}}
 						>
 							<img src={trashImage} />
 						</SimpleButton>
@@ -160,7 +296,12 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 				<div className="flex flex-col md:flex-row justify-between items-center">
 					<div className="flex flex-col md:flex-row items-stretch md:items-center w-full">
 						{OwnedUser.instance && (
-							<AccentButton onClick={onReply}>
+							<AccentButton
+								onClick={() => {
+									onSizeChange()
+									setReplying(true)
+								}}
+							>
 								Ответить
 							</AccentButton>
 						)}
@@ -178,7 +319,13 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 
 					<div className="flex flex-row items-center gap-4">
 						<div className="flex flex-row items-center w-max">
-							<>{likeButton(setLiked)}</>
+							<>
+								{likeButton(
+									LikeTypes.Media,
+									comment.mediaId,
+									setLiked,
+								)}
+							</>
 							{likesCount != undefined ? (
 								<p>{likesCount + (isLiked ? 1 : 0)}</p>
 							) : (
@@ -198,23 +345,27 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 							)}
 						</div>
 
-						{pageSize >= PageSizes.Small && children && (
+						{pageSize >= PageSizes.Small &&
+							childrenComments &&
+							childrenComments?.length != 0 && (
+								<Button
+									onClick={() => setUnwraped((prev) => !prev)}
+								>
+									{isUnwraped ? "Свернуть" : "Развернуть"}
+								</Button>
+							)}
+					</div>
+
+					{pageSize < PageSizes.Small &&
+						childrenComments &&
+						childrenComments?.length != 0 && (
 							<Button
+								className="self-stretch"
 								onClick={() => setUnwraped((prev) => !prev)}
 							>
 								{isUnwraped ? "Свернуть" : "Развернуть"}
 							</Button>
 						)}
-					</div>
-
-					{pageSize < PageSizes.Small && children && (
-						<Button
-							className="self-stretch"
-							onClick={() => setUnwraped((prev) => !prev)}
-						>
-							{isUnwraped ? "Свернуть" : "Развернуть"}
-						</Button>
-					)}
 				</div>
 			</div>
 
@@ -229,7 +380,44 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 				className="w-full mb-2"
 			>
 				<div className="px-2 flex flex-col items-start border-2 border-zinc-800 rounded-3xl">
-					{children}
+					{isReplying && (
+						<>
+							{replyCommentForm(comment.mediaId, (comment) => {
+								setChildrenComments((prev) => {
+									const tmp =
+										prev?.map((v) => v) ||
+										new Array<Comment>()
+
+									tmp.unshift(comment)
+									return tmp
+								})
+								setCommentsCount((prev) =>
+									prev ? Number(prev) + 1 : undefined,
+								)
+							})}
+						</>
+					)}
+
+					{childrenComments?.map((comment) => (
+						<CommentWrapper
+							sortOrder={sortOrder}
+							comment={comment}
+							likeButton={likeButton}
+							replyCommentForm={replyCommentForm}
+							changeCommentButton={changeCommentButton}
+							onSizeChange={updateHeight}
+							// onReply={insertChildrenComment}
+							onDelete={(comment) => {
+								setChildrenComments((prev) =>
+									prev?.filter(
+										(val) => val.id.id != comment.id.id,
+									),
+								)
+							}}
+							key={comment.id.id}
+						/>
+					))}
+					<div ref={observerRef} />
 				</div>
 			</motion.div>
 		</div>

@@ -40,12 +40,21 @@ const LikeButton: FC<LikeButtonProps> = ({
 			}
 
 			setLike(response)
+			OwnedUser.instance?.likes?.push(response)
 		} else {
 			const response = await like?.delete()
 
 			if (response instanceof ExError) {
 				console.error(response)
 				return
+			}
+
+			const index = OwnedUser.instance?.likes?.findIndex(
+				(val) => val.id.id == like?.id.id,
+			)
+
+			if (index) {
+				OwnedUser.instance?.likes?.splice(index, 1)
 			}
 
 			setLike(undefined)

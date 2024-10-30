@@ -5,7 +5,10 @@ import { MultilineFlatInput } from "@shared/ui/Inputs"
 import { FC, ReactNode, useState } from "react"
 
 interface CreateCommentForm {
-	createCommentButton: (getContent: () => string) => ReactNode
+	createCommentButton: (
+		getContent: () => string,
+		onComment: () => void,
+	) => ReactNode
 }
 
 const CreateCommentForm: FC<CreateCommentForm> = ({ createCommentButton }) => {
@@ -15,7 +18,7 @@ const CreateCommentForm: FC<CreateCommentForm> = ({ createCommentButton }) => {
 	return (
 		<div
 			className="flex flex-col m-2 p-2 rounded-3xl bg-[var(--dark-color)] items-stretch"
-			style={{ width: `${width}vw` }}
+			style={{ width: `min(${width}vw, 100%)` }}
 		>
 			<div className="flex flex-row">
 				<img
@@ -32,7 +35,10 @@ const CreateCommentForm: FC<CreateCommentForm> = ({ createCommentButton }) => {
 					/>
 				</div>
 			</div>
-			{createCommentButton(() => content)}
+			{createCommentButton(
+				() => content,
+				() => setContent(""),
+			)}
 		</div>
 	)
 }

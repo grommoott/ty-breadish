@@ -32,34 +32,35 @@ function ButtonBase({
 	)
 }
 
-function Button({ className, style, ...props }: ButtonProps) {
+function Button({ className, ...props }: ButtonProps) {
 	return (
 		<ButtonBase
 			className={`buttons-white ${className}`}
-			style={style}
 			{...props}
 		/>
 	)
 }
 
-function AccentButton({ className, style, ...props }: ButtonProps) {
+function AccentButton({ className, ...props }: ButtonProps) {
 	return (
 		<ButtonBase
 			className={`buttons-accent ${className}`}
-			style={style}
 			{...props}
 		/>
 	)
 }
 
-function SimpleButton({ className, style, ...props }: ButtonProps) {
+function SimpleButton({ className, ...props }: ButtonProps) {
 	return (
 		<ButtonBase
 			className={`hover:scale-110 active:scale-90 duration-100 focus-visible-default ${className}`}
-			style={style}
 			{...props}
 		/>
 	)
 }
 
-export { Button, AccentButton, SimpleButton }
+function NonStyledButton({ ...props }: ButtonProps) {
+	return <ButtonBase {...props} />
+}
+
+export { Button, AccentButton, SimpleButton, NonStyledButton }

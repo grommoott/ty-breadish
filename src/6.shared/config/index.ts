@@ -5,7 +5,10 @@ const defaultAxiosRequestConfig: AxiosRequestConfig = {
     withCredentials: true
 }
 
+const commentsPageSize = 5
+
 export {
     backendBaseUrl,
-    defaultAxiosRequestConfig
+    defaultAxiosRequestConfig,
+    commentsPageSize
 }
