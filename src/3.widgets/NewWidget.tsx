@@ -54,26 +54,6 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 	}
 
 	useEffect(() => {
-		setLoadingComments(() => true)
-
-		setComments(new Array())
-		;(async () => {
-			const response = await Comment.getCommentsPage(
-				aNew.mediaId,
-				sortOrder,
-				0,
-			)
-
-			if (response instanceof ExError) {
-				console.error(response)
-				setLoadingComments(false)
-				return
-			}
-
-			setCommentsPage(1)
-			setLoadingComments(false)
-			setComments(response)
-		})()
 		;(async () => {
 			const response = await aNew.getCommentsCount()
 
@@ -84,9 +64,15 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 
 			setCommentsPagesTotal(Math.ceil(response / commentsPageSize))
 		})()
-	}, [sortOrder])
+	}, [])
 
 	useEffect(() => {
+		setCommentsPage(0)
+		setLoadingComments(() => true)
+		setComments(new Array())
+	}, [sortOrder])
+
+	const loadComments = () => {
 		if (!isObserverInView) {
 			return
 		}
@@ -100,24 +86,31 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 		}
 
 		setLoadingComments(() => true)
-		;(async () => {
-			const response = await Comment.getCommentsPage(
-				aNew.mediaId,
-				CommentsSortOrders.NewFirst,
-				commentsPage,
-			)
+	}
 
-			if (response instanceof ExError) {
-				console.error(response)
+	useEffect(() => {
+		if (isLoadingComments) {
+			;(async () => {
+				const response = await Comment.getCommentsPage(
+					aNew.mediaId,
+					sortOrder,
+					commentsPage,
+				)
+
+				if (response instanceof ExError) {
+					console.error(response)
+					setLoadingComments(false)
+					return
+				}
+
+				appendComments(response)
 				setLoadingComments(false)
-				return
-			}
+				setCommentsPage((prev) => prev + 1)
+			})()
+		}
+	}, [isLoadingComments])
 
-			setCommentsPage((prev) => prev + 1)
-			setLoadingComments(false)
-			appendComments(response)
-		})()
-	}, [isObserverInView])
+	useEffect(loadComments, [isObserverInView, commentsPage])
 
 	return (
 		<>
@@ -133,8 +126,8 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 			/>
 
 			<h1 className="text-4xl">Комментарии</h1>
-			<div className="flex flex-col sm:flex-row items-center justify-center">
-				<p className="text-2xl">Порядок сортировки</p>
+			<div className="flex flex-col sm:flex-row items-center justify-center gap-1">
+				<p className="text-2xl text-center">Порядок сортировки</p>
 				<ListBox
 					items={translatedCommentsSortOrders}
 					defaultValue={{
@@ -146,6 +139,7 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 					onChange={(value) =>
 						setSortOrder(value as CommentsSortOrder)
 					}
+					width="16rem"
 				/>
 			</div>
 
@@ -186,6 +180,7 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 					)}
 					replyCommentForm={(target, onComment) => (
 						<CreateCommentForm
+							autoFocus
 							createCommentButton={(getContent) => (
 								<CreateCommentButton
 									getContent={getContent}

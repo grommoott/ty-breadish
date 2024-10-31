@@ -26,7 +26,7 @@ const useDefaultWidgetWidth = () => {
             setWidth(60)
         } else if (pageSize > PageSizes.SmallMedium) {
             setWidth(75)
-        } else if (pageSize > PageSizes.Small) {
+        } else {
             setWidth(90)
         }
     }, [pageSize])

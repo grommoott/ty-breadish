@@ -17,6 +17,7 @@ import {
 } from "@shared/model/types/enums"
 import { Id, MediaId } from "@shared/model/types/primitives"
 import { agreeWindow } from "@shared/ui/PopupWindows"
+import { commentsPageSize } from "@shared/config"
 
 interface CommentWrapperProps {
 	comment?: Comment
@@ -69,6 +70,8 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 
 	const [childrenComments, setChildrenComments] = useState<Comment[]>()
 	const [childrenCommentsPage, setChildrenCommentsPage] = useState(0)
+	const [childrenCommentsPagesTotal, setChildrenCommentsPagesTotal] =
+		useState(Infinity)
 	const [isLoadingChildrenComments, setLoadingChildrenComments] =
 		useState(false)
 
@@ -120,21 +123,12 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 			}
 
 			setCommentsCount(commentsCount)
+			setChildrenCommentsPagesTotal(
+				Math.ceil(commentsCount / commentsPageSize),
+			)
 		})()
 		;(async () => {
-			const childrenComments = await Comment.getCommentsPage(
-				comment.mediaId,
-				sortOrder,
-				childrenCommentsPage,
-			)
-
-			if (childrenComments instanceof ExError) {
-				console.error(childrenComments)
-				return
-			}
-
-			setChildrenComments(childrenComments)
-			setChildrenCommentsPage(1)
+			setLoadingChildrenComments(true)
 		})()
 	}, [])
 
@@ -178,34 +172,49 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 		onSizeChange()
 	}
 
-	useEffect(() => {
+	const loadComments = () => {
 		if (!isObserverInView || !isUnwraped) {
 			return
 		}
 
-		;(async () => {
-			if (isLoadingChildrenComments) {
-				return
-			}
+		if (childrenCommentsPagesTotal <= childrenCommentsPage) {
+			return
+		}
 
-			setLoadingChildrenComments(true)
-			const comments = await Comment.getCommentsPage(
-				comment.mediaId,
-				sortOrder,
-				childrenCommentsPage,
-			)
+		if (isLoadingChildrenComments) {
+			return
+		}
 
-			if (comments instanceof ExError) {
-				console.error(comments)
+		setLoadingChildrenComments(true)
+	}
+
+	useEffect(() => {
+		if (isLoadingChildrenComments) {
+			;(async () => {
+				if (isLoadingChildrenComments) {
+					return
+				}
+
+				const comments = await Comment.getCommentsPage(
+					comment.mediaId,
+					sortOrder,
+					childrenCommentsPage,
+				)
+
+				if (comments instanceof ExError) {
+					console.error(comments)
+					setLoadingChildrenComments(false)
+					return
+				}
+
+				appendChildrenComments(comments)
 				setLoadingChildrenComments(false)
-				return
-			}
+				setChildrenCommentsPage((prev) => prev + 1)
+			})()
+		}
+	}, [isLoadingChildrenComments])
 
-			setChildrenCommentsPage((prev) => prev + 1)
-			appendChildrenComments(comments)
-			setLoadingChildrenComments(false)
-		})()
-	}, [isObserverInView])
+	useEffect(loadComments, [isObserverInView, childrenCommentsPage])
 
 	useEffect(() => {
 		if (isReplying) {
@@ -410,6 +419,10 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 						/>
 					))}
 					<div ref={observerRef} />
+
+					{childrenCommentsPagesTotal > childrenCommentsPage && (
+						<Loading />
+					)}
 				</div>
 			</motion.div>
 		</div>

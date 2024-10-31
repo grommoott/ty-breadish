@@ -6,12 +6,14 @@ interface ListBoxProps {
 	items: Map<string, string>
 	onChange?: (value: string) => void
 	defaultValue?: { key: string; value: string }
+	width?: string
 }
 
 const ListBox: FC<ListBoxProps> = ({
 	items,
 	onChange = () => {},
 	defaultValue,
+	width = "15rem",
 }) => {
 	const [isOpened, setOpened] = useState(false)
 	const [selected, setSelected] = useState(defaultValue?.key || "nothing")
@@ -65,11 +67,12 @@ const ListBox: FC<ListBoxProps> = ({
 				ref={absoluteContainer}
 			>
 				<NonStyledButton
-					className={`p-2 min-w-60 bg-zinc-900 flex flex-row justify-between items-center`}
+					className={`p-2 bg-zinc-900 flex flex-row justify-between items-center`}
 					style={{
 						borderRadius: isOpened
 							? "0.75rem 0.75rem 0 0"
 							: "0.75rem",
+						minWidth: width,
 					}}
 					onClick={() => setOpened((prev) => !prev)}
 				>

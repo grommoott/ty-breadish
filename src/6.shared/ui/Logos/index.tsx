@@ -1,13 +1,15 @@
 import { CSSProperties, FC, useEffect } from "react"
-import { fullLogo } from "@assets/index"
+import { fullLogo, logo } from "@assets/index"
 import { motion, Variants, useAnimationControls } from "framer-motion"
 import "./index.css"
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
 
-const FullLogo: FC<{ size: number }> = ({ size }) => {
+const FullLogo: FC<{ size?: number }> = ({ size = 16 }) => {
 	return (
 		<img
+			className="select-none"
+			draggable={false}
 			src={fullLogo}
 			style={{ height: `${size}rem` }}
 		/>
@@ -224,9 +226,8 @@ const AnimatedFullLogo: FC = () => {
 				>
 					<motion.circle
 						id="circle"
-						cx="220.13271"
-						cy="-202.84761"
-						transform="rotate(87.659907)"
+						cx="50%"
+						cy="50%"
 						r="126.85303"
 						fill="none"
 					/>
@@ -235,7 +236,7 @@ const AnimatedFullLogo: FC = () => {
 						className="select-none logo-text-default neucha"
 						fontSize="4rem"
 						textAnchor="middle"
-						x="96.5%"
+						x="142%"
 					>
 						<motion.textPath
 							href="#circle"
@@ -243,6 +244,10 @@ const AnimatedFullLogo: FC = () => {
 						>
 							ТЫ
 						</motion.textPath>
+					</motion.text>
+
+					<motion.text>
+						<motion.textPath href="#MyPath">привет</motion.textPath>
 					</motion.text>
 				</motion.svg>
 			</motion.div>
@@ -258,9 +263,8 @@ const AnimatedFullLogo: FC = () => {
 				>
 					<motion.circle
 						id="circle2"
-						cx="-202.17924"
-						cy="-220.37592"
-						transform="matrix(0, -1, -1, 0, 0, 0)"
+						cx="50%"
+						cy="50%"
 						fill="none"
 						r="185"
 					/>
@@ -268,10 +272,12 @@ const AnimatedFullLogo: FC = () => {
 					<motion.text
 						className="select-none logo-text-default neucha"
 						fontSize="4rem"
-						x="108%"
+						x="178%"
 						textAnchor="start"
 					>
 						<motion.textPath
+							//@ts-ignore
+							side="right"
 							href="#circle2"
 							variants={bottomTextVariants}
 						>
@@ -284,4 +290,15 @@ const AnimatedFullLogo: FC = () => {
 	)
 }
 
-export { FullLogo, AnimatedFullLogo }
+const SmallLogo: FC<{ size: number }> = ({ size }) => {
+	return (
+		<img
+			className="select-none"
+			draggable={false}
+			src={logo}
+			style={{ height: `${size}rem` }}
+		/>
+	)
+}
+
+export { FullLogo, AnimatedFullLogo, SmallLogo }

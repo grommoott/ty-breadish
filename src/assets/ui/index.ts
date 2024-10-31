@@ -44,6 +44,8 @@ import tickImage from "./tick.svg"
 import searchImage from "./search.svg"
 //@ts-ignore
 import trashImage from "./trash.svg"
+//@ts-ignore
+import menuImage from "./menu.svg"
 
 export {
     basketImage,
@@ -68,5 +70,6 @@ export {
     starshineImage,
     tickImage,
     searchImage,
-    trashImage
+    trashImage,
+    menuImage
 }

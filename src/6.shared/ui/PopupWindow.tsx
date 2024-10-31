@@ -50,7 +50,7 @@ const PopupWindowElement: FC<PopupWindowProps> = ({
 							? { opacity: 1, y: "0rem" }
 							: { opacity: 0, y: "-10rem" }
 					}
-					className="p-2 bg-zinc-900 rounded-2xl flex flex-col items-center justify-center"
+					className="p-4 bg-zinc-900 rounded-2xl flex flex-col items-center justify-center"
 				>
 					<svg
 						viewBox="0 0 100 100"

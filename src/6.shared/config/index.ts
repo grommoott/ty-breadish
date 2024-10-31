@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios"
 
-const backendBaseUrl = "https://ty-breadish-backend.onrender.com"//"http://localhost:8443"
+const backendBaseUrl = "http://localhost:8443"//"https://ty-breadish-backend.onrender.com"
 const defaultAxiosRequestConfig: AxiosRequestConfig = {
     withCredentials: true
 }

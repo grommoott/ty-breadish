@@ -1,6 +1,8 @@
 import { New } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { NewId } from "@shared/model/types/primitives"
+import { AnimatedFullLogo, FullLogo } from "@shared/ui/Logos"
+import Header from "@widgets/Header"
 import NewWidget from "@widgets/NewWidget"
 import { ReactElement, useEffect, useState } from "react"
 
@@ -22,7 +24,9 @@ export default function Test(): ReactElement {
 
 	return (
 		<div className="bg-zinc-900 flex flex-col items-center justify-center">
-			{/* <AnimatedFullLogo /> */}
+			<Header />
+			<AnimatedFullLogo />
+			<FullLogo />
 
 			<NewWidget aNew={aNew} />
 

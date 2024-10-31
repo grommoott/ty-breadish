@@ -4,14 +4,18 @@ import { useSmallWidgetWidth } from "@shared/hooks"
 import { MultilineFlatInput } from "@shared/ui/Inputs"
 import { FC, ReactNode, useState } from "react"
 
-interface CreateCommentForm {
+interface CreateCommentFormProps {
 	createCommentButton: (
 		getContent: () => string,
 		onComment: () => void,
 	) => ReactNode
+	autoFocus?: boolean
 }
 
-const CreateCommentForm: FC<CreateCommentForm> = ({ createCommentButton }) => {
+const CreateCommentForm: FC<CreateCommentFormProps> = ({
+	createCommentButton,
+	autoFocus = false,
+}) => {
 	const [content, setContent] = useState("")
 	const width = useSmallWidgetWidth()
 
@@ -27,6 +31,7 @@ const CreateCommentForm: FC<CreateCommentForm> = ({ createCommentButton }) => {
 				/>
 				<div className="bg-zinc-900 rounded-3xl p-2 m-2 flex-grow">
 					<MultilineFlatInput
+						autoFocus={autoFocus}
 						className="w-full"
 						placeholder="Напишите здесь свой комментарий"
 						autoHeight
