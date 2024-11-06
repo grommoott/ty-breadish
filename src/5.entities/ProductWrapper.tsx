@@ -44,12 +44,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 
 		if (count <= 0) {
 			dispatch(basketSlice.actions.removeProduct(product.id.id))
-			dispatch(
-				basketSlice.actions.setProduct({
-					productId: product.id.id,
-					count: 0,
-				}),
-			)
+			return
 		}
 
 		dispatch(
@@ -78,7 +73,14 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 						>
 							{product.name}
 						</h1>
-						<>{featuredButton(product.itemId, ItemTypes.Product)}</>
+						<div>
+							<>
+								{featuredButton(
+									product.itemId,
+									ItemTypes.Product,
+								)}
+							</>
+						</div>
 					</div>
 
 					<p className="text-[var(--main-color)] text-3xl text-end">
@@ -136,7 +138,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 						const translated = translateCookingMethod(method)
 
 						return (
-							<Tag>
+							<Tag key={method}>
 								{translated[0].toUpperCase() +
 									translated.slice(1)}
 							</Tag>
@@ -149,7 +151,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 				<div className="flex flex-row flex-wrap items-center">
 					<p className="mr-1">Ингредиенты:</p>
 					{product.itemInfo.ingredients.map((val) => (
-						<Tag>
+						<Tag key={val}>
 							{(() => {
 								const ingredient = translateIngredient(val)
 

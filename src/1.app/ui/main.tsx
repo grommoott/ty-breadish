@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 ])
 
 async function initialization(): Promise<void> {
-	await OwnedUser.login("grommoott", "1234")
+	await OwnedUser.refreshToken()
 	await OwnedUser.instance?.initialize()
 }
 

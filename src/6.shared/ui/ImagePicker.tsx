@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react"
 import { fileUploadImage, trashImage } from "@assets/ui"
 import Loading from "./Loading"
+import { SimpleButton } from "./Buttons"
 
 interface ImagePickerProps {
 	defaultUrl?: string
@@ -87,13 +88,8 @@ const ImagePicker: FC<ImagePickerProps> = ({
 			/>
 
 			<div className="flex flex-row">
-				<button
+				<SimpleButton
 					onClick={openFilePicker}
-					onKeyDown={(e) => {
-						if (e.key == "Enter") {
-							openFilePicker()
-						}
-					}}
 					className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-10 active:bg-opacity-20 duration-100 focus-visible-default"
 				>
 					<img
@@ -105,25 +101,17 @@ const ImagePicker: FC<ImagePickerProps> = ({
 							height: `${compact ? 1.5 : 2}rem`,
 						}}
 					/>
-				</button>
+				</SimpleButton>
 
 				{deletable && (
-					<button
+					<SimpleButton
 						onClick={async () => {
 							setLoading(true)
 
 							await onDelete()
 
+							setUrl(defaultUrl)
 							setLoading(false)
-						}}
-						onKeyDown={async (e) => {
-							if (e.key == "Enter") {
-								setLoading(true)
-
-								await onDelete()
-
-								setLoading(false)
-							}
 						}}
 						className="group group-hover:scale-110 group-active:scale-90 p-2 m-2 rounded-xl bg-black bg-opacity-0 hover:bg-opacity-10 active:bg-opacity-20 duration-100 focus-visible-default"
 					>
@@ -136,7 +124,7 @@ const ImagePicker: FC<ImagePickerProps> = ({
 								height: `${compact ? 1.5 : 2}rem`,
 							}}
 						/>
-					</button>
+					</SimpleButton>
 				)}
 			</div>
 		</div>

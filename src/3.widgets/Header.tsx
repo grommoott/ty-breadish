@@ -63,12 +63,28 @@ const Header: FC = () => {
 
 				<div className="ml-auto">
 					{OwnedUser.instance ? (
-						<div className="flex flex-row items-center">
-							<img
-								className="rounded-full size-12 cursor-pointer select-none hover:scale-110 active:scale-90 duration-100"
-								draggable={false}
-								src={OwnedUser.instance.avatarLink}
-							/>
+						<div className="flex flex-row items-center gap-2">
+							<SimpleButton
+								onClick={() => {
+									popupWindow(() => {
+										return (
+											<div className="flex flex-col items-center">
+												<Button>
+													Домашняя страница
+												</Button>
+												<Button>Корзина</Button>
+												<Button>Заказы</Button>
+											</div>
+										)
+									})
+								}}
+							>
+								<img
+									className="rounded-full size-12"
+									draggable={false}
+									src={OwnedUser.instance.avatarLink}
+								/>
+							</SimpleButton>
 						</div>
 					) : (
 						<SimpleButton>

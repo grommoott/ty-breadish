@@ -164,7 +164,7 @@ const ProductChangeForm: FC<ProductChangeFormProps> = ({ product }) => {
 				<ValidatedInput
 					error={errorData?.price}
 					placeholder="Цена в рублях"
-					value={product?.itemInfo.pfc.protein.toString()}
+					value={product?.price.price.toString()}
 					onChange={() =>
 						setErrorData((prev) => ({
 							...prev,

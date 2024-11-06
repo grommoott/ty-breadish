@@ -57,9 +57,11 @@ async function putNew(id: NewId, title?: string, content?: string): Promise<void
     }
 }
 
-async function checkNewImage(id: NewId): Promise<void | ExError> {
+async function isNewImageExists(id: NewId): Promise<void | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/news/images/id/${id}`, defaultAxiosRequestConfig)
+        const result = await axios.get(`${backendBaseUrl}/api/news/images/id/${id}`, defaultAxiosRequestConfig)
+
+        return result.data
     } catch (e) {
         return errorWrapper(e, "checkNewImage")
     }
@@ -103,7 +105,7 @@ export {
     createNew,
     deleteNew,
     putNew,
-    checkNewImage,
+    isNewImageExists,
     createNewImage,
     deleteNewImage,
     putNewImage

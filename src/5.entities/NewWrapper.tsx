@@ -55,6 +55,8 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 		})()
 	}, [])
 
+	console.log(likesCount)
+
 	return (
 		<div
 			style={{ width: `${width}vw` }}
@@ -71,7 +73,7 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 				<Markdown>{content}</Markdown>
 			</div>
 
-			<div className="flex flex-row justify-center">
+			<div className="flex flex-row w-full justify-center">
 				<div className="flex flex-row items-center mx-2">
 					<img
 						src={commentImage}
@@ -83,10 +85,10 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 						<Loading size={2} />
 					)}
 				</div>
-				{likesCount && (
+				{likesCount != undefined && (
 					<div className="flex flex-row items-center mx-2">
 						{likeButton(setLiked)}
-						{likesCount ? (
+						{likesCount != undefined ? (
 							<p>{likesCount + (isLiked ? 1 : 0)}</p>
 						) : (
 							<Loading size={2} />
@@ -94,6 +96,12 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 					</div>
 				)}
 			</div>
+
+			{aNew.isEdited && (
+				<>
+					<p className="text-zinc-700">Изменено</p>
+				</>
+			)}
 		</div>
 	)
 }

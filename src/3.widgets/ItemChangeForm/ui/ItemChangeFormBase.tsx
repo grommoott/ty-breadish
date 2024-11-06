@@ -13,7 +13,7 @@ import MultiSelect from "@shared/ui/MultiSelect"
 import { Dispatch, ReactNode, SetStateAction, useState } from "react"
 import { imageImage } from "@assets/ui"
 import { ValidatedInput } from "@shared/ui/Inputs"
-import { Button } from "@shared/ui/Buttons"
+import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import {
 	useDefaultWidgetWidth,
@@ -100,9 +100,6 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 						setFormData({ ...formData, image })
 						setErrorData((prev) => ({ ...prev, image: undefined }))
 					}}
-					onDelete={() =>
-						setFormData({ ...formData, image: undefined })
-					}
 				/>
 			</div>
 
@@ -343,7 +340,7 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 			<div className="p-4 w-full">
 				{isChanging ? (
 					<>
-						<Button
+						<AccentButton
 							className="w-full flex flex-row items-center justify-center"
 							onClick={updateOrCreateItemWrapper}
 						>
@@ -353,9 +350,9 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 									<Loading inline />
 								</span>
 							)}
-						</Button>
+						</AccentButton>
 
-						<Button
+						<AccentButton
 							className="w-full flex flex-row items-center justify-center"
 							onClick={async () => {
 								const result = await popupWindow(
@@ -388,10 +385,10 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 									<Loading inline />
 								</span>
 							)}
-						</Button>
+						</AccentButton>
 					</>
 				) : (
-					<Button
+					<AccentButton
 						className="w-full flex flex-row items-center justify-center"
 						onClick={updateOrCreateItemWrapper}
 					>
@@ -401,7 +398,7 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 								<Loading inline />
 							</span>
 						)}
-					</Button>
+					</AccentButton>
 				)}
 			</div>
 		</div>

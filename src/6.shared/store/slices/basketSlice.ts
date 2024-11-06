@@ -33,7 +33,13 @@ const basketSlice = createSlice({
 const basketSavingMiddleware: Middleware = (_) => (next) => (action: any) => {
     if (action.type == "basket/setProduct" || action.type == "basket/removeProduct") {
         const basket = getBasket()
-        basket[action.payload.productId] = action.payload.count
+
+        if (action.type == "basket/setProduct") {
+            basket[action.payload.productId] = action.payload.count
+        } else {
+            basket[action.payload] = undefined
+        }
+
         localStorage.setItem("basket", JSON.stringify(basket))
     }
 

@@ -1,5 +1,5 @@
-import { createRegisterToken, getAccessToken, login, register } from "@shared/api/auth"
-import { deleteAvatar, deleteUser, getUser, getUsername, isEmailAvailable, isPasswordIsValid, isUsernameAvailable, putAvatar, putUser } from "@shared/api/users"
+import { createRegisterToken, createVerificationCode, getAccessToken, login, register } from "@shared/api/auth"
+import { createAvatar, deleteAvatar, deleteUser, getUser, getUsername, isAvatarExists, isEmailAvailable, isPasswordIsValid, isUsernameAvailable, putAvatar, putUser } from "@shared/api/users"
 import { backendBaseUrl } from "@shared/config"
 import { ExError } from "@shared/helpers"
 import { IUser } from "@shared/model/interfaces"
@@ -36,6 +36,10 @@ class User {
 
     public static async isEmailAvailable(email: Email): Promise<boolean | ExError> {
         return await isEmailAvailable(email)
+    }
+
+    public static async createVerificationCode(email: Email): Promise<void | ExError> {
+        return await createVerificationCode(email)
     }
 
     // Static constructors
@@ -104,6 +108,18 @@ class OwnedUser {
         return await putAvatar(image)
     }
 
+    public async deleteAvatar(): Promise<void | ExError> {
+        return await deleteAvatar()
+    }
+
+    public async createAvatar(image: File): Promise<void | ExError> {
+        return await createAvatar(image)
+    }
+
+    public async isAvatarExists(): Promise<boolean | ExError> {
+        return await isAvatarExists(this._user.id)
+    }
+
     public async edit(password: string, username?: string, newPassword?: string, email?: Email, code?: number, newCode?: number): Promise<void | ExError> {
         return await putUser(password, username, newPassword, email, code, newCode)
     }
@@ -134,6 +150,8 @@ class OwnedUser {
         if (!(featured instanceof ExError)) {
             this._featured = featured
         }
+
+        setInterval(OwnedUser.refreshToken, 19 * 60 * 1000)
     }
 
     // Static initializers
@@ -151,7 +169,9 @@ class OwnedUser {
             return user
         }
 
-        this._instance = new OwnedUser(user)
+        if (!this._instance) {
+            this._instance = new OwnedUser(user)
+        }
     }
 
     public static async login(username: string, password: string): Promise<void | ExError> {
@@ -183,7 +203,7 @@ class OwnedUser {
     // Other
 
     public static get isLoggedIn(): boolean {
-        return this._instance === undefined
+        return this._instance !== undefined
     }
 
     public static get instance(): OwnedUser | undefined {

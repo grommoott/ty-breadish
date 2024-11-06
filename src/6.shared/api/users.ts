@@ -1,4 +1,5 @@
 import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
+import { OwnedUser } from "@shared/facades";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IUser } from "@shared/model/interfaces";
 import { Email, UserId } from "@shared/model/types/primitives";
@@ -6,7 +7,7 @@ import axios from "axios";
 
 async function isUsernameAvailable(username: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${username}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${btoa(username)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -16,7 +17,7 @@ async function isUsernameAvailable(username: string): Promise<boolean | ExError>
 
 async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${email.email}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${btoa(email.email)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -26,7 +27,7 @@ async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
 
 async function isPasswordIsValid(password: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${password}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${btoa(password)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -56,7 +57,7 @@ async function getUser(): Promise<IUser | ExError> {
 
 async function deleteUser(verificationCode: number, password: string): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${password}`, defaultAxiosRequestConfig)
+        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${btoa(password)}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteUser")
     }
@@ -69,17 +70,19 @@ async function putUser(password: string, username?: string, newPassword?: string
             username,
             newPassword,
             email: email?.email,
-            code,
-            newCode
+            verificationCode: code,
+            newVerificationCode: newCode
         }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "putUser")
     }
 }
 
-async function checkAvatar(id: UserId): Promise<void | ExError> {
+async function isAvatarExists(id: UserId): Promise<boolean | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/users/avatars/id/${id}`, defaultAxiosRequestConfig)
+        const result = await axios.get(`${backendBaseUrl}/api/users/avatars/isExists/id/${id}`, defaultAxiosRequestConfig)
+
+        return result.data
     } catch (e) {
         return errorWrapper(e, "checkAvatar")
     }
@@ -87,8 +90,13 @@ async function checkAvatar(id: UserId): Promise<void | ExError> {
 
 async function createAvatar(image: File): Promise<void | ExError> {
     try {
+        if (!OwnedUser.instance) {
+            return
+        }
+
         const formData = new FormData()
         formData.append("image", image)
+        formData.append("id", OwnedUser.instance.id.id.toString())
 
         await axios.postForm(`${backendBaseUrl}/api/users/avatars/create`, formData, defaultAxiosRequestConfig)
     } catch (e) {
@@ -106,8 +114,13 @@ async function deleteAvatar(): Promise<void | ExError> {
 
 async function putAvatar(image: File): Promise<void | ExError> {
     try {
+        if (!OwnedUser.instance) {
+            return
+        }
+
         const formData = new FormData()
         formData.append("image", image)
+        formData.append("id", OwnedUser.instance.id.id.toString())
 
         await axios.putForm(`${backendBaseUrl}/api/users/avatars`, formData, defaultAxiosRequestConfig)
     } catch (e) {
@@ -123,7 +136,7 @@ export {
     getUser,
     deleteUser,
     putUser,
-    checkAvatar,
+    isAvatarExists,
     createAvatar,
     deleteAvatar,
     putAvatar

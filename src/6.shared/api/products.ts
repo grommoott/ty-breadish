@@ -61,9 +61,11 @@ async function putProduct(id: ProductId, price?: Price, name?: string, descripti
     }
 }
 
-async function checkProductImage(id: ProductId): Promise<void | ExError> {
+async function isProductImageExists(id: ProductId): Promise<void | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/products/images/id/${id}`, defaultAxiosRequestConfig)
+        const result = await axios.get(`${backendBaseUrl}/api/products/images/id/${id}`, defaultAxiosRequestConfig)
+
+        return result.data
     } catch (e) {
         return errorWrapper(e, "getProductImage")
     }
@@ -107,7 +109,7 @@ export {
     createProduct,
     deleteProduct,
     putProduct,
-    checkProductImage,
+    isProductImageExists,
     createProductImage,
     deleteProductImage,
     putProductImage

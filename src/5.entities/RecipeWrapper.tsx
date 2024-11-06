@@ -93,7 +93,7 @@ const RecipeWrapper: FC<RecipeWrapperProps> = ({
 						const translated = translateCookingMethod(method)
 
 						return (
-							<Tag>
+							<Tag key={method}>
 								{translated[0].toUpperCase() +
 									translated.slice(1)}
 							</Tag>
@@ -106,7 +106,7 @@ const RecipeWrapper: FC<RecipeWrapperProps> = ({
 				<div className="flex flex-row flex-wrap items-center">
 					<p className="mr-1">Ингредиенты:</p>
 					{recipe.itemInfo.ingredients.map((val) => (
-						<Tag>
+						<Tag key={val}>
 							{(() => {
 								const ingredient = translateIngredient(val)
 

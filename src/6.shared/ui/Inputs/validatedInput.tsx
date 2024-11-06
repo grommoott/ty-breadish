@@ -77,11 +77,13 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 				)
 			}
 			childrenRight={
-				isLoading && (
-					<div className="ml-2">
+				<div className="ml-2">
+					{isLoading ? (
 						<Loading size={1.6} />
-					</div>
-				)
+					) : (
+						<div style={{ width: "1.6rem", height: "1.6rem" }} />
+					)}
+				</div>
 			}
 			onFocus={() => {
 				setIsFocused(true)

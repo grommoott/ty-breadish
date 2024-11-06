@@ -61,9 +61,11 @@ async function putRecipe(id: RecipeId, name?: string, description?: string, item
     }
 }
 
-async function checkRecipeImage(id: RecipeId): Promise<void | ExError> {
+async function isRecipeImageExists(id: RecipeId): Promise<void | ExError> {
     try {
-        await axios.get(`${backendBaseUrl}/api/recipes/images/id/${id}`, defaultAxiosRequestConfig)
+        const result = await axios.get(`${backendBaseUrl}/api/recipes/images/id/${id}`, defaultAxiosRequestConfig)
+
+        return result.data
     } catch (e) {
         return errorWrapper(e, "getRecipeImage")
     }
@@ -106,7 +108,7 @@ export {
     createRecipe,
     deleteRecipe,
     putRecipe,
-    checkRecipeImage,
+    isRecipeImageExists,
     createRecipeImage,
     deleteRecipeImage,
     putRecipeImage

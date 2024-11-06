@@ -4,9 +4,9 @@ import { IUser, responseDataToUser } from "@shared/model/interfaces"
 import { Email } from "@shared/model/types/primitives"
 import axios from "axios"
 
-async function createAccessToken(): Promise<void | ExError> {
+async function createVerificationCode(email: Email): Promise<void | ExError> {
     try {
-        await axios.post(`${backendBaseUrl}/api/verificationCode/create`, {}, defaultAxiosRequestConfig)
+        await axios.post(`${backendBaseUrl}/api/verificationCode/create`, { email: email.email }, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "createAccessToken")
     }
@@ -59,5 +59,5 @@ async function createRegisterToken(username: string, password: string, email: Em
     }
 }
 
-export { createAccessToken, getAccessToken, login, register, createRegisterToken }
+export { createVerificationCode, getAccessToken, login, register, createRegisterToken }
 

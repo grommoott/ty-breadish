@@ -1,4 +1,11 @@
-import { createContext, FC, ReactNode, useEffect, useState } from "react"
+import {
+	createContext,
+	FC,
+	ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from "react"
 import { motion } from "framer-motion"
 
 type PopupWindow = {
@@ -17,6 +24,18 @@ const PopupWindowElement: FC<PopupWindowProps> = ({
 	children,
 	setIsVisible,
 }) => {
+	const ref = useRef(null)
+
+	const focus = () => {
+		ref.current && (ref.current as HTMLDivElement).focus()
+	}
+
+	useEffect(() => {
+		const timeout = setTimeout(focus, 10)
+
+		return () => clearTimeout(timeout)
+	}, [isVisible])
+
 	return (
 		<>
 			<motion.div
@@ -40,8 +59,15 @@ const PopupWindowElement: FC<PopupWindowProps> = ({
 					transform: "translate(-50%, -50%)",
 				}}
 				animate={isVisible ? { display: "block" } : { display: "none" }}
-				className="fixed z-30"
+				className="fixed z-30 outline-none"
 				onClick={(e) => e.stopPropagation()}
+				ref={ref}
+				tabIndex={0}
+				onKeyDown={(e) => {
+					if (e.key == "Escape") {
+						setIsVisible(false)
+					}
+				}}
 			>
 				<motion.div
 					initial={{ opacity: 0 }}
@@ -55,8 +81,14 @@ const PopupWindowElement: FC<PopupWindowProps> = ({
 					<svg
 						viewBox="0 0 100 100"
 						xmlns="http://www.w3.org/2000/svg"
-						className="h-4 self-end cursor-pointer hover:scale-125 active:scale-75 duration-100"
+						className="h-4 self-end cursor-pointer hover:scale-125 active:scale-75 duration-100 focus-visible-default"
 						onClick={() => setIsVisible(false)}
+						tabIndex={0}
+						onKeyDown={(e) => {
+							if (e.key == "Enter") {
+								setIsVisible(false)
+							}
+						}}
 					>
 						<path
 							d="M 10, 10 L 90, 90 M 90,10 L 10, 90"

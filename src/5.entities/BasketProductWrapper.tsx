@@ -31,12 +31,7 @@ const BasketProductWrapper: FC<BasketProductWrapperProps> = ({ product }) => {
 
 		if (count <= 0) {
 			dispatch(basketSlice.actions.removeProduct(product.id.id))
-			dispatch(
-				basketSlice.actions.setProduct({
-					productId: product.id.id,
-					count: 0,
-				}),
-			)
+			return
 		}
 
 		dispatch(
