@@ -1,6 +1,7 @@
 import { New } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { NewId } from "@shared/model/types/primitives"
+import Map from "@shared/ui/Map"
 import Header from "@widgets/Header"
 import NewChangeForm from "@widgets/NewChangeForm"
 import NewWidget from "@widgets/NewWidget"
@@ -26,9 +27,11 @@ export default function Test(): ReactElement {
 		<div className="bg-zinc-900 flex flex-col items-center justify-center">
 			<Header />
 
-			{aNew && <NewChangeForm aNew={aNew} />}
+			<Map onCoordsSelect={() => {}} />
 
-			<NewWidget aNew={aNew} />
+			{/* {aNew && <NewChangeForm aNew={aNew} />} */}
+			{/**/}
+			{/* <NewWidget aNew={aNew} /> */}
 
 			<div className="h-60" />
 		</div>

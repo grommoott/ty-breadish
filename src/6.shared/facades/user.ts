@@ -185,9 +185,7 @@ class OwnedUser {
     }
 
     public static async createRegisterToken(username: string, password: string, email: Email): Promise<string | ExError> {
-        const token: string | ExError = await createRegisterToken(username, password, email)
-
-        return token
+        return await createRegisterToken(username, password, email)
     }
 
     public static async register(verificationCode: number, registerToken: string): Promise<void | ExError> {

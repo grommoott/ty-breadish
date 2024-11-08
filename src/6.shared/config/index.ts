@@ -6,9 +6,11 @@ const defaultAxiosRequestConfig: AxiosRequestConfig = {
 }
 
 const commentsPageSize = 5
+const maptilerApiKey = "Xatct3p2XwOFw9GCQTYJ"
 
 export {
     backendBaseUrl,
     defaultAxiosRequestConfig,
-    commentsPageSize
+    commentsPageSize,
+    maptilerApiKey
 }
