@@ -242,79 +242,84 @@ const HomeWidget: FC = () => {
 	}, [])
 
 	return (
-		<div className="p-4 m-2 rounded-3xl bg-[var(--dark-color)] flex flex-col items-stretch">
-			<div className="flex flex-col md:flex-row items-center md:items-stretch">
-				<ImagePicker
-					defaultUrl={user.avatarLink}
-					onChange={changeAvatar}
-					onDelete={deleteAvatar}
-					deletable={isAvatarDeletable}
-				/>
-				<div className="flex flex-col items-center justify-center">
-					<ValidatedInput
-						value={formData.username}
-						placeholder="Имя пользователя"
-						error={errorData.username}
-						validator={usernameValidator(user.username)}
-						onChange={(value) => {
-							setHasChanged(true)
-							setFormData((prev) => ({
-								...prev,
-								username: value,
-							}))
-						}}
+		<div className="flex flex-col items-center">
+			<div className="p-4 m-2 rounded-3xl bg-[var(--dark-color)] flex flex-col items-stretch">
+				<div className="flex flex-col md:flex-row items-center md:items-stretch">
+					<ImagePicker
+						defaultUrl={user.avatarLink}
+						onChange={changeAvatar}
+						onDelete={deleteAvatar}
+						deletable={isAvatarDeletable}
 					/>
-					<ValidatedInput
-						value={formData.email}
-						placeholder="Электронная почта"
-						error={errorData.email}
-						validator={emailValidator(user.email.email)}
-						onChange={(value) => {
-							setHasChanged(true)
-							setFormData((prev) => ({ ...prev, email: value }))
-						}}
-					/>
-					<ValidatedInput
-						value={formData.password}
-						placeholder="Новый пароль"
-						error={errorData.password}
-						validator={newPasswordValidator}
-						onChange={(value) => {
-							setHasChanged(true)
-							setFormData((prev) => ({
-								...prev,
-								password: value,
-							}))
-						}}
-					/>
-					<ValidatedInput
-						value={formData.passwordConfirmation}
-						placeholder="Ещё раз"
-						error={errorData.passwordConfirmation}
-						validator={passwordConfirmationValidator(
-							formData.password,
-						)}
-						onChange={(value) => {
-							setFormData((prev) => ({
-								...prev,
-								passwordConfirmation: value,
-							}))
-						}}
-					/>
+					<div className="flex flex-col items-center justify-center">
+						<ValidatedInput
+							value={formData.username}
+							placeholder="Имя пользователя"
+							error={errorData.username}
+							validator={usernameValidator(user.username)}
+							onChange={(value) => {
+								setHasChanged(true)
+								setFormData((prev) => ({
+									...prev,
+									username: value,
+								}))
+							}}
+						/>
+						<ValidatedInput
+							value={formData.email}
+							placeholder="Электронная почта"
+							error={errorData.email}
+							validator={emailValidator(user.email.email)}
+							onChange={(value) => {
+								setHasChanged(true)
+								setFormData((prev) => ({
+									...prev,
+									email: value,
+								}))
+							}}
+						/>
+						<ValidatedInput
+							value={formData.password}
+							placeholder="Новый пароль"
+							error={errorData.password}
+							validator={newPasswordValidator}
+							onChange={(value) => {
+								setHasChanged(true)
+								setFormData((prev) => ({
+									...prev,
+									password: value,
+								}))
+							}}
+						/>
+						<ValidatedInput
+							value={formData.passwordConfirmation}
+							placeholder="Ещё раз"
+							error={errorData.passwordConfirmation}
+							validator={passwordConfirmationValidator(
+								formData.password,
+							)}
+							onChange={(value) => {
+								setFormData((prev) => ({
+									...prev,
+									passwordConfirmation: value,
+								}))
+							}}
+						/>
+					</div>
 				</div>
-			</div>
 
-			<div className="flex flex-col md:flex-row items-center justify-center">
-				<div
-					className={`flex flex-col items-center duration-200 ${!hasChanged && "pointer-events-none grayscale"}`}
-				>
-					<AccentButton onClick={changeUserData}>
-						Сохранить изменения
+				<div className="flex flex-col md:flex-row items-center justify-center">
+					<div
+						className={`flex flex-col items-center duration-200 ${!hasChanged && "pointer-events-none grayscale"}`}
+					>
+						<AccentButton onClick={changeUserData}>
+							Сохранить изменения
+						</AccentButton>
+					</div>
+					<AccentButton onClick={deleteUser}>
+						Удалить аккаунт
 					</AccentButton>
 				</div>
-				<AccentButton onClick={deleteUser}>
-					Удалить аккаунт
-				</AccentButton>
 			</div>
 		</div>
 	)

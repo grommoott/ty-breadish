@@ -1,9 +1,9 @@
 import { IOrder } from "@shared/model/interfaces"
-import { OrderType, PaymentStatus } from "@shared/model/types/enums"
-import { Moment, OrderId, OrderInfo, ProductId, UserId } from "@shared/model/types/primitives"
+import { CourierOrderState, OrderType, PaymentStatus, PickUpOrderState } from "@shared/model/types/enums"
+import { BakeryId, Moment, OrderId, OrderInfo, ProductId, UserId } from "@shared/model/types/primitives"
 import { Product } from "./item/product"
 import { ExError } from "@shared/helpers"
-import { createOrder, getOrders } from "@shared/api/orders"
+import { changeOrderState, createOrder, deleteOrder, getOrder, getOrderByBakeryId, getOrders, markOrderAsCompleted } from "@shared/api/orders"
 
 class Order {
 
@@ -79,10 +79,42 @@ class Order {
         return this._products
     }
 
+    public async changeState(state: PickUpOrderState | CourierOrderState): Promise<void | ExError> {
+        return await changeOrderState(this.id, state)
+    }
+
+    public async markAsCompleted(): Promise<void | ExError> {
+        return await markOrderAsCompleted(this.id)
+    }
+
+    public async delete(): Promise<void | ExError> {
+        return await deleteOrder(this.id)
+    }
+
     // Static constructors 
+
+    public static async fromId(id: OrderId): Promise<Order | ExError> {
+        const order: IOrder | ExError = await getOrder(id)
+
+        if (order instanceof ExError) {
+            return order
+        }
+
+        return new Order(order)
+    }
 
     public static async getList(): Promise<Array<Order> | ExError> {
         const orders: Array<IOrder> | ExError = await getOrders()
+
+        if (orders instanceof ExError) {
+            return orders
+        }
+
+        return orders.map(order => new Order(order))
+    }
+
+    public static async getByBakery(id: BakeryId): Promise<Array<Order> | ExError> {
+        const orders: Array<IOrder> | ExError = await getOrderByBakeryId(id)
 
         if (orders instanceof ExError) {
             return orders

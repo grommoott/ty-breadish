@@ -1,9 +1,10 @@
-import { CSSProperties, FC, useEffect } from "react"
+import { CSSProperties, FC, useEffect, useMemo, useState } from "react"
 import { fullLogo, logo } from "@assets/index"
 import { motion, Variants, useAnimationControls } from "framer-motion"
 import "./index.css"
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
+import { useDefaultWidgetWidth } from "@shared/hooks"
 
 const FullLogo: FC<{ size?: number }> = ({ size = 16 }) => {
 	return (
@@ -111,12 +112,44 @@ const AnimatedFullLogo: FC = () => {
 	const pageSize = usePageSize()
 	const circleControls = useAnimationControls()
 
-	const sizeMultiplier = pageSize >= PageSizes.Small ? 1 : 0.6
+	const [sizeMultiplier, setSizeMultiplier] = useState(1)
 
-	const circleSizeMultiplied = circleSize * sizeMultiplier
-	const breadSizeMultiplied = breadSize * sizeMultiplier
-	const fullSizeMultiplied = fullSize * sizeMultiplier
-	const differentMultiplied = different * sizeMultiplier
+	const circleSizeMultiplied = useMemo(
+		() => circleSize * sizeMultiplier,
+		[sizeMultiplier],
+	)
+	const breadSizeMultiplied = useMemo(
+		() => breadSize * sizeMultiplier,
+		[sizeMultiplier],
+	)
+	const fullSizeMultiplied = useMemo(
+		() => fullSize * sizeMultiplier,
+		[sizeMultiplier],
+	)
+	const differentMultiplied = useMemo(
+		() => different * sizeMultiplier,
+		[sizeMultiplier],
+	)
+
+	useEffect(() => {
+		if (pageSize >= PageSizes.XXL) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.XL) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.Large) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.Medium) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.SmallMedium) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.Small) {
+			setSizeMultiplier(0.9)
+		} else if (pageSize >= PageSizes.ExtraSmall) {
+			setSizeMultiplier(0.9)
+		} else {
+			setSizeMultiplier(0.9)
+		}
+	}, [pageSize])
 
 	useEffect(() => {
 		circleControls.set("hidden")

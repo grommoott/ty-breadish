@@ -1,4 +1,4 @@
-import { createRegisterToken, createVerificationCode, getAccessToken, login, register } from "@shared/api/auth"
+import { createRegisterToken, createVerificationCode, getAccessToken, login, logout, register } from "@shared/api/auth"
 import { createAvatar, deleteAvatar, deleteUser, getUser, getUsername, isAvatarExists, isEmailAvailable, isPasswordIsValid, isUsernameAvailable, putAvatar, putUser } from "@shared/api/users"
 import { backendBaseUrl } from "@shared/config"
 import { ExError } from "@shared/helpers"
@@ -6,6 +6,7 @@ import { IUser } from "@shared/model/interfaces"
 import { Email, Moment, UserId } from "@shared/model/types/primitives"
 import { Like } from "./like"
 import { Featured } from "./featured"
+import { Role } from "@shared/model/types/enums"
 
 class User {
 
@@ -90,6 +91,10 @@ class OwnedUser {
         return this._user.moment
     }
 
+    public get role(): Role {
+        return this._user.role
+    }
+
     public get avatarLink(): string {
         return `${backendBaseUrl}/api/users/avatars/id/${this.id}`
     }
@@ -152,6 +157,11 @@ class OwnedUser {
         }
 
         setInterval(OwnedUser.refreshToken, 19 * 60 * 1000)
+    }
+
+    public async logout(): Promise<void | ExError> {
+        await logout()
+        OwnedUser._instance = undefined
     }
 
     // Static initializers
@@ -218,8 +228,8 @@ class OwnedUser {
 
     // Constructor
 
-    private constructor({ id, username, email, moment }: IUser) {
-        this._user = { id, username, email, moment }
+    private constructor({ id, username, email, moment, role }: IUser) {
+        this._user = { id, username, email, moment, role }
     }
 }
 

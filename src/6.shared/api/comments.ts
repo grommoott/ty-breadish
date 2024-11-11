@@ -17,7 +17,7 @@ async function getCommentsPage(target: MediaId, sortOrder: CommentsSortOrder, pa
 
 async function getCommentsCount(target: MediaId): Promise<number | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/comments/count/target/${target.id}`)
+        const response = await axios.get(`${backendBaseUrl}/api/comments/count/target/${target.id}`, defaultAxiosRequestConfig)
 
         return response.data.count
     } catch (e) {

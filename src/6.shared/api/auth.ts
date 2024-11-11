@@ -59,5 +59,13 @@ async function createRegisterToken(username: string, password: string, email: Em
     }
 }
 
-export { createVerificationCode, getAccessToken, login, register, createRegisterToken }
+async function logout(): Promise<void | ExError> {
+    try {
+        await axios.post(`${backendBaseUrl}/api/logout`, {}, defaultAxiosRequestConfig)
+    } catch (e) {
+        return errorWrapper(e, "logout")
+    }
+}
+
+export { createVerificationCode, getAccessToken, login, register, createRegisterToken, logout }
 

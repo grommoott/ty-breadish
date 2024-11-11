@@ -3,8 +3,6 @@ import { ExError } from "@shared/helpers"
 import { NewId } from "@shared/model/types/primitives"
 import Map from "@shared/ui/Map"
 import Header from "@widgets/Header"
-import NewChangeForm from "@widgets/NewChangeForm"
-import NewWidget from "@widgets/NewWidget"
 import { ReactElement, useEffect, useState } from "react"
 
 export default function Test(): ReactElement {

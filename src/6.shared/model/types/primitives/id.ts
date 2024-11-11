@@ -53,6 +53,8 @@ class SessionId extends Id { }
 
 class ImageId extends Id { }
 
+class BakeryId extends Id { }
+
 export {
     Id,
     CommentId,
@@ -67,5 +69,6 @@ export {
     ItemId,
     OrderId,
     SessionId,
-    ImageId
+    ImageId,
+    BakeryId
 }

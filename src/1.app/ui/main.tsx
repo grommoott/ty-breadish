@@ -11,11 +11,26 @@ import { PageSize, PageSizes } from "@shared/enums"
 import NotificationsProvider from "@shared/ui/Notification"
 import PopupWindowProvider from "@shared/ui/PopupWindow"
 import { OwnedUser } from "@shared/facades"
+import MainPage from "@pages/MainPage"
+import HomePage from "@pages/HomePage"
+import LoginPage from "@pages/LoginPage"
 
 const router = createBrowserRouter([
 	{
-		path: "/",
+		path: "/test",
 		element: <Test />,
+	},
+	{
+		path: "/",
+		element: <MainPage />,
+	},
+	{
+		path: "/homePage",
+		element: <HomePage />,
+	},
+	{
+		path: "/login",
+		element: <LoginPage />,
 	},
 ])
 
