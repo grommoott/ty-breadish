@@ -1,16 +1,17 @@
+import BasketWidget from "@widgets/BasketWidget"
 import Header from "@widgets/Header"
-import LoginWidget from "@widgets/LoginWidget"
 import { FC } from "react"
 
-const LoginPage: FC = () => {
+const BasketPage: FC = () => {
 	return (
 		<>
 			<Header />
+
 			<div className="bg-zinc-900">
-				<LoginWidget />
+				<BasketWidget />
 			</div>
 		</>
 	)
 }
 
-export default LoginPage
+export default BasketPage

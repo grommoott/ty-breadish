@@ -67,5 +67,13 @@ async function logout(): Promise<void | ExError> {
     }
 }
 
-export { createVerificationCode, getAccessToken, login, register, createRegisterToken, logout }
+async function sendRecoveryPassword(username: string, verificationCode: number): Promise<void | ExError> {
+    try {
+        await axios.post(`${backendBaseUrl}/api/sendRecoveryPassword`, { username, verificationCode }, defaultAxiosRequestConfig)
+    } catch (e) {
+        return errorWrapper(e, "sendRecoveryPassword")
+    }
+}
+
+export { createVerificationCode, getAccessToken, login, register, createRegisterToken, logout, sendRecoveryPassword }
 

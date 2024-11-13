@@ -12,6 +12,8 @@ interface InputBaseProps {
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 	onFocus?: () => void
 	onBlur?: () => void
+	passwordInput?: boolean
+	autocomplete?: string
 }
 
 const BaseInput: FC<InputBaseProps> = ({
@@ -26,6 +28,8 @@ const BaseInput: FC<InputBaseProps> = ({
 	onChange = () => {},
 	onFocus,
 	onBlur,
+	passwordInput = false,
+	autocomplete = "off",
 }) => {
 	const inputRef = useRef(null)
 
@@ -52,8 +56,9 @@ const BaseInput: FC<InputBaseProps> = ({
 			>
 				{childrenLeft}
 				<input
+					autoComplete={autocomplete}
 					ref={inputRef}
-					type="text"
+					type={passwordInput ? "password" : "text"}
 					className={`bg-transparent outline-none w-full ${placeholderClass}`}
 					placeholder={placeholder}
 					onChange={onChange}

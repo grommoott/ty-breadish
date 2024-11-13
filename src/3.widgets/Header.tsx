@@ -25,7 +25,10 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 			>
 				<div className="flex flex-row items-center">
 					{!compact && (
-						<SimpleButton className="cursor-pointer hover:scale-110 active:scale-90 duration-100">
+						<SimpleButton
+							className="cursor-pointer hover:scale-110 active:scale-90 duration-100"
+							onClick={() => navigate("/")}
+						>
 							<SmallLogo size={3} />
 						</SimpleButton>
 					)}
@@ -53,25 +56,26 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 									</SimpleButton>
 								</div>
 							) : (
-								<SimpleButton
-									className="mx-auto"
-									onClick={() => {
-										popupWindow(() => {
-											return (
-												<div className="flex flex-col items-center">
-													<Button>Рецепты</Button>
-													<Button>Магазин</Button>
-													<Button>Новости</Button>
-												</div>
-											)
-										})
-									}}
-								>
-									<img
-										src={menuImage}
-										className="size-12"
-									/>
-								</SimpleButton>
+								<div className="flex flex-col items-center">
+									<SimpleButton
+										onClick={() => {
+											popupWindow(() => {
+												return (
+													<div className="flex flex-col items-center">
+														<Button>Рецепты</Button>
+														<Button>Магазин</Button>
+														<Button>Новости</Button>
+													</div>
+												)
+											})
+										}}
+									>
+										<img
+											src={menuImage}
+											className="size-12"
+										/>
+									</SimpleButton>
+								</div>
 							)}
 						</>
 					)}
@@ -94,7 +98,13 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 												>
 													Домашняя страница
 												</Button>
-												<Button className="w-full">
+												<Button
+													className="w-full"
+													onClick={() => {
+														navigate("/basket")
+														closeWindow(undefined)
+													}}
+												>
 													Корзина
 												</Button>
 												<Button className="w-full">
@@ -125,7 +135,11 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 							</SimpleButton>
 						</div>
 					) : (
-						<SimpleButton>
+						<SimpleButton
+							onClick={() => {
+								navigate("/login")
+							}}
+						>
 							<img
 								src={loginImage}
 								className="size-12"

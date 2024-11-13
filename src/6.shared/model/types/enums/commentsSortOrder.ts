@@ -10,8 +10,6 @@ const translatedCommentsSortOrders = new Map<string, string>([
     ["likedFirst", "Сначала популярные"]
 ])
 
-
-
 type CommentsSortOrder = typeof CommentsSortOrders[keyof typeof CommentsSortOrders]
 
 export { CommentsSortOrder, CommentsSortOrders, translatedCommentsSortOrders }

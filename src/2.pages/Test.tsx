@@ -1,37 +1,33 @@
-import { New } from "@shared/facades"
+import { Product } from "@shared/facades"
 import { ExError } from "@shared/helpers"
-import { NewId } from "@shared/model/types/primitives"
-import Map from "@shared/ui/Map"
+import { ProductId } from "@shared/model/types/primitives"
 import Header from "@widgets/Header"
+import ProductWidget from "@widgets/ProductWidget"
 import { ReactElement, useEffect, useState } from "react"
 
 export default function Test(): ReactElement {
-	const [aNew, setNew] = useState<New>()
+	const [product, setProduct] = useState<Product>()
 
 	useEffect(() => {
 		;(async () => {
-			const response = await New.fromId(new NewId(0))
+			const response = await Product.fromId(new ProductId(2))
 
 			if (response instanceof ExError) {
 				console.error(response)
-				return
+				return response
 			}
 
-			setNew(response)
+			setProduct(response)
 		})()
 	}, [])
 
 	return (
-		<div className="bg-zinc-900 flex flex-col items-center justify-center">
+		<>
 			<Header />
 
-			<Map onCoordsSelect={() => {}} />
-
-			{/* {aNew && <NewChangeForm aNew={aNew} />} */}
-			{/**/}
-			{/* <NewWidget aNew={aNew} /> */}
-
-			<div className="h-60" />
-		</div>
+			<div className="bg-zinc-900 flex flex-col items-center justify-center">
+				<ProductWidget product={product} />
+			</div>
+		</>
 	)
 }

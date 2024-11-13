@@ -11,11 +11,11 @@ import {
 	FormData,
 } from "./types"
 import {
-	emailValidator,
+	registerEmailValidator,
 	passwordConfirmationValidator,
-	newPasswordValidator,
-	usernameValidator,
-} from "./helpers"
+	registerPasswordValidator,
+	registerUsernameValidator,
+} from "@shared/helpers"
 import { ExError } from "@shared/helpers"
 import ConfirmationForm from "./ui/ConfirmationForm"
 import { Email } from "@shared/model/types/primitives"
@@ -36,6 +36,7 @@ const HomeWidget: FC = () => {
 		password: "",
 		passwordConfirmation: "",
 	})
+
 	const [errorData, setErrorData] = useState<ErrorData>({
 		username: "",
 		email: "",
@@ -49,9 +50,16 @@ const HomeWidget: FC = () => {
 
 	const changeUserData = async () => {
 		const errorData: ErrorData = {
-			username: await usernameValidator(user.username)(formData.username),
-			email: await emailValidator(user.email.email)(formData.email),
-			password: await newPasswordValidator(formData.password),
+			username: await registerUsernameValidator(user.username)(
+				formData.username,
+			),
+			email: await registerEmailValidator(user.email.email)(
+				formData.email,
+			),
+			password:
+				formData.password == ""
+					? ""
+					: await registerPasswordValidator(formData.password),
 			passwordConfirmation: await passwordConfirmationValidator(
 				formData.password,
 			)(formData.passwordConfirmation),
@@ -256,7 +264,7 @@ const HomeWidget: FC = () => {
 							value={formData.username}
 							placeholder="Имя пользователя"
 							error={errorData.username}
-							validator={usernameValidator(user.username)}
+							validator={registerUsernameValidator(user.username)}
 							onChange={(value) => {
 								setHasChanged(true)
 								setFormData((prev) => ({
@@ -269,7 +277,7 @@ const HomeWidget: FC = () => {
 							value={formData.email}
 							placeholder="Электронная почта"
 							error={errorData.email}
-							validator={emailValidator(user.email.email)}
+							validator={registerEmailValidator(user.email.email)}
 							onChange={(value) => {
 								setHasChanged(true)
 								setFormData((prev) => ({
@@ -279,10 +287,11 @@ const HomeWidget: FC = () => {
 							}}
 						/>
 						<ValidatedInput
+							passwordInput
 							value={formData.password}
 							placeholder="Новый пароль"
 							error={errorData.password}
-							validator={newPasswordValidator}
+							validator={registerPasswordValidator}
 							onChange={(value) => {
 								setHasChanged(true)
 								setFormData((prev) => ({
@@ -292,6 +301,7 @@ const HomeWidget: FC = () => {
 							}}
 						/>
 						<ValidatedInput
+							passwordInput
 							value={formData.passwordConfirmation}
 							placeholder="Ещё раз"
 							error={errorData.passwordConfirmation}

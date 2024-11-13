@@ -14,6 +14,7 @@ import { OwnedUser } from "@shared/facades"
 import MainPage from "@pages/MainPage"
 import HomePage from "@pages/HomePage"
 import LoginPage from "@pages/LoginPage"
+import BasketPage from "@pages/BasketPage"
 
 const router = createBrowserRouter([
 	{
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: <LoginPage />,
+	},
+	{
+		path: "/basket",
+		element: <BasketPage />,
 	},
 ])
 

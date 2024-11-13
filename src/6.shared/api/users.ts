@@ -1,7 +1,7 @@
 import { backendBaseUrl, defaultAxiosRequestConfig } from "@shared/config";
 import { OwnedUser } from "@shared/facades";
 import { errorWrapper, ExError } from "@shared/helpers";
-import { IUser } from "@shared/model/interfaces";
+import { IUser, responseDataToUser } from "@shared/model/interfaces";
 import { Email, UserId } from "@shared/model/types/primitives";
 import axios from "axios";
 
@@ -49,7 +49,7 @@ async function getUser(): Promise<IUser | ExError> {
     try {
         const response = await axios.get(`${backendBaseUrl}/api/users`, defaultAxiosRequestConfig)
 
-        return response.data
+        return responseDataToUser(response.data)
     } catch (e) {
         return errorWrapper(e, "getUser")
     }

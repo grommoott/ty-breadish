@@ -100,7 +100,7 @@ const PopupWindowElement: FC<PopupWindowProps> = ({
 					</svg>
 
 					<div
-						className="flex flex-col overflow-y-scroll m-2 pr-2"
+						className="flex flex-col overflow-visible m-2 pr-2"
 						style={{ maxHeight: "80vh" }}
 					>
 						{children}

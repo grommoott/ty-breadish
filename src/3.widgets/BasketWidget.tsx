@@ -3,8 +3,9 @@ import { Product } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { useAppSelector } from "@shared/hooks"
 import { ProductId } from "@shared/model/types/primitives"
-import { AccentButton } from "@shared/ui/Buttons"
+import { AccentButton, SimpleButton } from "@shared/ui/Buttons"
 import { FC, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const BasketWidget: FC = () => {
 	const basket = useAppSelector((state) => state.basket)
@@ -12,6 +13,7 @@ const BasketWidget: FC = () => {
 	const [renderedProducts, setRenderedProducts] = useState<Array<Product>>()
 
 	const [price, setPrice] = useState<number>()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		;(async () => {
@@ -54,9 +56,24 @@ const BasketWidget: FC = () => {
 
 	if (price == 0) {
 		return (
-			<p className="text-3xl text-zinc-700 p-4 m-2 bg-[var(--dark-color)] rounded-3xl">
-				Корзина пуста
-			</p>
+			<div className="flex flex-col items-center">
+				<div className="flex flex-col items-center p-4 m-4 bg-[var(--dark-color)] rounded-3xl">
+					<p className="text-4xl text-[var(--main-color)]">
+						Корзина пуста
+					</p>
+
+					<p className="text-zinc-800 max-w-80 text-center py-4">
+						Однако, вы можете это исправить, перейдя в наш магазин
+					</p>
+
+					<SimpleButton
+						className="py-4"
+						onClick={() => navigate("/shop")}
+					>
+						<p className="text-zinc-800">Перейти в магазин</p>
+					</SimpleButton>
+				</div>
+			</div>
 		)
 	}
 

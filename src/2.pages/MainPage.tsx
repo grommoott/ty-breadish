@@ -54,7 +54,7 @@ const MainPage: FC = () => {
 	return (
 		<>
 			<Header compact />
-			<div className="flex flex-col items-center justify-center w-full">
+			<div className="flex flex-col items-center justify-center w-full bg-zinc-900">
 				<AnimatedFullLogo />
 
 				<motion.div

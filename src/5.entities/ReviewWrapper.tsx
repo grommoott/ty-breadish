@@ -1,19 +1,19 @@
 import { trashImage } from "@assets/ui"
-import { usePageSize } from "@shared/contexts"
-import { PageSizes } from "@shared/enums"
 import { OwnedReview, OwnedUser, Review, User } from "@shared/facades"
 import { ExError } from "@shared/helpers"
+import { usePopupWindow, useSmallWidgetWidth } from "@shared/hooks"
 import { LikeTypes, Rate } from "@shared/model/types/enums"
 import { SimpleButton } from "@shared/ui/Buttons"
 import { MultilineFlatInput } from "@shared/ui/Inputs"
 import Loading from "@shared/ui/Loading"
+import { agreeWindow } from "@shared/ui/PopupWindows"
 import RateSelector from "@shared/ui/RateSelector"
 import Star from "@shared/ui/Star"
 import { FC, ReactNode, useEffect, useState } from "react"
 
 interface ReviewWrapperProps {
 	review?: Review
-	onDelete?: () => void
+	onDelete?: (review: Review) => void
 	changeReviewButton?: (
 		review: OwnedReview,
 		getReviewContent: () => string,
@@ -25,7 +25,7 @@ interface ReviewWrapperProps {
 
 const ReviewWrapper: FC<ReviewWrapperProps> = ({
 	review,
-	onDelete,
+	onDelete = () => {},
 	changeReviewButton = () => {},
 	likeButton = () => {},
 }) => {
@@ -43,11 +43,12 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 		) != -1,
 	)
 
-	const pageSize = usePageSize()
-	const [width, setWidth] = useState(70)
+	const width = useSmallWidgetWidth()
 	const [isEditing, setEditing] = useState(false)
 	const [content, setContent] = useState(review.content)
 	const [rate, setRate] = useState(review.rate)
+
+	const popupWindow = usePopupWindow()
 
 	useEffect(() => {
 		;(async () => {
@@ -72,17 +73,24 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 		})()
 	}, [])
 
-	useEffect(() => {
-		if (pageSize < PageSizes.Large) {
-			setWidth(90)
-		} else if (pageSize < PageSizes.XL) {
-			setWidth(70)
-		} else if (pageSize < PageSizes.XXL) {
-			setWidth(60)
-		} else {
-			setWidth(50)
+	const deleteReview = async () => {
+		const result = await popupWindow(
+			agreeWindow("Вы уверены, что хотите удалить этот отзыв?"),
+		)
+
+		if (!result) {
+			return
 		}
-	}, [pageSize])
+
+		const response = await review.delete()
+
+		if (response instanceof ExError) {
+			console.error(response)
+			return
+		}
+
+		onDelete(review)
+	}
 
 	return (
 		<div
@@ -100,11 +108,11 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 						<div className="flex flex-row items-center">
 							<p>{user?.username}</p>
 
-							{review instanceof OwnedReview && (
+							{review.isOwned && (
 								<>
 									<div className="w-4 sm:hidden block" />
 									<SimpleButton
-										onClick={onDelete}
+										onClick={deleteReview}
 										className="size-10 sm:hidden block"
 									>
 										<img src={trashImage} />
@@ -130,11 +138,11 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 								))}
 							</div>
 						)}
-						{review instanceof OwnedReview && (
+						{review.isOwned && (
 							<>
 								<div className="w-4 hidden sm:block" />
 								<SimpleButton
-									onClick={onDelete}
+									onClick={deleteReview}
 									className="size-10 hidden sm:block"
 								>
 									<img src={trashImage} />
@@ -149,7 +157,9 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 								content={content}
 								setContent={setContent}
 								className="w-full"
-							></MultilineFlatInput>
+								autoFocus
+								autoHeight
+							/>
 						) : (
 							<p>{content}</p>
 						)}

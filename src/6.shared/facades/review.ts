@@ -39,6 +39,10 @@ class Review {
         return this._review.moment
     }
 
+    public get isOwned(): boolean {
+        return OwnedUser.instance?.id.id == this.from.id
+    }
+
     // Methods
 
     protected async edit(content?: string, rate?: Rate): Promise<void | ExError> {

@@ -7,7 +7,7 @@ import {
 	Confirmations,
 } from "../types"
 import { AccentButton } from "@shared/ui/Buttons"
-import { passwordValidator, validationCodeValidator } from "../helpers"
+import { passwordValidator, validationCodeValidator } from "@shared/helpers"
 
 interface ConfirmationFormProps {
 	confirmations: Set<Confirmation>
@@ -86,6 +86,7 @@ const ConfirmationForm: FC<ConfirmationFormProps> = ({
 				<div className="my-2 flex flex-col items-center">
 					<h1 className="text-center">Пароль</h1>
 					<ValidatedInput
+						passwordInput
 						placeholder="Пароль"
 						error={errorData.password}
 						validator={passwordValidator}

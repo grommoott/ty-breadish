@@ -46,11 +46,7 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 	)
 
 	const appendComments = (comments: Comment[]) => {
-		setComments((prev) => {
-			const tmp = prev.map((v) => v)
-
-			return tmp.concat(comments)
-		})
+		setComments((prev) => prev.concat(comments))
 	}
 
 	useEffect(() => {

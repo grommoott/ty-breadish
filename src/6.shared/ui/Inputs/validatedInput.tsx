@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, HTMLInputAutoCompleteAttribute, useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import Loading from "../Loading"
 import BaseInput from "./baseInput"
@@ -13,6 +13,8 @@ interface ValidatedInputProps {
 	displayErrors?: boolean
 	value?: string
 	error?: string
+	passwordInput?: boolean
+	autocomplete?: HTMLInputAutoCompleteAttribute
 }
 
 const ValidatedInput: FC<ValidatedInputProps> = ({
@@ -25,6 +27,8 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 	displayErrors = true,
 	value,
 	error = "",
+	passwordInput = false,
+	autocomplete = "new-password",
 }) => {
 	const [isValid, setIsValid] = useState(error == "")
 	const [isLoading, setIsLoading] = useState(false)
@@ -41,6 +45,8 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 
 	return (
 		<BaseInput
+			autocomplete={autocomplete}
+			passwordInput={passwordInput}
 			width={width}
 			margin={margin}
 			placeholder={placeholder}

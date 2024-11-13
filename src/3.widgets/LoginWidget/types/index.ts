@@ -1,15 +1,16 @@
+import { Dispatch, SetStateAction } from "react"
+import { LoginPage } from "../enums"
+
 type FormData = {
     email: string,
     username: string,
     password: string,
-    passwordConfirmation: string
 }
 
-type ErrorData = {
-    email: string,
-    username: string,
-    password: string,
-    passwordConfirmation: string
+interface LoginPageBaseProps {
+    goToPage: (page: LoginPage) => void
+    formData: FormData
+    setFormData: Dispatch<SetStateAction<FormData>>
 }
 
-export { FormData, ErrorData }
+export { FormData, LoginPageBaseProps }

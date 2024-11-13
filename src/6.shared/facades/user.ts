@@ -1,4 +1,4 @@
-import { createRegisterToken, createVerificationCode, getAccessToken, login, logout, register } from "@shared/api/auth"
+import { createRegisterToken, createVerificationCode, getAccessToken, login, logout, register, sendRecoveryPassword } from "@shared/api/auth"
 import { createAvatar, deleteAvatar, deleteUser, getUser, getUsername, isAvatarExists, isEmailAvailable, isPasswordIsValid, isUsernameAvailable, putAvatar, putUser } from "@shared/api/users"
 import { backendBaseUrl } from "@shared/config"
 import { ExError } from "@shared/helpers"
@@ -180,6 +180,7 @@ class OwnedUser {
         }
 
         if (!this._instance) {
+            console.log(user)
             this._instance = new OwnedUser(user)
         }
     }
@@ -191,6 +192,7 @@ class OwnedUser {
             return response
         }
 
+        console.log(response)
         this._instance = new OwnedUser(response)
     }
 
@@ -206,6 +208,10 @@ class OwnedUser {
         }
 
         this._instance = new OwnedUser(user)
+    }
+
+    public static async sendRecoveryPassword(username: string, verificationCode: number): Promise<void | ExError> {
+        return await sendRecoveryPassword(username, verificationCode)
     }
 
     // Other

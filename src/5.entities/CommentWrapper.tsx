@@ -246,6 +246,8 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 						</p>
 						{isEditing ? (
 							<MultilineFlatInput
+								autoFocus
+								autoHeight
 								content={content}
 								setContent={setContent}
 								className="w-full"
