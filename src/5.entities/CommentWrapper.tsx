@@ -253,7 +253,7 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 								className="w-full"
 							/>
 						) : (
-							<p>{content}</p>
+							<p className="break-all">{content}</p>
 						)}
 					</div>
 

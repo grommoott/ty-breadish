@@ -1,10 +1,10 @@
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useMemo, useRef, useState } from "react"
 import "./index.css"
 
 interface PriceSliderProps {
 	min?: number
 	max?: number
-	width?: number
+	width?: string
 	onValueChanged?: (value: [number, number]) => void
 }
 
@@ -22,17 +22,19 @@ const clamp = (a: number, min: number, max: number) =>
 const PriceSlider: FC<PriceSliderProps> = ({
 	min = 0,
 	max = 1,
-	width = 15,
+	width = "10rem",
 	onValueChanged = () => {},
 }) => {
 	const [sliderValue, setSliderValue] = useState([min, max])
 	const minButton = useRef(null)
 	const maxButton = useRef(null)
+	const sliderRef = useRef(null)
 
-	const widthPx =
-		width * parseFloat(getComputedStyle(document.documentElement).fontSize)
+	const [widthPx, setWidthPx] = useState<number>(1)
+	// const widthPx =
+	// 	width * parseFloat(getComputedStyle(document.documentElement).fontSize)
 
-	const pxToVal = max / widthPx
+	const pxToVal = useMemo(() => max / widthPx, [widthPx])
 
 	function addValue(value: [number, number]) {
 		setSliderValue((prev) => {
@@ -57,14 +59,27 @@ const PriceSlider: FC<PriceSliderProps> = ({
 		onValueChanged([Math.round(sliderValue[0]), Math.round(sliderValue[1])])
 	}
 
+	useEffect(() => {
+		if (!sliderRef.current) {
+			return
+		}
+
+		const slider = sliderRef.current as HTMLDivElement
+
+		setWidthPx(slider.scrollWidth)
+	}, [sliderRef])
+
 	return (
-		<div className="flex flex-col items-center justify-center m-3">
+		<div
+			className="flex flex-col items-center justify-center m-3"
+			style={{ width }}
+		>
 			<div className="flex flex-row justify-between w-full px-1">
 				<p className="text-zinc-700 text-base">{min}</p>
 				<p className="text-zinc-700 text-base">{max}</p>
 			</div>
 
-			<div className="relative flex flex-col items-center justify-center">
+			<div className="relative flex flex-col items-center justify-center w-full">
 				<button
 					onPointerDown={onPointerDown}
 					onPointerUp={onPointerUp}
@@ -125,7 +140,11 @@ const PriceSlider: FC<PriceSliderProps> = ({
 					<div className="price-slider-thumb" />
 				</button>
 
-				<div className="relative size-full">
+				<div
+					className="relative size-full"
+					ref={sliderRef}
+					style={{ width }}
+				>
 					<div
 						className="relative size-full bg-white opacity-10 translate-y-1/2 rounded-full"
 						style={{

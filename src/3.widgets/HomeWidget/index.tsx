@@ -150,6 +150,8 @@ const HomeWidget: FC = () => {
 			notification("Ошибка аутентификации, изменения не были сохранены")
 			return
 		}
+
+		setHasChanged(false)
 	}
 
 	const deleteUser = async () => {

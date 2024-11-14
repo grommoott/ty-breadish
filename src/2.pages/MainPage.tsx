@@ -3,7 +3,12 @@ import { FC } from "react"
 import { Button } from "@shared/ui/Buttons"
 import { useNavigate } from "react-router-dom"
 import Header from "@widgets/Header"
-import { newsImage, recipesImage, shopImage } from "@assets/ui"
+import {
+	featuredActivatedImage,
+	newsImage,
+	recipesImage,
+	shopImage,
+} from "@assets/ui"
 import { motion, Variants } from "framer-motion"
 
 interface MainPageItemProps {
@@ -26,7 +31,7 @@ const MainPageItem: FC<MainPageItemProps> = ({
 			className="flex flex-col items-center w-40 mx-6 my-6 md:my-0"
 			variants={mainPageItemVariants}
 		>
-			<h2 className="text-3xl">{title}</h2>
+			<h2 className="text-3xl text-center">{title}</h2>
 
 			<div className="size-36">
 				<img src={imageUrl} />
@@ -82,6 +87,17 @@ const MainPage: FC = () => {
 						description={`Будьте в курсе самых новых новостей на "Ты Breadish!"`}
 					/>
 				</motion.div>
+
+				<div className="h-20" />
+
+				<MainPageItem
+					title="Тестовая страница"
+					imageUrl={featuredActivatedImage}
+					buttonLink="/test"
+					description={`Страница для разработчиков "Ты Breadish!"`}
+				/>
+
+				<div className="h-20" />
 			</div>
 		</>
 	)

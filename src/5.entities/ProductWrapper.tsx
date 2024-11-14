@@ -88,14 +88,26 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 					</p>
 
 					<div className="flex flex-row items-center">
-						{[0, 1, 2, 3, 4].map((val) => (
-							<Star
-								fillRatio={product.avgRate.avgRate - val}
-								key={val}
-							/>
-						))}
-						<div className="w-1" />
-						<p>{product.avgRate.avgRate.toFixed(1)}</p>
+						{product.avgRate.avgRate == -1 ? (
+							<p className="text-zinc-700">Нет отзывов</p>
+						) : (
+							<>
+								{[0, 1, 2, 3, 4].map((val) => {
+									return (
+										<Star
+											fillRatio={
+												product.avgRate.avgRate - val
+											}
+											key={val}
+										/>
+									)
+								})}
+
+								<p className="text ml-2">
+									{product.avgRate.avgRate.toFixed(1)}
+								</p>
+							</>
+						)}
 					</div>
 
 					<div className="flex-1" />

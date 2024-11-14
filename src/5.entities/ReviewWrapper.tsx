@@ -95,7 +95,9 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 	return (
 		<div
 			className="flex flex-col items-center p-2 m-2 bg-[var(--dark-color)] rounded-3xl"
-			style={{ width: `min(${width}vw, 100%)` }}
+			style={{
+				width: `min(${width}vw, 100%)`,
+			}}
 		>
 			<div className="flex flex-row w-full">
 				<img
@@ -161,14 +163,16 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 								autoHeight
 							/>
 						) : (
-							<p>{content}</p>
+							<p className="break-all">{content}</p>
 						)}
 					</div>
 				</div>
 			</div>
+
 			<p className="ml-auto text-zinc-600 text-sm">
 				{new Date(review.moment.moment).toLocaleDateString()}
 			</p>
+
 			<div className="flex flex-row justify-between w-full">
 				{review instanceof OwnedReview ? (
 					<>

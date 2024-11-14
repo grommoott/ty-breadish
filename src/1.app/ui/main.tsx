@@ -15,6 +15,10 @@ import MainPage from "@pages/MainPage"
 import HomePage from "@pages/HomePage"
 import LoginPage from "@pages/LoginPage"
 import BasketPage from "@pages/BasketPage"
+import ProductPage from "@pages/ProductPage"
+import RecipePage from "@pages/RecipePage"
+import { fetchProducts } from "@shared/store/actionCreators/product"
+import { fetchRecipes } from "@shared/store/actionCreators/recipe"
 
 const router = createBrowserRouter([
 	{
@@ -37,11 +41,25 @@ const router = createBrowserRouter([
 		path: "/basket",
 		element: <BasketPage />,
 	},
+	{
+		path: "/products/id/:id",
+		element: <ProductPage />,
+	},
+	{
+		path: "/recipes/id/:id",
+		element: <RecipePage />,
+	},
 ])
 
 async function initialization(): Promise<void> {
-	await OwnedUser.refreshToken()
-	await OwnedUser.instance?.initialize()
+	await Promise.all([
+		(async () => {
+			await OwnedUser.refreshToken()
+			await OwnedUser.instance?.initialize()
+		})(),
+		store.dispatch(fetchProducts()),
+		store.dispatch(fetchRecipes()),
+	])
 }
 
 function matchPageSize(pageWidth: number): PageSize {

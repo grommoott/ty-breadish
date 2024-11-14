@@ -15,6 +15,16 @@ async function getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page:
     }
 }
 
+async function getReviewByItemUser(target: ItemId): Promise<IReview | ExError> {
+    try {
+        const response = await axios.get(`${backendBaseUrl}/api/reviews/byItemUser/target/${target}`, defaultAxiosRequestConfig)
+
+        return responseDataToReview(response.data)
+    } catch (e) {
+        return errorWrapper(e, "getReviewByItemUser")
+    }
+}
+
 async function createReview(target: ItemId, content: string, rate: Rate): Promise<IReview | ExError> {
     try {
         const response = await axios.post(`${backendBaseUrl}/api/reviews/create`, {
@@ -49,4 +59,4 @@ async function putReview(id: ReviewId, content?: string, rate?: Rate): Promise<v
     }
 }
 
-export { getReviewsPage, createReview, deleteReview, putReview }
+export { getReviewsPage, createReview, deleteReview, putReview, getReviewByItemUser }

@@ -70,7 +70,6 @@ class OwnedUser {
     private _user: IUser
     private _likes: Array<Like> | undefined = undefined
     private _featured: Array<Featured> | undefined = undefined
-    // private _role: Role | undefined = undefined
     private static _instance: OwnedUser | undefined = undefined
 
     // Getters
@@ -180,7 +179,6 @@ class OwnedUser {
         }
 
         if (!this._instance) {
-            console.log(user)
             this._instance = new OwnedUser(user)
         }
     }
@@ -192,7 +190,6 @@ class OwnedUser {
             return response
         }
 
-        console.log(response)
         this._instance = new OwnedUser(response)
     }
 

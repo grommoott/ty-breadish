@@ -63,17 +63,24 @@ const ItemWrapper: FC<ListItemWrapperProps> = ({
 		>
 			<div className="flex flex-row items-center justify-between">
 				<div className="flex flex-row items-center justify-start">
-					{[0, 1, 2, 3, 4].map((val) => {
-						return (
-							<Star
-								fillRatio={item.avgRate.avgRate - val}
-								key={val}
-							/>
-						)
-					})}
-					<p className="text ml-2">
-						{item.avgRate.avgRate.toFixed(1)}
-					</p>
+					{item.avgRate.avgRate == -1 ? (
+						<p className="text-zinc-700">Нет отзывов</p>
+					) : (
+						<>
+							{[0, 1, 2, 3, 4].map((val) => {
+								return (
+									<Star
+										fillRatio={item.avgRate.avgRate - val}
+										key={val}
+									/>
+								)
+							})}
+
+							<p className="text ml-2">
+								{item.avgRate.avgRate.toFixed(1)}
+							</p>
+						</>
+					)}
 
 					<>
 						{featuredButton(
@@ -119,7 +126,7 @@ const ItemWrapper: FC<ListItemWrapperProps> = ({
 						}
 					})()}
 					src={imageLink}
-					className="top-0 relative z-10 drop-shadow-xl h-full"
+					className="top-0 relative z-[1] drop-shadow-xl h-full"
 					draggable="false"
 				/>
 				<motion.svg

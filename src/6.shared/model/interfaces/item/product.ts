@@ -61,7 +61,7 @@ function responseDataToListProduct(data: any): IListProduct {
         itemId: new ItemId(data.itemId),
         name: data.name,
         avgRate: new AvgRate(data.avgRate),
-        itemInfo: ItemInfo.fromJSON(data.itemInfo)
+        itemInfo: ItemInfo.fromObject(data.itemInfo)
     }
 }
 

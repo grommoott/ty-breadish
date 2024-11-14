@@ -1,5 +1,5 @@
 import { getLikesCount } from "@shared/api/likes"
-import { createReview, deleteReview, getReviewsPage, putReview } from "@shared/api/reviews"
+import { createReview, deleteReview, getReviewByItemUser, getReviewsPage, putReview } from "@shared/api/reviews"
 import { ExError } from "@shared/helpers"
 import { IReview } from "@shared/model/interfaces"
 import { LikeTypes, Rate, ReviewsSortOrder } from "@shared/model/types/enums"
@@ -89,6 +89,22 @@ class Review {
         }
 
         return reviews.map(review => OwnedReview.tryOccupyReview(new Review(review)))
+    }
+
+    public static async fromItemUser(target: ItemId): Promise<OwnedReview | ExError> {
+        const response: IReview | ExError = await getReviewByItemUser(target)
+
+        if (response instanceof ExError) {
+            return response
+        }
+
+        const review = OwnedReview.tryOccupyReview(new Review(response))
+
+        if (review instanceof OwnedReview) {
+            return review
+        } else {
+            return new ExError("Impossible error", 666)
+        }
     }
 
     // Constructor

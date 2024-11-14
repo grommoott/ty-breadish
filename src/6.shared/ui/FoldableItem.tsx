@@ -58,7 +58,7 @@ const FoldableItem: FC<FoldableItemProps> = ({
 			style={{ width }}
 		>
 			<button
-				className="px-3 h-10 w-full focus-visible:text-[var(--main-color)] duration-100 outline-none flex flex-row items-center justify-between gap-2"
+				className="px-3 py-2 w-full focus-visible:text-[var(--main-color)] duration-100 outline-none flex flex-row items-center justify-between gap-2"
 				onClick={() => setIsFolded(!isFolded)}
 			>
 				<p>{title}</p>

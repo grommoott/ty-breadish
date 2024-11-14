@@ -65,13 +65,26 @@ const RecipeWrapper: FC<RecipeWrapperProps> = ({
 
 					{recipe.avgRate.avgRate != -1 && (
 						<div className="flex flex-row items-center">
-							{[0, 1, 2, 3, 4].map((val) => (
-								<Star
-									fillRatio={recipe.avgRate.avgRate - val}
-								/>
-							))}
-							<div className="w-1" />
-							<p>{recipe.avgRate.avgRate.toFixed(1)}</p>
+							{recipe.avgRate.avgRate == -1 ? (
+								<p className="text-zinc-700">Нет отзывов</p>
+							) : (
+								<>
+									{[0, 1, 2, 3, 4].map((val) => {
+										return (
+											<Star
+												fillRatio={
+													recipe.avgRate.avgRate - val
+												}
+												key={val}
+											/>
+										)
+									})}
+
+									<p className="text ml-2">
+										{recipe.avgRate.avgRate.toFixed(1)}
+									</p>
+								</>
+							)}
 						</div>
 					)}
 				</div>
