@@ -1,10 +1,12 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react"
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import "./index.css"
 
 interface PriceSliderProps {
 	min?: number
 	max?: number
-	width?: string
+	width?: { value: string }
+	step?: number
+	value?: [number, number]
 	onValueChanged?: (value: [number, number]) => void
 }
 
@@ -22,7 +24,9 @@ const clamp = (a: number, min: number, max: number) =>
 const PriceSlider: FC<PriceSliderProps> = ({
 	min = 0,
 	max = 1,
-	width = "10rem",
+	width = { value: "10rem" },
+	step = 1,
+	value = [min, max],
 	onValueChanged = () => {},
 }) => {
 	const [sliderValue, setSliderValue] = useState([min, max])
@@ -31,16 +35,50 @@ const PriceSlider: FC<PriceSliderProps> = ({
 	const sliderRef = useRef(null)
 
 	const [widthPx, setWidthPx] = useState<number>(1)
-	// const widthPx =
-	// 	width * parseFloat(getComputedStyle(document.documentElement).fontSize)
 
 	const pxToVal = useMemo(() => max / widthPx, [widthPx])
 
+	const roundToStep = useCallback(
+		(value: number) => {
+			return step * Math.round(value / step)
+		},
+		[step],
+	)
+
 	function addValue(value: [number, number]) {
-		setSliderValue((prev) => {
+		const result = [
+			clamp(roundToStep(sliderValue[0] + value[0]), min, max),
+			clamp(roundToStep(sliderValue[1] + value[1]), min, max),
+		]
+
+		if (result[0] > result[1]) {
+			if (value[0] != 0) {
+				result[1] = result[0]
+			}
+
+			if (value[1] != 0) {
+				result[0] = result[1]
+			}
+		}
+
+		onValueChanged([result[0], result[1]])
+	}
+
+	useEffect(() => {
+		if (!sliderRef.current) {
+			return
+		}
+
+		const slider = sliderRef.current as HTMLDivElement
+
+		setWidthPx(slider.clientWidth)
+	}, [width])
+
+	useEffect(() => {
+		setSliderValue(() => {
 			const result = [
-				clamp(prev[0] + value[0], min, max),
-				clamp(prev[1] + value[1], min, max),
+				clamp(roundToStep(value[0]), min, max),
+				clamp(roundToStep(value[1]), min, max),
 			]
 
 			if (result[0] > result[1]) {
@@ -55,24 +93,12 @@ const PriceSlider: FC<PriceSliderProps> = ({
 
 			return result
 		})
-
-		onValueChanged([Math.round(sliderValue[0]), Math.round(sliderValue[1])])
-	}
-
-	useEffect(() => {
-		if (!sliderRef.current) {
-			return
-		}
-
-		const slider = sliderRef.current as HTMLDivElement
-
-		setWidthPx(slider.scrollWidth)
-	}, [sliderRef])
+	}, [value])
 
 	return (
 		<div
 			className="flex flex-col items-center justify-center m-3"
-			style={{ width }}
+			style={{ width: width.value }}
 		>
 			<div className="flex flex-row justify-between w-full px-1">
 				<p className="text-zinc-700 text-base">{min}</p>
@@ -143,7 +169,7 @@ const PriceSlider: FC<PriceSliderProps> = ({
 				<div
 					className="relative size-full"
 					ref={sliderRef}
-					style={{ width }}
+					style={{ width: width.value }}
 				>
 					<div
 						className="relative size-full bg-white opacity-10 translate-y-1/2 rounded-full"

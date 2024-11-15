@@ -4,7 +4,8 @@ type ProductFilterData = {
     includeIngredients: Array<Ingredient>,
     excludeIngredients: Array<Ingredient>,
     minPrice?: number,
-    maxPrice?: number
+    maxPrice?: number,
+    query: string
 }
 
 export { ProductFilterData }

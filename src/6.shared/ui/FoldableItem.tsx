@@ -2,7 +2,7 @@ import { useAnimationControls, motion } from "framer-motion"
 import { FC, ReactNode, useEffect, useRef, useState } from "react"
 
 interface FoldableItemProps {
-	title?: string
+	title?: ReactNode
 	children?: ReactNode
 	width?: string
 	contentAlign?: "center" | "stretch"
@@ -58,32 +58,35 @@ const FoldableItem: FC<FoldableItemProps> = ({
 			style={{ width }}
 		>
 			<button
-				className="px-3 py-2 w-full focus-visible:text-[var(--main-color)] duration-100 outline-none flex flex-row items-center justify-between gap-2"
+				className="pl-5 pr-3 py-2 w-full focus-visible:text-[var(--main-color)] duration-100 outline-none flex flex-row items-center justify-between gap-2"
 				onClick={() => setIsFolded(!isFolded)}
 			>
 				<p>{title}</p>
 
-				<motion.svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 100 100"
-					className="h-6"
-					initial={{ rotate: 0 }}
-					animate={{ rotate: isFolded ? 180 : 0 }}
-				>
-					<path
-						d="M 10,70 L 50,30 L 90, 70"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						strokeWidth={10}
-						fill="none"
-						stroke="white"
-					/>
-				</motion.svg>
+				<div>
+					<motion.svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 100 100"
+						className="h-6"
+						initial={{ rotate: 0 }}
+						animate={{ rotate: isFolded ? 180 : 0 }}
+					>
+						<path
+							d="M 10,70 L 50,30 L 90, 70"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={10}
+							fill="none"
+							stroke="white"
+						/>
+					</motion.svg>
+				</div>
 			</button>
 
 			<motion.div
 				animate={outerDivControls}
 				className={`${isFolded && "overflow-hidden"} self-stretch`}
+				style={{ visibility: isFolded ? "hidden" : "visible" }}
 			>
 				<div
 					ref={innterDiv}

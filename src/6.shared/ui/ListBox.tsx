@@ -67,7 +67,7 @@ const ListBox: FC<ListBoxProps> = ({
 				ref={absoluteContainer}
 			>
 				<NonStyledButton
-					className={`p-2 bg-zinc-900 flex flex-row justify-between items-center`}
+					className={`p-2 bg-zinc-900 flex flex-row justify-between items-center focus-visible:bg-[var(--main-color)] border-2 border-transparent outline-none`}
 					style={{
 						borderRadius: isOpened
 							? "0.75rem 0.75rem 0 0"

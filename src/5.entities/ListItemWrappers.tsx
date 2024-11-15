@@ -111,7 +111,12 @@ const ItemWrapper: FC<ListItemWrapperProps> = ({
 				onTouchEnd={() => setMouseDown(false)}
 				onTouchCancel={() => setMouseDown(false)}
 				onClick={() => navigate(itemLink || "/")}
-				className="m-2 h-1/2 relative"
+				onKeyDown={(e) => {
+					if (e.key == "Enter") {
+						navigate(itemLink || "/")
+					}
+				}}
+				className="m-2 h-1/2 relative outline-none"
 				tabIndex={0}
 			>
 				<motion.img
