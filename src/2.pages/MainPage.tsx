@@ -71,13 +71,13 @@ const MainPage: FC = () => {
 					<MainPageItem
 						title="Рецепты"
 						imageUrl={recipesImage}
-						buttonLink="/"
+						buttonLink="/recipes"
 						description={`Пеките по самым лучшим рецептам от "Ты Breadish!"`}
 					/>
 					<MainPageItem
 						title="Магазин"
 						imageUrl={shopImage}
-						buttonLink="/"
+						buttonLink="/products"
 						description={`Покупайте самую вкусную выпечку на "Ты Breadish!"`}
 					/>
 					<MainPageItem

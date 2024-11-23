@@ -39,12 +39,16 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 						<>
 							{pageSize >= PageSizes.Small ? (
 								<div className="flex flex-row justify-center px-2 sm:px-6 gap-4 sm:gap-10 overflow-visible">
-									<SimpleButton>
+									<SimpleButton
+										onClick={() => navigate("/recipes")}
+									>
 										<p className="text-[var(--main-color)] text-xl sm:text-2xl">
 											Рецепты
 										</p>
 									</SimpleButton>
-									<SimpleButton>
+									<SimpleButton
+										onClick={() => navigate("/products")}
+									>
 										<p className="text-[var(--main-color)] text-xl sm:text-2xl">
 											Магазин
 										</p>
@@ -59,11 +63,33 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 								<div className="flex flex-col items-center">
 									<SimpleButton
 										onClick={() => {
-											popupWindow(() => {
+											popupWindow((closeWindow) => {
 												return (
 													<div className="flex flex-col items-center">
-														<Button>Рецепты</Button>
-														<Button>Магазин</Button>
+														<Button
+															onClick={() => {
+																navigate(
+																	"/recipes",
+																)
+																closeWindow(
+																	undefined,
+																)
+															}}
+														>
+															Рецепты
+														</Button>
+														<Button
+															onClick={() => {
+																navigate(
+																	"/products",
+																)
+																closeWindow(
+																	undefined,
+																)
+															}}
+														>
+															Магазин
+														</Button>
 														<Button>Новости</Button>
 													</div>
 												)

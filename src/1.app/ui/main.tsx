@@ -19,6 +19,8 @@ import ProductPage from "@pages/ProductPage"
 import RecipePage from "@pages/RecipePage"
 import { fetchProducts } from "@shared/store/actionCreators/product"
 import { fetchRecipes } from "@shared/store/actionCreators/recipe"
+import RecipesListPage from "@pages/RecipesListPage"
+import ProductsListPage from "@pages/ProductsListPage"
 
 const router = createBrowserRouter([
 	{
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
 	{
 		path: "/recipes/id/:id",
 		element: <RecipePage />,
+	},
+	{
+		path: "/products",
+		element: <ProductsListPage />,
+	},
+	{
+		path: "/recipes",
+		element: <RecipesListPage />,
 	},
 ])
 
@@ -93,7 +103,11 @@ const PageSizeProviderWrapper: FC = () => {
 
 	return (
 		<PageSizeProvider value={pageSize}>
-			<RouterProvider router={router} />
+			<NotificationsProvider>
+				<PopupWindowProvider>
+					<RouterProvider router={router} />
+				</PopupWindowProvider>
+			</NotificationsProvider>
 		</PageSizeProvider>
 	)
 }
@@ -102,11 +116,7 @@ initialization().then(() =>
 	ReactDOM.createRoot(document.getElementById("root")!).render(
 		<React.StrictMode>
 			<Provider store={store}>
-				<NotificationsProvider>
-					<PopupWindowProvider>
-						<PageSizeProviderWrapper />
-					</PopupWindowProvider>
-				</NotificationsProvider>
+				<PageSizeProviderWrapper />
 			</Provider>
 		</React.StrictMode>,
 	),

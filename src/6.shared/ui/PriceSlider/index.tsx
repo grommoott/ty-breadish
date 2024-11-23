@@ -1,4 +1,12 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+	FC,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react"
 import "./index.css"
 
 interface PriceSliderProps {
@@ -64,7 +72,7 @@ const PriceSlider: FC<PriceSliderProps> = ({
 		onValueChanged([result[0], result[1]])
 	}
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!sliderRef.current) {
 			return
 		}

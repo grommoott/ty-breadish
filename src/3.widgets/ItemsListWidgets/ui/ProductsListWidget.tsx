@@ -3,21 +3,26 @@ import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
 import { ListProduct } from "@shared/facades"
 import { ExError } from "@shared/helpers"
-import { useAppSelector, useSmallWidgetWidth } from "@shared/hooks"
 import {
-	Ingredient,
-	Ingredients,
-	translateIngredient,
-} from "@shared/model/types/enums"
-import MultiSelect from "@shared/ui/MultiSelect"
-import { FC, useMemo, useState } from "react"
-import { ProductFilterData } from "../types"
-import FoldableItem from "@shared/ui/FoldableItem"
-import PriceSlider from "@shared/ui/PriceSlider"
-import CountInput from "@shared/ui/Inputs/countInput"
+	useAppSelector,
+	usePopupWindow,
+	useSmallWidgetWidth,
+} from "@shared/hooks"
+import { FC, useEffect, useMemo, useState } from "react"
+import { ProductsFilterData } from "../types"
 import { SearchInput } from "@shared/ui/Inputs"
+import { AccentButton } from "@shared/ui/Buttons"
+import ProductsFiltersWindow from "./ProductsFiltersWindow"
+import ListBox from "@shared/ui/ListBox"
+import {
+	ListProductsSortOrder,
+	ListProductsSortOrders,
+	translatedListProductsSortOrders,
+} from "../enums"
 
 const ProductsListWidget: FC = () => {
+	const popupWindow = usePopupWindow()
+
 	const productsSerialized = useAppSelector((state) => state.products)
 	const products = useMemo(
 		() =>
@@ -59,30 +64,61 @@ const ProductsListWidget: FC = () => {
 		return buffer
 	}, [products])
 
+	useEffect(() => {
+		setFilterData((prev) => ({ ...prev, minPrice }))
+	}, [minPrice])
+
+	useEffect(() => {
+		setFilterData((prev) => ({ ...prev, maxPrice }))
+	}, [maxPrice])
+
 	const pageSize = usePageSize()
 	const columns = useMemo(() => {
-		if (pageSize < PageSizes.Medium) {
+		if (pageSize < PageSizes.SmallMedium) {
 			return 1
 		} else if (pageSize < PageSizes.Medium) {
 			return 2
 		} else if (pageSize < PageSizes.Large) {
 			return 2
 		} else if (pageSize < PageSizes.XL) {
-			return 2
+			return 3
 		} else if (pageSize < PageSizes.XXL) {
-			return 2
+			return 4
+		} else {
+			return 5
 		}
 	}, [pageSize])
 
-	const [filterData, setFilterData] = useState<ProductFilterData>({
-		includeIngredients: new Array(),
-		excludeIngredients: new Array(),
-		minPrice: undefined,
-		maxPrice: undefined,
-		query: "",
+	const [filterData, setFilterData] = useState<ProductsFilterData>(() => {
+		const data = sessionStorage.getItem("productsFilterData")
+
+		let result = {
+			includeIngredients: new Array(),
+			excludeIngredients: new Array(),
+			cookingMethods: new Array(),
+			minPrice: undefined,
+			maxPrice: undefined,
+			query: "",
+		}
+
+		if (data != null) {
+			try {
+				result = JSON.parse(data)
+			} catch (e) {}
+		}
+
+		return result
 	})
 
-	const displayedProducts = useMemo(
+	useEffect(() => {
+		sessionStorage.setItem("productsFilterData", JSON.stringify(filterData))
+	}, [filterData])
+
+	const [sortOrder, setSortOrder] = useState<ListProductsSortOrder>(
+		ListProductsSortOrders.RatedFirst,
+	)
+
+	const filteredProducts = useMemo(
 		() =>
 			products
 				?.filter(
@@ -92,221 +128,142 @@ const ProductsListWidget: FC = () => {
 						product.price.price >= (filterData.minPrice || 0),
 				)
 				.filter((product) => {
+					if (filterData.cookingMethods.length == 0) {
+						return true
+					}
+
+					return product.itemInfo.cookingMethod
+						.map((method) =>
+							filterData.cookingMethods.includes(method),
+						)
+						.reduce((prev, cur) => prev || cur)
+				})
+				.filter((product) => {
 					if (filterData.includeIngredients.length == 0) {
 						return true
 					}
 
-					return [...new Set(product.itemInfo.ingredients)]
+					return filterData.includeIngredients
 						.map((ingredient) =>
-							filterData.includeIngredients.includes(ingredient),
+							product.itemInfo.ingredients.includes(ingredient),
 						)
-						.reduce((prev, curr) => prev || curr)
+						.reduce((prev, curr) => prev && curr)
 				})
 				.filter(
 					(product) =>
-						![...new Set(product.itemInfo.ingredients)]
+						!product.itemInfo.ingredients
 							.map((ingredient) =>
 								filterData.excludeIngredients.includes(
 									ingredient,
 								),
 							)
 							.reduce((prev, curr) => prev || curr),
+				)
+				.filter(
+					(product) =>
+						product.name
+							.toLowerCase()
+							.search(filterData.query.toLowerCase()) != -1,
 				),
 		[products, filterData],
 	)
+
+	const sortedProducts = useMemo(() => {
+		switch (sortOrder) {
+			case ListProductsSortOrders.RatedFirst:
+				return filteredProducts?.sort(
+					(a, b) => b.avgRate.avgRate - a.avgRate.avgRate,
+				)
+
+			case ListProductsSortOrders.RatedLast:
+				return filteredProducts?.sort(
+					(a, b) => a.avgRate.avgRate - b.avgRate.avgRate,
+				)
+
+			case ListProductsSortOrders.DearFirst:
+				return filteredProducts?.sort(
+					(a, b) => b.price.price - a.price.price,
+				)
+
+			case ListProductsSortOrders.CheapFirst:
+				return filteredProducts?.sort(
+					(a, b) => a.price.price - b.price.price,
+				)
+		}
+	}, [sortOrder, filteredProducts])
 
 	const searchWidth = useSmallWidgetWidth()
 
 	return (
 		<div className="flex flex-col w-full items-center">
-			<SearchInput
-				width={`${searchWidth}vw`}
-				onChange={(value) =>
-					setFilterData((prev) => ({ ...prev, query: value }))
-				}
-			></SearchInput>
+			<div
+				className="flex flex-col sm:flex-row items-center sm:items-center"
+				style={{
+					width: `${searchWidth}vw`,
+				}}
+			>
+				<SearchInput
+					margin="1rem 0"
+					width="100%"
+					onChange={(value) =>
+						setFilterData((prev) => ({ ...prev, query: value }))
+					}
+				/>
 
-			<div className="flex flex-col sm:flex-row items-center sm:items-start">
-				<div>
-					<div className="w-[16rem] sm:w-[20rem] flex flex-col items-stretch p-2 sm:p-4">
-						<h1 className="text-center text-3xl pb-2 text-[var(--main-color)]">
-							Фильтры
-						</h1>
-
-						<FoldableItem
-							width="100%"
-							contentAlign="stretch"
-							contentPadding="2rem"
-							title="Включая ингредиенты"
-						>
-							<MultiSelect
-								selectedValues={filterData.includeIngredients}
-								values={Object.values(Ingredients)}
-								translator={(val) => {
-									const translated = translateIngredient(
-										val as Ingredient,
-									)
-
-									return (
-										translated[0].toUpperCase() +
-										translated.substring(1)
-									)
-								}}
-								onSelect={(val) =>
-									setFilterData({
-										...filterData,
-										includeIngredients:
-											filterData.includeIngredients.concat(
-												val as Ingredient,
-											),
-									})
-								}
-								onDelete={(val) =>
-									setFilterData({
-										...filterData,
-										includeIngredients:
-											filterData.includeIngredients.filter(
-												(ingredient) =>
-													ingredient != val,
-											),
-									})
-								}
+				<AccentButton
+					className="w-full sm:w-min"
+					onClick={() =>
+						popupWindow(() => (
+							<ProductsFiltersWindow
+								initialFilterData={filterData}
+								setInitialFilterData={setFilterData}
+								minPrice={minPrice}
+								maxPrice={maxPrice}
 							/>
-						</FoldableItem>
+						))
+					}
+				>
+					Фильтры
+				</AccentButton>
+			</div>
 
-						<FoldableItem
-							width="100%"
-							contentAlign="stretch"
-							contentPadding="2rem"
-							title="Исключая ингредиенты"
-						>
-							<MultiSelect
-								selectedValues={filterData.excludeIngredients}
-								values={Object.values(Ingredients)}
-								translator={(val) => {
-									const translated = translateIngredient(
-										val as Ingredient,
-									)
+			<div className="flex flex-col md:flex-row items-center mt-4">
+				<h2 className="text-2xl">Порядок сортировки </h2>
 
-									return (
-										translated[0].toUpperCase() +
-										translated.substring(1)
-									)
-								}}
-								onSelect={(val) =>
-									setFilterData({
-										...filterData,
-										excludeIngredients:
-											filterData.excludeIngredients.concat(
-												val as Ingredient,
-											),
-									})
-								}
-								onDelete={(val) =>
-									setFilterData({
-										...filterData,
-										excludeIngredients:
-											filterData.excludeIngredients.filter(
-												(ingredient) =>
-													ingredient != val,
-											),
-									})
-								}
-							/>
-						</FoldableItem>
+				<ListBox
+					items={translatedListProductsSortOrders}
+					defaultValue={{
+						key: ListProductsSortOrders.RatedFirst,
+						value: translatedListProductsSortOrders.get(
+							ListProductsSortOrders.RatedFirst,
+						) as string,
+					}}
+					onChange={(value) =>
+						setSortOrder(value as ListProductsSortOrder)
+					}
+				/>
+			</div>
 
-						<FoldableItem
-							width="100%"
-							contentAlign="stretch"
-							contentPadding="1rem"
-							title="Цена"
-						>
-							<div className="mx-2">
-								{useMemo(
-									() => (
-										<PriceSlider
-											value={[
-												filterData.minPrice || 0,
-												filterData.maxPrice || 1,
-											]}
-											width={
-												pageSize >=
-												PageSizes.SmallMedium
-													? (() => ({
-															value: "100%",
-														}))()
-													: (() => ({
-															value: "100%",
-														}))()
-											}
-											min={minPrice}
-											max={maxPrice}
-											onValueChanged={([min, max]) => {
-												{
-													setFilterData((prev) => ({
-														...prev,
-														minPrice: min,
-														maxPrice: max,
-													}))
-												}
-											}}
-										/>
-									),
-									[pageSize, filterData],
-								)}
-							</div>
-
-							<div className="flex flex-row justify-center items-center h-8">
-								<p>От: </p>
-								<CountInput
-									controls={false}
-									initial={minPrice}
-									value={filterData.minPrice}
-									minValue={minPrice}
-									maxValue={maxPrice}
-									onChange={(value) => {
-										setFilterData((prev) => ({
-											...prev,
-											minPrice: value,
-										}))
-									}}
-								/>
-							</div>
-
-							<div className="flex flex-row justify-center items-center h-8 mb-4">
-								<p>До: </p>
-								<CountInput
-									controls={false}
-									initial={maxPrice}
-									value={filterData.maxPrice}
-									minValue={minPrice}
-									maxValue={maxPrice}
-									onChange={(value) => {
-										setFilterData((prev) => ({
-											...prev,
-											maxPrice: value,
-										}))
-									}}
-								/>
-							</div>
-						</FoldableItem>
-					</div>
+			<div className="flex flex-col items-center">
+				<div
+					className="grid p-6"
+					style={{
+						gridTemplateColumns: `repeat(${columns}, 1fr)`,
+					}}
+				>
+					{sortedProducts?.map((product) => (
+						<ListProductWrapper
+							product={product}
+							key={product.id.id}
+						/>
+					))}
 				</div>
-				<div className="flex flex-col items-center">
-					<div
-						className="grid p-6"
-						style={{
-							gridTemplateColumns: `repeat(${columns}, 1fr)`,
-						}}
-					>
-						{displayedProducts?.map((product) => (
-							<ListProductWrapper
-								product={product}
-								key={product.id.id}
-							/>
-						))}
-					</div>
-				</div>
+
+				{sortedProducts?.length == 0 && products?.length != 0 && (
+					<p className="m-4 p-4 rounded-3xl bg-[var(--dark-color)] text-zinc-700 text-center w-60">
+						Продуктов, соответствующих заданным фильтрам нет :(
+					</p>
+				)}
 			</div>
 		</div>
 	)

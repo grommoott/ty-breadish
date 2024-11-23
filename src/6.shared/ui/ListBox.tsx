@@ -63,7 +63,7 @@ const ListBox: FC<ListBoxProps> = ({
 			style={mainContainerSize}
 		>
 			<div
-				className="absolute border-white rounded-xl border-2"
+				className="absolute border-white rounded-xl border-2 z-[5]"
 				ref={absoluteContainer}
 			>
 				<NonStyledButton

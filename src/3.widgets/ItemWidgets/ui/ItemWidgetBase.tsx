@@ -50,10 +50,10 @@ const ItemWidgetBase = <T extends Item>({
 	const [reviews, setReviews] = useState<Array<Review>>(new Array<Review>())
 	const [userReview, setUserReview] = useState<OwnedReview>()
 
-	const appendReviews = (reviews: Array<Review>) => {
+	const appendReviews = (_reviews: Array<Review>) => {
 		setReviews((prev) =>
 			prev.concat(
-				reviews.filter((review) => review.id.id != userReview?.id.id),
+				_reviews.filter((review) => review.id.id != userReview?.id.id),
 			),
 		)
 	}
@@ -105,6 +105,10 @@ const ItemWidgetBase = <T extends Item>({
 			return
 		}
 
+		if (isUserReviewLoading) {
+			return
+		}
+
 		if (allReviewsHasLoaded) {
 			return
 		}
@@ -143,6 +147,11 @@ const ItemWidgetBase = <T extends Item>({
 	}, [isLoadingReviews])
 
 	useEffect(loadReviews, [isObserverInView, reviewsPage])
+	useEffect(() => {
+		if (!isUserReviewLoading) {
+			loadReviews()
+		}
+	}, [isUserReviewLoading])
 
 	return (
 		<div className="flex flex-col items-center">
@@ -193,7 +202,7 @@ const ItemWidgetBase = <T extends Item>({
 					review={review}
 					onDelete={(rev) => {
 						setReviews((prev) =>
-							prev.filter((val) => val.id.id != rev.id.id),
+							prev.filter((val) => val?.id.id != rev.id.id),
 						)
 
 						setUserReview(undefined)

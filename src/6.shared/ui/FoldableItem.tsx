@@ -85,7 +85,7 @@ const FoldableItem: FC<FoldableItemProps> = ({
 
 			<motion.div
 				animate={outerDivControls}
-				className={`${isFolded && "overflow-hidden"} self-stretch`}
+				className={`overflow-hidden self-stretch`}
 				style={{ visibility: isFolded ? "hidden" : "visible" }}
 			>
 				<div

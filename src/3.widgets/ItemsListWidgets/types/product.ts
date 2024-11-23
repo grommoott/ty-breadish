@@ -1,11 +1,9 @@
-import { Ingredient } from "@shared/model/types/enums"
+import { CookingMethod, Ingredient } from "@shared/model/types/enums"
+import { ItemFilterDataBase } from "."
 
-type ProductFilterData = {
-    includeIngredients: Array<Ingredient>,
-    excludeIngredients: Array<Ingredient>,
+type ProductsFilterData = {
     minPrice?: number,
     maxPrice?: number,
-    query: string
-}
+} & ItemFilterDataBase
 
-export { ProductFilterData }
+export { ProductsFilterData }

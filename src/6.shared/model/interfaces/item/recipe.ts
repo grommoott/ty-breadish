@@ -37,7 +37,7 @@ function responseDataToRecipe(data: any): IRecipe {
         name: data.name,
         description: data.description,
         avgRate: new AvgRate(data.avgRate),
-        itemInfo: ItemInfo.fromObject(data.itemInfo)
+        itemInfo: ItemInfo.fromJSON(data.itemInfo)
     }
 
 }

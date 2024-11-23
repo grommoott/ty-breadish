@@ -97,7 +97,7 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 					defaultUrl={isChanging ? getImageLink() : imageImage}
 					error={errorData?.image}
 					onChange={(image) => {
-						setFormData({ ...formData, image })
+						setFormData((prev) => ({ ...prev, image }))
 						setErrorData((prev) => ({ ...prev, image: undefined }))
 					}}
 				/>

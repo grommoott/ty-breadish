@@ -1,5 +1,5 @@
 import Header from "@widgets/Header"
-import { ProductsListWidget } from "@widgets/ItemsListWidgets"
+import { RecipesListWidget } from "@widgets/ItemsListWidgets/ui/RecipesListWidget"
 import { ReactElement } from "react"
 
 export default function Test(): ReactElement {
@@ -8,7 +8,7 @@ export default function Test(): ReactElement {
 			<Header />
 
 			<div className="bg-zinc-900">
-				<ProductsListWidget />
+				<RecipesListWidget />
 			</div>
 		</>
 	)

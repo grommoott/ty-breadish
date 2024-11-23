@@ -241,7 +241,7 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 					</span>
 
 					<div className="flex flex-col items-start flex-1">
-						<p className="text-[var(--main-color)]">
+						<p className="text-[var(--main-color)] pl-2">
 							{user?.username}
 						</p>
 						{isEditing ? (
@@ -250,10 +250,10 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 								autoHeight
 								content={content}
 								setContent={setContent}
-								className="w-full"
+								className="w-full pl-2"
 							/>
 						) : (
-							<p className="break-all">{content}</p>
+							<p className="break-all pl-2">{content}</p>
 						)}
 					</div>
 

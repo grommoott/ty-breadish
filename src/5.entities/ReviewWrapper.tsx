@@ -108,7 +108,7 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 				<div className="flex flex-col items-end flex-1">
 					<div className="flex flex-col sm:flex-row items-center w-full">
 						<div className="flex flex-row items-center">
-							<p>{user?.username}</p>
+							<p className="pl-2">{user?.username}</p>
 
 							{review.isOwned && (
 								<>
@@ -158,12 +158,12 @@ const ReviewWrapper: FC<ReviewWrapperProps> = ({
 							<MultilineFlatInput
 								content={content}
 								setContent={setContent}
-								className="w-full"
+								className="w-full pl-2"
 								autoFocus
 								autoHeight
 							/>
 						) : (
-							<p className="break-all">{content}</p>
+							<p className="break-all pl-2">{content}</p>
 						)}
 					</div>
 				</div>
