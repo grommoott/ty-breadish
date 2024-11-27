@@ -21,6 +21,7 @@ import { fetchProducts } from "@shared/store/actionCreators/product"
 import { fetchRecipes } from "@shared/store/actionCreators/recipe"
 import RecipesListPage from "@pages/RecipesListPage"
 import ProductsListPage from "@pages/ProductsListPage"
+import fetchBakeries from "@shared/store/actionCreators/bakeries"
 
 const router = createBrowserRouter([
 	{
@@ -69,6 +70,7 @@ async function initialization(): Promise<void> {
 		})(),
 		store.dispatch(fetchProducts()),
 		store.dispatch(fetchRecipes()),
+		store.dispatch(fetchBakeries()),
 	])
 }
 

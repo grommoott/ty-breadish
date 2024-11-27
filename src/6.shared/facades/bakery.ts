@@ -1,6 +1,6 @@
 import { createBakery, deleteBakery, getBakeries, getBakery, putBakery } from "@shared/api/bakeries";
 import { ExError } from "@shared/helpers";
-import { IBakery } from "@shared/model/interfaces";
+import { IBakery, ISerializedBakery } from "@shared/model/interfaces";
 import { BakeryId, Coords } from "@shared/model/types/primitives";
 
 class Bakery {
@@ -33,6 +33,14 @@ class Bakery {
         return await deleteBakery(this.id)
     }
 
+    public serialize(): ISerializedBakery {
+        return {
+            id: this.id.id,
+            address: this.address,
+            coords: [this.coords.latitude, this.coords.longitude]
+        }
+    }
+
     // Static constructors
 
     public static async fromId(id: BakeryId): Promise<Bakery | ExError> {
@@ -63,6 +71,22 @@ class Bakery {
         }
 
         return new Bakery(response)
+    }
+
+    public static parse(bakery: ISerializedBakery): Bakery | ExError {
+        if (!(
+            "id" in bakery &&
+            "address" in bakery &&
+            "coords" in bakery
+        )) {
+            return new ExError("Invalid object to parse into bakery", -400)
+        }
+
+        return new Bakery({
+            id: new BakeryId(bakery.id),
+            address: bakery.address,
+            coords: Coords.fromObject(bakery.coords)
+        })
     }
 
     // Constructor

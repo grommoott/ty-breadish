@@ -22,4 +22,10 @@ function responseDataToBakery(data: any): IBakery {
     }
 }
 
-export { IBakery, responseDataToBakery }
+interface ISerializedBakery {
+    id: number,
+    address: string,
+    coords: [number, number]
+}
+
+export { IBakery, responseDataToBakery, ISerializedBakery }

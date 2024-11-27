@@ -4,13 +4,15 @@ import { featuredReducer } from "./slices/featuredSlice"
 import { productsReducer } from "./slices/productsSlice"
 import { recipesReducer } from "./slices/recipesSlice"
 import { basketReducer, basketSavingMiddleware } from "./slices/basketSlice"
+import { bakeriesReducer } from "./slices/bakeries"
 
 const rootReducer = combineReducers({
     likes: likesReducer,
     featured: featuredReducer,
     products: productsReducer,
     recipes: recipesReducer,
-    basket: basketReducer
+    basket: basketReducer,
+    bakeries: bakeriesReducer
 })
 
 const store = configureStore({

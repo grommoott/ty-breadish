@@ -3,7 +3,7 @@ import { errorWrapper, ExError } from "@shared/helpers";
 import { Coords } from "@shared/model/types/primitives";
 import axios from "axios";
 
-function getMapTileUrl(x: number, y: number, z: number): string {
+function getMapTileUrl(x: string, y: string, z: string): string {
     return `${backendBaseUrl}/api/maps/tiles/x/${x}/y/${y}/z/${z}`
 }
 

@@ -3,7 +3,6 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import { LeafletEventHandlerFnMap } from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { maptilerApiKey } from "@shared/config"
-import { imageImage } from "@assets/ui"
 
 interface MapProps {
 	onCoordsSelect: (coords: [number, number]) => void

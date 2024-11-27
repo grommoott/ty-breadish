@@ -1,4 +1,4 @@
-import { ISerializedFeatured, ISerializedLike, ISerializedListProduct, ISerializedListRecipe } from "@shared/model/interfaces"
+import { ISerializedBakery, ISerializedFeatured, ISerializedLike, ISerializedListProduct, ISerializedListRecipe } from "@shared/model/interfaces"
 
 type BasicStorageState<T> = {
     isLoading: boolean,
@@ -16,4 +16,6 @@ type RecipesState = BasicStorageState<Array<ISerializedListRecipe>>
 
 type BasketState = { [id: number]: number | undefined } // {[id: ProductId.id]: count}
 
-export { LikesState, FeaturedState, ProductsState, RecipesState, BasketState }
+type BakeriesState = BasicStorageState<Array<ISerializedBakery>>
+
+export { LikesState, FeaturedState, ProductsState, RecipesState, BasketState, BakeriesState }

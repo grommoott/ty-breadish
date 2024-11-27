@@ -3,7 +3,7 @@ import { ExError } from "@shared/helpers"
 import { Coords } from "@shared/model/types/primitives"
 
 class Maps {
-    public static mapTileUrl(x: number, y: number, z: number): string {
+    public static mapTileUrl(x: string, y: string, z: string): string {
         return getMapTileUrl(x, y, z)
     }
 
