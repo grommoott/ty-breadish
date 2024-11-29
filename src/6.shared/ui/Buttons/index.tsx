@@ -5,6 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	onClick?: () => void
 	children?: ReactNode
 	style?: CSSProperties
+	isActive?: boolean
 	className?: string
 }
 
@@ -13,18 +14,20 @@ function ButtonBase({
 	className,
 	children,
 	onClick,
+	disabled = false,
 	...props
 }: ButtonProps) {
 	return (
 		<button
 			style={style}
-			className={`select-none overflow-visible caret-transparent buttons-base ${className}`}
+			className={`select-none overflow-visible caret-transparent buttons-base ${disabled && "saturate-0"} ${className}`}
 			onClick={onClick}
 			onKeyDown={(e) => {
 				if (e.key == "enter" && onClick) {
 					onClick()
 				}
 			}}
+			disabled={disabled}
 			{...props}
 		>
 			{children}

@@ -1,10 +1,10 @@
 import { Bakery, Maps } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import Loading from "@shared/ui/Loading"
-import { FC, useEffect, useMemo, useState } from "react"
+import { FC, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { MapContainer, Marker, TileLayer } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
-import { useAppSelector, useMapWidth } from "@shared/hooks"
+import { useAppSelector } from "@shared/hooks"
 import { Icon } from "leaflet"
 import {
 	bakeryMarkerPng,
@@ -45,7 +45,7 @@ const PickUpOrderMap: FC<PickUpOrderMapProps> = ({ onChange = () => {} }) => {
 	)
 	const [center, setCenter] = useState<[number, number] | undefined>()
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const data = localStorage.getItem("mapCenterDefault")
 
 		if (!data) {
@@ -65,8 +65,6 @@ const PickUpOrderMap: FC<PickUpOrderMapProps> = ({ onChange = () => {} }) => {
 		onChange(selectedBakery)
 	}, [selectedBakery])
 
-	const width = useMapWidth()
-
 	if (!bakeries || !center) {
 		return (
 			<div className="p-4 m-4 bg-[var(--dark-color)]">
@@ -78,16 +76,15 @@ const PickUpOrderMap: FC<PickUpOrderMapProps> = ({ onChange = () => {} }) => {
 	return (
 		<div
 			style={{
-				width: `${width}vw`,
 				height: "30rem",
 			}}
-			className="m-4 overflow-hidden rounded-3xl flex flex-col"
+			className="m-4 overflow-hidden rounded-3xl flex flex-col w-full"
 		>
 			<MapContainer
 				center={center}
 				zoom={10}
 				scrollWheelZoom={true}
-				style={{ width: `100%`, height: "100%" }}
+				className="w-full h-full"
 			>
 				<TileLayer
 					attribution={`\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e`}
@@ -125,7 +122,7 @@ const PickUpOrderMap: FC<PickUpOrderMapProps> = ({ onChange = () => {} }) => {
 				))}
 			</MapContainer>
 
-			<div className="bg-[var(--dark-color)] p-4">
+			<div className="bg-zinc-900 p-4">
 				{selectedBakery ? (
 					<>
 						<p>

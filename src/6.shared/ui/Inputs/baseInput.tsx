@@ -14,6 +14,7 @@ interface InputBaseProps {
 	onBlur?: () => void
 	passwordInput?: boolean
 	autocomplete?: string
+	currentValue?: string
 }
 
 const BaseInput: FC<InputBaseProps> = ({
@@ -30,6 +31,7 @@ const BaseInput: FC<InputBaseProps> = ({
 	onBlur,
 	passwordInput = false,
 	autocomplete = "off",
+	currentValue,
 }) => {
 	const inputRef = useRef(null)
 
@@ -42,6 +44,16 @@ const BaseInput: FC<InputBaseProps> = ({
 
 		input.value = value
 	}, [inputRef])
+
+	useEffect(() => {
+		if (!inputRef.current || currentValue == undefined) {
+			return
+		}
+
+		const input = inputRef.current as HTMLInputElement
+
+		input.value = currentValue
+	}, [currentValue])
 
 	return (
 		<div

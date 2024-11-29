@@ -123,7 +123,7 @@ class Order {
         return orders.map(order => new Order(order))
     }
 
-    public static async create(orderType: OrderType, orderInfo: OrderInfo, productIds: Array<ProductId>): Promise<Order | ExError> {
+    public static async create<T extends OrderInfo>(orderType: OrderType, orderInfo: T, productIds: Array<ProductId>): Promise<Order | ExError> {
         const order: IOrder | ExError = await createOrder(orderType, orderInfo, productIds)
 
         if (order instanceof ExError) {

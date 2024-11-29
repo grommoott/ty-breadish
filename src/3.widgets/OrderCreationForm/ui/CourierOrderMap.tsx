@@ -5,8 +5,8 @@ import {
 } from "@assets/png"
 import { Bakery, Maps } from "@shared/facades"
 import { ExError } from "@shared/helpers"
-import { useAppSelector, useMapWidth } from "@shared/hooks"
-import { Coords } from "@shared/model/types/primitives"
+import { useAppSelector } from "@shared/hooks"
+import { BakeryId, Coords } from "@shared/model/types/primitives"
 import Loading from "@shared/ui/Loading"
 import { Icon, Marker as MarkerLeaflet } from "leaflet"
 import { FC, useEffect, useMemo, useRef, useState } from "react"
@@ -15,7 +15,7 @@ import "leaflet/dist/leaflet.css"
 import config from "../config"
 
 interface CourierOrderMapProps {
-	onChange?: (coords?: Coords) => void
+	onChange?: (coords?: Coords, bakeryId?: BakeryId) => void
 }
 
 const CourierOrderMap: FC<CourierOrderMapProps> = ({ onChange = () => {} }) => {
@@ -41,7 +41,6 @@ const CourierOrderMap: FC<CourierOrderMapProps> = ({ onChange = () => {} }) => {
 	)
 
 	const [center, setCenter] = useState<[number, number] | undefined>()
-	const width = useMapWidth()
 
 	const [selectedCoords, setSelectedCoords] = useState<Coords | undefined>()
 
@@ -72,10 +71,37 @@ const CourierOrderMap: FC<CourierOrderMapProps> = ({ onChange = () => {} }) => {
 		}
 
 		localStorage.setItem(
-			"courierLatestCoords",
+			"mapCenterDefault",
 			JSON.stringify(selectedCoords?.toNormalView()),
 		)
-		onChange(selectedCoords)
+
+		let nearestBakeryId = undefined
+		let nearestBakeryDistance = Infinity
+
+		const normalizedCoords = new Coords(
+			((selectedCoords.latitude - 180) % 360) + 180,
+			((selectedCoords.longitude - 180) % 360) + 180,
+		)
+
+		bakeries?.forEach((bakery) => {
+			const distance =
+				(Math.pow(
+					bakery.coords.latitude - normalizedCoords.latitude,
+					2,
+				) +
+					Math.pow(
+						bakery.coords.latitude - normalizedCoords.longitude,
+						2,
+					)) *
+				(90 - Math.abs(bakery.coords.latitude)) // aproximate
+
+			if (distance < nearestBakeryDistance) {
+				nearestBakeryId = bakery.id
+				nearestBakeryDistance = distance
+			}
+		})
+
+		onChange(selectedCoords, nearestBakeryId)
 	}, [selectedCoords])
 
 	if (!bakeries || !center) {
@@ -89,16 +115,15 @@ const CourierOrderMap: FC<CourierOrderMapProps> = ({ onChange = () => {} }) => {
 	return (
 		<div
 			style={{
-				width: `${width}vw`,
 				height: "30rem",
 			}}
-			className="m-4 overflow-hidden rounded-3xl flex flex-col"
+			className="m-4 overflow-hidden rounded-3xl flex flex-col w-full"
 		>
 			<MapContainer
 				center={center}
 				zoom={10}
 				scrollWheelZoom={true}
-				style={{ width: `100%`, height: "100%" }}
+				className="w-full h-full"
 			>
 				<TileLayer
 					attribution={`\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e`}

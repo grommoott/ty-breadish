@@ -15,6 +15,7 @@ interface ValidatedInputProps {
 	error?: string
 	passwordInput?: boolean
 	autocomplete?: HTMLInputAutoCompleteAttribute
+	currentValue?: string
 }
 
 const ValidatedInput: FC<ValidatedInputProps> = ({
@@ -29,6 +30,7 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 	error = "",
 	passwordInput = false,
 	autocomplete = "new-password",
+	currentValue,
 }) => {
 	const [isValid, setIsValid] = useState(error == "")
 	const [isLoading, setIsLoading] = useState(false)
@@ -55,6 +57,7 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 			}
 			bgClass={isValid ? "bg-zinc-800" : "bg-red-500"}
 			value={value}
+			currentValue={currentValue}
 			childrenLeft={
 				displayErrors && (
 					<AnimatePresence>
