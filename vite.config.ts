@@ -1,4 +1,4 @@
-import { defineConfig, Rollup, rollupVersion } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths"
 
@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [react(), tsconfigPaths()],
     build: {
         rollupOptions: {
-            external: "./node_modules/"
+            external: "./node_modules/leaflet/package.json"
         }
     }
 })
