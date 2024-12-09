@@ -62,6 +62,7 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 		}
 
 		if (isChanging) {
+			setChangeLoading(true)
 			const response = await aNew.edit(
 				formData.title,
 				formData.content,
@@ -71,14 +72,18 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 			if (response instanceof ExError) {
 				console.error(response)
 				notificate("Произошла ошибка")
+				setChangeLoading(false)
 				return
 			}
 
 			notificate("Новость успешно изменена")
+			setChangeLoading(false)
 		} else {
 			if (!formData.image || !formData.title || !formData.content) {
 				return
 			}
+
+			setChangeLoading(true)
 
 			const response = await New.create(
 				formData.title,
@@ -90,6 +95,8 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 				console.error(response)
 				notificate("Произошла ошибка")
 			}
+
+			setChangeLoading(false)
 		}
 	}
 
