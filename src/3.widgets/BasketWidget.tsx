@@ -68,7 +68,7 @@ const BasketWidget: FC = () => {
 
 					<SimpleButton
 						className="py-4"
-						onClick={() => navigate("/shop")}
+						onClick={() => navigate("/products")}
 					>
 						<p className="text-zinc-800">Перейти в магазин</p>
 					</SimpleButton>

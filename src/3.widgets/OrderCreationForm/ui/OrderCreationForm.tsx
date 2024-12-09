@@ -149,7 +149,7 @@ const OrderCreationForm: FC = () => {
 				}
 
 				setLoading(false)
-				navigator(response.paymentUrl)
+				window.location.assign(response.paymentUrl)
 				break
 		}
 	}

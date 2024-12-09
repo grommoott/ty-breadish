@@ -20,7 +20,7 @@ const LikeButton: FC<LikeButtonProps> = ({
 	const [isLiked, setLiked] = useState<boolean>(
 		OwnedUser.instance?.likes?.findIndex(
 			(val) => val.target.id == id.id && val.type == likeType,
-		) != -1,
+		) != -1 || false,
 	)
 	const [like, setLike] = useState<Like | undefined>(
 		OwnedUser.instance?.likes?.find((val) => val.target.id == id.id),
