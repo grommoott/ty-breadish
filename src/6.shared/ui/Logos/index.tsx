@@ -4,7 +4,6 @@ import { motion, Variants, useAnimationControls } from "framer-motion"
 import "./index.css"
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
-import { useDefaultWidgetWidth } from "@shared/hooks"
 
 const FullLogo: FC<{ size?: number }> = ({ size = 16 }) => {
 	return (
