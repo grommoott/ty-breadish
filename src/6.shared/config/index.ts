@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios"
 
 const backendBaseUrl = process.env.BACKEND_BASE_URL || "https://localhost:8443"
+console.log(backendBaseUrl)
 const defaultAxiosRequestConfig: AxiosRequestConfig = {
     withCredentials: true
 }
