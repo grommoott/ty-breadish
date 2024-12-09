@@ -3,7 +3,7 @@ import { ExError } from "@shared/helpers"
 import Loading from "@shared/ui/Loading"
 import { FC, useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { MapContainer, Marker, TileLayer } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
+import leaflet from "leaflet"
 import { useAppSelector } from "@shared/hooks"
 import { Icon } from "leaflet"
 import {
@@ -12,6 +12,9 @@ import {
 	markerShadowPng,
 } from "@assets/png"
 import config from "../config"
+
+// import "leaflet/dist/leaflet.css" isn't working
+leaflet
 
 interface PickUpOrderMapProps {
 	onChange?: (bakery?: Bakery) => void
