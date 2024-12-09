@@ -44,7 +44,7 @@ async function createOrder(orderType: OrderType, orderInfo: OrderInfo, productId
             productIds: productIds.map(productId => productId.id)
         }, defaultAxiosRequestConfig)
 
-        return responseDataToOrder(response)
+        return responseDataToOrder(response.data)
     } catch (e) {
         return errorWrapper(e, "createOrder")
     }

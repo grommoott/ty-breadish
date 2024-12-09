@@ -19,6 +19,7 @@ import { CourierOrderInfo, ProductId } from "@shared/model/types/primitives"
 import { ExError, requiredFieldValidator } from "@shared/helpers"
 import { bakeryIdValidator, orderTypeValidator } from "../helpers"
 import { Order } from "@shared/facades"
+import Loading from "@shared/ui/Loading"
 
 const OrderCreationForm: FC = () => {
 	const [currentOrderType, setCurrentOrderType] = useState<OrderType>()
@@ -72,7 +73,7 @@ const OrderCreationForm: FC = () => {
 
 	useEffect(() => {
 		setFormData((prev) => ({ ...prev, orderType: currentOrderType }))
-		setErrorData((_) => ({
+		setErrorData(() => ({
 			courierOrderInfo: { bakeryId: "", deliveryAddress: "" },
 			pickUpOrderInfo: { bakeryId: "" },
 			orderType: "",
@@ -147,9 +148,8 @@ const OrderCreationForm: FC = () => {
 					return
 				}
 
-				response.setLoading(false)
-				navigator()
-
+				setLoading(false)
+				navigator(response.paymentUrl)
 				break
 		}
 	}
@@ -259,10 +259,15 @@ const OrderCreationForm: FC = () => {
 			</motion.div>
 
 			<AccentButton
-				className="px-6"
+				className="px-6 flex flex-row items-center"
 				onClick={createOrder}
 			>
-				Оформить заказ
+				Оформить заказ{" "}
+				{isLoading && (
+					<div className="l-2">
+						<Loading color="black" />
+					</div>
+				)}
 			</AccentButton>
 		</div>
 	)

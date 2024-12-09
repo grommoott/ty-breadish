@@ -50,6 +50,10 @@ class Order {
         return this._order.readyMoment
     }
 
+    public get paymentUrl(): string {
+        return `https://yoomoney.ru/api-pages/v2/payment-confirm/epl?orderId=${this.paymentId}`
+    }
+
     // Methods
 
     public async getProducts(): Promise<Array<Product> | ExError> {
