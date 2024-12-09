@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [react(), tsconfigPaths()],
     build: {
         rollupOptions: {
-            external: "./node_modules/leaflet/package.json"
+            external: ["./node_modules/leaflet/package.json"]
         }
     }
 })
