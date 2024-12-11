@@ -83,7 +83,7 @@ const MainPage: FC = () => {
 					<MainPageItem
 						title="Новости"
 						imageUrl={newsImage}
-						buttonLink="/"
+						buttonLink="/news"
 						description={`Будьте в курсе самых новых новостей на "Ты Breadish!"`}
 					/>
 				</motion.div>

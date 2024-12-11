@@ -28,7 +28,11 @@ const CreateReviewButton: FC<CreateReviewButtonProps> = ({
 		<AccentButton
 			onClick={async () => {
 				if (!OwnedUser.instance) {
-					const result = await popupWindow(LoginWarningPage)
+					const result = await popupWindow(
+						LoginWarningPage(
+							"Чтобы отправить отзыв вы должны зарегистрироваться или войти в аккаунт",
+						),
+					)
 
 					if (!result) {
 						return

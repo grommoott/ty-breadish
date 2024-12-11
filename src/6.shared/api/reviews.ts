@@ -15,7 +15,7 @@ async function getReviewsPage(target: ItemId, sortOrder: ReviewsSortOrder, page:
     }
 }
 
-async function getReviewByItemUser(target: ItemId): Promise<IReview | ExError> {
+async function getReviewByItemUser(target: ItemId): Promise<IReview | ExError | null> {
     try {
         const response = await axios.get(`${backendBaseUrl}/api/reviews/byItemUser/target/${target}`, defaultAxiosRequestConfig)
 

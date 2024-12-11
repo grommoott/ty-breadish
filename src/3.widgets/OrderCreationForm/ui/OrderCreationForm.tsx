@@ -7,6 +7,7 @@ import {
 	CourierOrderStates,
 	OrderType,
 	OrderTypes,
+	PickUpOrderStates,
 } from "@shared/model/types/enums"
 import { AccentButton, SimpleButton } from "@shared/ui/Buttons"
 import { motion } from "framer-motion"
@@ -15,7 +16,11 @@ import PickUpOrderForm from "./PickUpOrderForm"
 import CourierOrderForm from "./CourierOrderForm"
 import { useNavigate } from "react-router-dom"
 import { ErrorData, FormData } from "../types"
-import { CourierOrderInfo, ProductId } from "@shared/model/types/primitives"
+import {
+	CourierOrderInfo,
+	PickUpOrderInfo,
+	ProductId,
+} from "@shared/model/types/primitives"
 import { ExError, requiredFieldValidator } from "@shared/helpers"
 import { bakeryIdValidator, orderTypeValidator } from "../helpers"
 import { Order } from "@shared/facades"
@@ -118,6 +123,8 @@ const OrderCreationForm: FC = () => {
 			return
 		}
 
+		let response: ExError | Order
+
 		switch (formData.orderType) {
 			case OrderTypes.Courier:
 				if (
@@ -128,8 +135,7 @@ const OrderCreationForm: FC = () => {
 				}
 
 				setLoading(true)
-
-				const response = await Order.create<CourierOrderInfo>(
+				response = await Order.create<CourierOrderInfo>(
 					OrderTypes.Courier,
 					{
 						bakeryId: formData.courierOrderInfo.bakeryId,
@@ -141,17 +147,41 @@ const OrderCreationForm: FC = () => {
 					formData.productIds,
 				)
 
-				if (response instanceof ExError) {
-					setLoading(false)
-					notificate("Произошла ошибка сервера")
-					console.error(response)
+				break
+
+			case OrderTypes.PickUp:
+				if (formData.pickUpOrderInfo?.bakeryId == undefined) {
 					return
 				}
 
-				setLoading(false)
-				window.location.assign(response.paymentUrl)
+				setLoading(true)
+				response = await Order.create<PickUpOrderInfo>(
+					OrderTypes.PickUp,
+					{
+						bakeryId: formData.pickUpOrderInfo.bakeryId,
+						state: PickUpOrderStates.RequestSent,
+						productCounts: formData.productCounts,
+					},
+					formData.productIds,
+				)
 				break
+
+			default:
+				console.error(
+					"Unexpected OrderType when trying to send order creation request",
+				)
+				return
 		}
+
+		if (response instanceof ExError) {
+			setLoading(false)
+			notificate("Произошла ошибка сервера")
+			console.error(response)
+			return
+		}
+
+		setLoading(false)
+		window.location.assign(response.paymentUrl)
 	}
 
 	if (basket.length == 0) {

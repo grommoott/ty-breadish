@@ -55,8 +55,6 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 		})()
 	}, [])
 
-	console.log(likesCount)
-
 	return (
 		<div
 			style={{ width: `${width}vw` }}
@@ -102,6 +100,12 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 					<p className="text-zinc-700">Изменено</p>
 				</>
 			)}
+
+			<div className="self-end">
+				<p className="text-zinc-700">
+					{new Date(aNew.moment.moment).toLocaleDateString()}
+				</p>
+			</div>
 		</div>
 	)
 }

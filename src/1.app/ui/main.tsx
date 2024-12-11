@@ -22,6 +22,9 @@ import { fetchRecipes } from "@shared/store/actionCreators/recipe"
 import RecipesListPage from "@pages/RecipesListPage"
 import ProductsListPage from "@pages/ProductsListPage"
 import fetchBakeries from "@shared/store/actionCreators/bakeries"
+import OrderCreationPage from "@pages/OrderCreationPage"
+import NewsListPage from "@pages/NewsListPage"
+import NewPage from "@pages/NewPage"
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +62,18 @@ const router = createBrowserRouter([
 	{
 		path: "/recipes",
 		element: <RecipesListPage />,
+	},
+	{
+		path: "/orderCreation",
+		element: <OrderCreationPage />,
+	},
+	{
+		path: "/news",
+		element: <NewsListPage />,
+	},
+	{
+		path: "/news/id/:id",
+		element: <NewPage />,
 	},
 ])
 

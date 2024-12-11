@@ -1,9 +1,11 @@
 import { likedImage, likeImage } from "@assets/ui"
 import { Like, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
+import { usePopupWindow } from "@shared/hooks"
 import { LikeType } from "@shared/model/types/enums"
 import { Id } from "@shared/model/types/primitives"
 import { SimpleButton } from "@shared/ui/Buttons"
+import LoginWarningPage from "@shared/ui/LoginWarningPage"
 import { FC, useState } from "react"
 
 interface LikeButtonProps {
@@ -18,15 +20,27 @@ const LikeButton: FC<LikeButtonProps> = ({
 	id,
 }) => {
 	const [isLiked, setLiked] = useState<boolean>(
-		OwnedUser.instance?.likes?.findIndex(
-			(val) => val.target.id == id.id && val.type == likeType,
-		) != -1 || false,
+		OwnedUser.instance != undefined &&
+			OwnedUser.instance?.likes?.findIndex(
+				(val) => val.target.id == id.id && val.type == likeType,
+			) != -1,
 	)
 	const [like, setLike] = useState<Like | undefined>(
 		OwnedUser.instance?.likes?.find((val) => val.target.id == id.id),
 	)
 
+	const popupWindow = usePopupWindow()
+
 	const onClick = async () => {
+		if (OwnedUser.instance == undefined) {
+			popupWindow(
+				LoginWarningPage(
+					"Чтобы поставить лайк вы должны зарегистрироваться или войти в аккаунт",
+				),
+			)
+			return
+		}
+
 		const isLikedBuf = !isLiked
 		setLiked(isLikedBuf)
 		onChange(isLikedBuf)

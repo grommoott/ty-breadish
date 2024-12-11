@@ -53,7 +53,9 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 											Магазин
 										</p>
 									</SimpleButton>
-									<SimpleButton>
+									<SimpleButton
+										onClick={() => navigate("/news")}
+									>
 										<p className="text-[var(--main-color)] text-xl sm:text-2xl">
 											Новости
 										</p>

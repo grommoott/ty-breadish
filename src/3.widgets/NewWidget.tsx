@@ -25,8 +25,10 @@ interface NewWidgetProps {
 const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 	if (!aNew) {
 		return (
-			<div className="p-4 m-2 rounded-3xl bg-[var(--dark-color)]">
-				<Loading />
+			<div className="flex flex-col items-center">
+				<div className="p-4 m-2 rounded-3xl bg-[var(--dark-color)]">
+					<Loading />
+				</div>
 			</div>
 		)
 	}
@@ -109,7 +111,7 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 	useEffect(loadComments, [isObserverInView, commentsPage])
 
 	return (
-		<>
+		<div className="flex flex-col items-center">
 			<NewWrapper
 				aNew={aNew}
 				likeButton={(onChange) => (
@@ -202,7 +204,7 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 
 			<div ref={observerRef} />
 			{commentsPagesTotal > commentsPage && <Loading />}
-		</>
+		</div>
 	)
 }
 

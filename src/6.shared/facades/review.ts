@@ -91,11 +91,15 @@ class Review {
         return reviews.map(review => OwnedReview.tryOccupyReview(new Review(review)))
     }
 
-    public static async fromItemUser(target: ItemId): Promise<OwnedReview | ExError> {
-        const response: IReview | ExError = await getReviewByItemUser(target)
+    public static async fromItemUser(target: ItemId): Promise<OwnedReview | ExError | null> {
+        const response: IReview | ExError | null = await getReviewByItemUser(target)
 
         if (response instanceof ExError) {
             return response
+        }
+
+        if (response == null) {
+            return null
         }
 
         const review = OwnedReview.tryOccupyReview(new Review(response))

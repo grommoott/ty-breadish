@@ -76,11 +76,16 @@ const ItemWidgetBase = <T extends Item>({
 
 	useEffect(() => {
 		;(async () => {
-			if (OwnedUser.instance) {
+			if (OwnedUser.instance != undefined) {
 				const response = await Review.fromItemUser(item.itemId)
 
 				if (response instanceof ExError) {
 					console.error(response)
+					setUserReview(undefined)
+					return
+				}
+
+				if (response == null) {
 					setUserReview(undefined)
 					return
 				}

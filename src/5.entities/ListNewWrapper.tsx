@@ -112,7 +112,7 @@ const ListNewWrapper: FC<ListNewWrapperProps> = ({
 					</div>
 					<div className="flex flex-row items-center mx-2">
 						<>{likeButton(setLiked)}</>
-						{likesCount ? (
+						{likesCount != undefined ? (
 							<p>{likesCount + (isLiked ? 1 : 0)}</p>
 						) : (
 							<Loading size={2} />

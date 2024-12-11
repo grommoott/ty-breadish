@@ -92,7 +92,9 @@ const BasketWidget: FC = () => {
 					Итого:{" "}
 					<span className="text-[var(--main-color)]">{price}₽</span>
 				</p>
-				<AccentButton>Перейти к оплате</AccentButton>
+				<AccentButton onClick={() => navigate("/orderCreation")}>
+					Перейти к оплате
+				</AccentButton>
 			</div>
 		</div>
 	)

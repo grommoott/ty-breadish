@@ -25,7 +25,11 @@ const CreateCommentButton: FC<CreateCommentButton> = ({
 		<AccentButton
 			onClick={async () => {
 				if (!OwnedUser.instance) {
-					const result = await popupWindow(LoginWarningPage)
+					const result = await popupWindow(
+						LoginWarningPage(
+							"Чтобы отправлять комментарии вы должны зарегистрироваться или войти в аккаунт",
+						),
+					)
 
 					if (!result) {
 						return
