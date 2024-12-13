@@ -25,6 +25,12 @@ import fetchBakeries from "@shared/store/actionCreators/bakeries"
 import OrderCreationPage from "@pages/OrderCreationPage"
 import NewsListPage from "@pages/NewsListPage"
 import NewPage from "@pages/NewPage"
+import NewChangingPage from "@pages/NewChangingPage"
+import NewCreationPage from "@pages/NewCreationPage"
+import ProductChangingPage from "@pages/ProductChangingPage"
+import ProductCreationPage from "@pages/ProductCreationPage"
+import RecipeChangingPage from "@pages/RecipeChangingPage"
+import RecipeCreationPage from "@pages/RecipeCreationPage"
 
 const router = createBrowserRouter([
 	{
@@ -64,7 +70,7 @@ const router = createBrowserRouter([
 		element: <RecipesListPage />,
 	},
 	{
-		path: "/orderCreation",
+		path: "/orders/create",
 		element: <OrderCreationPage />,
 	},
 	{
@@ -74,6 +80,30 @@ const router = createBrowserRouter([
 	{
 		path: "/news/id/:id",
 		element: <NewPage />,
+	},
+	{
+		path: "/news/change/id/:id",
+		element: <NewChangingPage />,
+	},
+	{
+		path: "/news/create",
+		element: <NewCreationPage />,
+	},
+	{
+		path: "/products/change/id/:id",
+		element: <ProductChangingPage />,
+	},
+	{
+		path: "/products/create",
+		element: <ProductCreationPage />,
+	},
+	{
+		path: "/recipes/change/id:id",
+		element: <RecipeChangingPage />,
+	},
+	{
+		path: "/recipes/create",
+		element: <RecipeCreationPage />,
 	},
 ])
 

@@ -6,4 +6,17 @@ const PickUpOrderStates = {
 
 type PickUpOrderState = typeof PickUpOrderStates[keyof typeof PickUpOrderStates]
 
-export { PickUpOrderState, PickUpOrderStates }
+function translatePickUpOrderState(state: PickUpOrderState) {
+    switch (state) {
+        case PickUpOrderStates.RequestSent:
+            return "Запрос отправлен"
+
+        case PickUpOrderStates.Cooking:
+            return "Готовится"
+
+        case PickUpOrderStates.Waiting:
+            return "Можно забирать"
+    }
+}
+
+export { PickUpOrderState, PickUpOrderStates, translatePickUpOrderState }

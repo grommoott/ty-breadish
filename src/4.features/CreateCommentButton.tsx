@@ -4,7 +4,7 @@ import { usePopupWindow } from "@shared/hooks"
 import { MediaId } from "@shared/model/types/primitives"
 import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
-import LoginWarningPage from "@shared/ui/LoginWarningPage"
+import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
 
 interface CreateCommentButton {
@@ -26,7 +26,7 @@ const CreateCommentButton: FC<CreateCommentButton> = ({
 			onClick={async () => {
 				if (!OwnedUser.instance) {
 					const result = await popupWindow(
-						LoginWarningPage(
+						loginWarningPage(
 							"Чтобы отправлять комментарии вы должны зарегистрироваться или войти в аккаунт",
 						),
 					)

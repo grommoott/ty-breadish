@@ -73,10 +73,12 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 
 			<div className="flex flex-row w-full justify-center">
 				<div className="flex flex-row items-center mx-2">
-					<img
-						src={commentImage}
-						className="h-10"
-					/>
+					<div>
+						<img
+							src={commentImage}
+							className="h-10"
+						/>
+					</div>
 					{commentsCount ? (
 						<p>{commentsCount}</p>
 					) : (

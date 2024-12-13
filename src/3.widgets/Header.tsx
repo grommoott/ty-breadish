@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 	return (
 		<>
 			<header
-				className={`fixed grid grid-cols-3 top-0 ${!compact && "bg-zinc-900 border-b-2 border-b-zinc-800 "} w-full z-10 items-center h-16 px-2 sm:px-6`}
+				className={`fixed grid grid-cols-3 top-0 ${!compact && "bg-zinc-900 border-b-2 border-b-zinc-800"} w-full z-[15] items-center h-16 px-2 sm:px-6`}
 			>
 				<div className="flex flex-row items-center">
 					{!compact && (

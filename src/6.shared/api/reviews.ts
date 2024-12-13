@@ -19,6 +19,10 @@ async function getReviewByItemUser(target: ItemId): Promise<IReview | ExError | 
     try {
         const response = await axios.get(`${backendBaseUrl}/api/reviews/byItemUser/target/${target}`, defaultAxiosRequestConfig)
 
+        if (response.data == "") {
+            return null
+        }
+
         return responseDataToReview(response.data)
     } catch (e) {
         return errorWrapper(e, "getReviewByItemUser")

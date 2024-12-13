@@ -5,7 +5,7 @@ import { usePopupWindow } from "@shared/hooks"
 import { LikeType } from "@shared/model/types/enums"
 import { Id } from "@shared/model/types/primitives"
 import { SimpleButton } from "@shared/ui/Buttons"
-import LoginWarningPage from "@shared/ui/LoginWarningPage"
+import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
 
 interface LikeButtonProps {
@@ -34,7 +34,7 @@ const LikeButton: FC<LikeButtonProps> = ({
 	const onClick = async () => {
 		if (OwnedUser.instance == undefined) {
 			popupWindow(
-				LoginWarningPage(
+				loginWarningPage(
 					"Чтобы поставить лайк вы должны зарегистрироваться или войти в аккаунт",
 				),
 			)

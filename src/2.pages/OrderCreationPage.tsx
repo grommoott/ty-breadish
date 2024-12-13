@@ -6,7 +6,7 @@ const OrderCreationPage: FC = () => {
 	return (
 		<>
 			<Header />
-			<div className="bg-zinc-900">
+			<div className="bg-zinc-900 flex flex-col items-center">
 				<OrderCreationForm />
 			</div>
 		</>

@@ -5,7 +5,7 @@ import { Rate } from "@shared/model/types/enums"
 import { ItemId } from "@shared/model/types/primitives"
 import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
-import LoginWarningPage from "@shared/ui/LoginWarningPage"
+import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
 
 interface CreateReviewButtonProps {
@@ -29,7 +29,7 @@ const CreateReviewButton: FC<CreateReviewButtonProps> = ({
 			onClick={async () => {
 				if (!OwnedUser.instance) {
 					const result = await popupWindow(
-						LoginWarningPage(
+						loginWarningPage(
 							"Чтобы отправить отзыв вы должны зарегистрироваться или войти в аккаунт",
 						),
 					)

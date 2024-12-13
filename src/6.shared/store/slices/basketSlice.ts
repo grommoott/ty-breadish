@@ -26,12 +26,17 @@ const basketSlice = createSlice({
 
         removeProduct(state, action: { type: string, payload: number }) {
             state[action.payload] = undefined
+        },
+
+        clear(state, _) {
+            console.log("clear")
+            state = {}
         }
     }
 })
 
 const basketSavingMiddleware: Middleware = (_) => (next) => (action: any) => {
-    if (action.type == "basket/setProduct" || action.type == "basket/removeProduct") {
+    if (action.type == "basket/setProduct" || action.type == "basket/removeProduct" || action.type == "basket/clear") {
         const basket = getBasket()
 
         if (action.type == "basket/setProduct") {

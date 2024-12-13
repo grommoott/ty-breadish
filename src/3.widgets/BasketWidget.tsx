@@ -78,7 +78,7 @@ const BasketWidget: FC = () => {
 	}
 
 	return (
-		<div className="p-4 m-2 flex flex-col lg:flex-row justify-center items-center lg:items-start">
+		<div className="p-4 m-2 flex flex-col lg:flex-row justify-center items-center lg:items-start bg-zinc-900">
 			<div className="flex flex-col items-stretch">
 				{renderedProducts?.map((product) => (
 					<BasketProductWrapper
@@ -92,7 +92,7 @@ const BasketWidget: FC = () => {
 					Итого:{" "}
 					<span className="text-[var(--main-color)]">{price}₽</span>
 				</p>
-				<AccentButton onClick={() => navigate("/orderCreation")}>
+				<AccentButton onClick={() => navigate("/orders/create")}>
 					Перейти к оплате
 				</AccentButton>
 			</div>

@@ -100,10 +100,12 @@ const ListNewWrapper: FC<ListNewWrapperProps> = ({
 				</p>
 				<div className="flex flex-row items-center justify-center">
 					<div className="flex flex-row items-center mx-2">
-						<img
-							src={commentImage}
-							className="h-10"
-						/>
+						<div className="size-10">
+							<img
+								src={commentImage}
+								className="h-10"
+							/>
+						</div>
 						{commentsCount ? (
 							<p>{commentsCount}</p>
 						) : (
