@@ -9,6 +9,7 @@ import {
 	PaymentStatuses,
 	PickUpOrderState,
 	translateCourierOrderState,
+	translateOrderType,
 	translatePickUpOrderState,
 } from "@shared/model/types/enums"
 
@@ -64,7 +65,7 @@ const OrderWrapper: FC<OrderWrapperProps> = ({ order, deleteButton }) => {
 
 	return (
 		<div className="m-2 p-4 rounded-3xl bg-[var(--dark-color)] flex flex-col items-center w-full">
-			<h2 className="text-3xl text-center m-2 mb-0">
+			<h2 className="text-3xl text-center m-2">
 				Ожидаемое время готовности{" "}
 				<span className="text-[var(--main-color)]">
 					{order.readyMoment.moment == -1 ? (
@@ -79,6 +80,19 @@ const OrderWrapper: FC<OrderWrapperProps> = ({ order, deleteButton }) => {
 					)}
 				</span>
 			</h2>
+
+			<h3 className="text-2xl text-center m-2">
+				Способ доставки:{" "}
+				<span className="text-[var(--main-color)]">
+					"{translateOrderType(order.orderType)}"
+				</span>
+			</h3>
+
+			{/* <h3 className="text-2xl text-center m-2"> */}
+			{/*              Адрес доставки: */}
+			{/* 	<span className="text-[var(--main-color)]"> */}
+			{/* 	</span> */}
+			{/* </h3> */}
 
 			<h2 className="text-2xl text-center m-2 text-zinc-600">{status}</h2>
 

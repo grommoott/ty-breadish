@@ -47,7 +47,7 @@ const ProductChangingPage: FC = () => {
 		<>
 			<Header />
 
-			<div className="bg-zinc-900">
+			<div className="bg-zinc-900 flex flex-col items-center">
 				{isLoading ? (
 					<div className="m-4 p-4 rounded-3xl bg-[var(--dark-color)]">
 						<Loading />

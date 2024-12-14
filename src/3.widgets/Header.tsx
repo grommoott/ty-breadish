@@ -92,7 +92,18 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 														>
 															Магазин
 														</Button>
-														<Button>Новости</Button>
+														<Button
+															onClick={() => {
+																navigate(
+																	"/news",
+																)
+																closeWindow(
+																	undefined,
+																)
+															}}
+														>
+															Новости
+														</Button>
 													</div>
 												)
 											})
@@ -135,7 +146,13 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 												>
 													Корзина
 												</Button>
-												<Button className="w-full">
+												<Button
+													className="w-full"
+													onClick={() => {
+														navigate("/orders/list")
+														closeWindow(undefined)
+													}}
+												>
 													Заказы
 												</Button>
 												<AccentButton

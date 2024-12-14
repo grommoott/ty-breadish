@@ -11,6 +11,7 @@ import { useNotification } from "@shared/hooks"
 import { BaseErrorData, BaseFormData } from "../types"
 import AddImageButton from "./AddImageButton"
 import ItemChangeFormBase from "./ItemChangeFormBase"
+import { useNavigate } from "react-router-dom"
 
 interface RecipeChangeFormProps {
 	recipe?: Recipe
@@ -46,6 +47,7 @@ const RecipeChangeForm: FC<RecipeChangeFormProps> = ({ recipe }) => {
 	const [errorData, setErrorData] = useState<ErrorData>({})
 
 	const notificate = useNotification()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		setInternalImages(searchImageIds(formData.recipe))
@@ -167,12 +169,15 @@ const RecipeChangeForm: FC<RecipeChangeFormProps> = ({ recipe }) => {
 				notificate("Произошла ошибка")
 				return
 			}
+
+			navigate(`/recipes/id/${response.id.id}`)
 		}
 	}
 
 	return (
 		<ItemChangeFormBase
 			subjectNameOf="рецепта"
+			subjectNameWhat="рецепт"
 			errorData={errorData}
 			setErrorData={setErrorData}
 			formData={formData}

@@ -5,4 +5,14 @@ const OrderTypes = {
 
 type OrderType = typeof OrderTypes[keyof typeof OrderTypes]
 
-export { OrderType, OrderTypes }
+function translateOrderType(type: OrderType): string {
+    switch (type) {
+        case OrderTypes.PickUp:
+            return "Самовывоз"
+
+        case OrderTypes.Courier:
+            return "Курьер"
+    }
+}
+
+export { OrderType, OrderTypes, translateOrderType }

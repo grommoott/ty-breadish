@@ -31,6 +31,7 @@ import ProductChangingPage from "@pages/ProductChangingPage"
 import ProductCreationPage from "@pages/ProductCreationPage"
 import RecipeChangingPage from "@pages/RecipeChangingPage"
 import RecipeCreationPage from "@pages/RecipeCreationPage"
+import OrdersListPage from "@pages/OrdersListPage"
 
 const router = createBrowserRouter([
 	{
@@ -98,12 +99,16 @@ const router = createBrowserRouter([
 		element: <ProductCreationPage />,
 	},
 	{
-		path: "/recipes/change/id:id",
+		path: "/recipes/change/id/:id",
 		element: <RecipeChangingPage />,
 	},
 	{
 		path: "/recipes/create",
 		element: <RecipeCreationPage />,
+	},
+	{
+		path: "/orders/list",
+		element: <OrdersListPage />,
 	},
 ])
 

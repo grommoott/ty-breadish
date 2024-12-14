@@ -23,6 +23,7 @@ import {
 import { ExError } from "@shared/helpers"
 import { BaseErrorData, BaseFormData } from "../types"
 import { agreeWindow } from "@shared/ui/PopupWindows"
+import { useNavigate } from "react-router-dom"
 
 interface ItemChangeFormBaseProps<
 	T extends BaseFormData,
@@ -36,6 +37,7 @@ interface ItemChangeFormBaseProps<
 	updateOrCreateItem: () => Promise<void>
 	children?: ReactNode
 	subjectNameOf: string
+	subjectNameWhat: string
 }
 
 function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
@@ -47,6 +49,7 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 	updateOrCreateItem,
 	children,
 	subjectNameOf,
+	subjectNameWhat,
 }: ItemChangeFormBaseProps<T, N>) {
 	const isChanging = item != undefined
 
@@ -80,6 +83,8 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 
 		setChangeLoading(false)
 	}
+
+	const navigate = useNavigate()
 
 	return (
 		<div
@@ -129,7 +134,9 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 					margin="0.5rem 0"
 					width="100%"
 					placeholder="Описание"
-					onChange={(val) => setFormData({ ...formData, val })}
+					onChange={(val) =>
+						setFormData({ ...formData, description: val })
+					}
 					value={item?.description}
 				/>
 			</div>
@@ -347,7 +354,10 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 							Сохранить изменения
 							{isChangeLoading && (
 								<span className="px-1">
-									<Loading inline />
+									<Loading
+										inline
+										color="black"
+									/>
 								</span>
 							)}
 						</AccentButton>
@@ -377,12 +387,16 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 								}
 
 								setDeleteLoading(false)
+								navigate("/")
 							}}
 						>
-							Удалить рецепт
+							Удалить {subjectNameWhat}
 							{isDeleteLoading && (
 								<span className="px-1">
-									<Loading inline />
+									<Loading
+										inline
+										color="black"
+									/>
 								</span>
 							)}
 						</AccentButton>
@@ -392,10 +406,13 @@ function ItemChangeFormBase<T extends BaseFormData, N extends BaseErrorData>({
 						className="w-full flex flex-row items-center justify-center"
 						onClick={updateOrCreateItemWrapper}
 					>
-						Создать рецепт
+						Создать {subjectNameWhat}
 						{isChangeLoading && (
 							<span className="px-1">
-								<Loading inline />
+								<Loading
+									inline
+									color="black"
+								/>
 							</span>
 						)}
 					</AccentButton>

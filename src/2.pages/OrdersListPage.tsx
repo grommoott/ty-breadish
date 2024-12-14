@@ -1,16 +1,16 @@
 import Header from "@widgets/Header"
-import HomeWidget from "@widgets/HomeWidget"
+import OrdersListWidget from "@widgets/OrdersListWidget"
 import { FC } from "react"
 
-const HomePage: FC = () => {
+const OrdersListPage: FC = () => {
 	return (
 		<>
 			<Header />
 			<div className="bg-zinc-900">
-				<HomeWidget />
+				<OrdersListWidget />
 			</div>
 		</>
 	)
 }
 
-export default HomePage
+export default OrdersListPage

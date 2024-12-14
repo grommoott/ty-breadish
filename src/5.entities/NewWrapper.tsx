@@ -2,10 +2,12 @@ import { commentImage } from "@assets/ui"
 import { New, OwnedUser } from "@shared/facades"
 import { ExError, replaceImageIds } from "@shared/helpers"
 import { useDefaultWidgetWidth } from "@shared/hooks"
-import { LikeTypes } from "@shared/model/types/enums"
+import { LikeTypes, Roles } from "@shared/model/types/enums"
+import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode, useEffect, useMemo, useState } from "react"
 import Markdown from "react-markdown"
+import { useNavigate } from "react-router-dom"
 
 interface NewWrapperProps {
 	aNew?: New
@@ -55,11 +57,21 @@ const NewWrapper: FC<NewWrapperProps> = ({ aNew, likeButton }) => {
 		})()
 	}, [])
 
+	const navigate = useNavigate()
+
 	return (
 		<div
 			style={{ width: `${width}vw` }}
 			className="rounded-3xl p-4 flex flex-col items-center bg-[var(--dark-color)] my-4"
 		>
+			{OwnedUser.instance?.role == Roles.Admin && (
+				<AccentButton
+					onClick={() => navigate(`/news/change/id/${aNew.id.id}`)}
+				>
+					Изменить новость
+				</AccentButton>
+			)}
+
 			<h1 className="text-3xl">{aNew.title}</h1>
 
 			<img

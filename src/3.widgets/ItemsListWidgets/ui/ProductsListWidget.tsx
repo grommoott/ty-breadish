@@ -19,6 +19,7 @@ import {
 	ListProductsSortOrders,
 	translatedListProductsSortOrders,
 } from "../enums"
+import NewItemButton from "./NewItemButton"
 
 const ProductsListWidget: FC = () => {
 	const popupWindow = usePopupWindow()
@@ -163,7 +164,8 @@ const ProductsListWidget: FC = () => {
 					(product) =>
 						product.name
 							.toLowerCase()
-							.search(filterData.query.toLowerCase()) != -1,
+							.indexOf(filterData.query.toLowerCase().trim()) !=
+						-1,
 				),
 		[products, filterData],
 	)
@@ -251,6 +253,11 @@ const ProductsListWidget: FC = () => {
 						gridTemplateColumns: `repeat(${columns}, 1fr)`,
 					}}
 				>
+					<NewItemButton
+						text="Создать продукт"
+						navigatePath="/products/create"
+					/>
+
 					{sortedProducts?.map((product) => (
 						<ListProductWrapper
 							product={product}

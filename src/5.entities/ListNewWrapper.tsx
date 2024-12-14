@@ -85,7 +85,8 @@ const ListNewWrapper: FC<ListNewWrapperProps> = ({
 					onClick={gotoFullPage}
 				/>
 			</div>
-			<div className="flex flex-row items-center justify-between h-16 p-2 w-full">
+
+			<div className="flex flex-row items-center justify-between h-32 md:h-16 p-2 w-full">
 				<p
 					className="cursor-pointer focus-visible:-translate-y-2 outline-none duration-100"
 					onClick={gotoFullPage}

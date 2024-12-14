@@ -1,11 +1,13 @@
 import ListNewWrapper from "@entities/ListNewWrapper"
 import LikeButton from "@features/LikeButton"
-import { ListNew } from "@shared/facades"
+import { ListNew, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
-import { LikeTypes } from "@shared/model/types/enums"
+import { LikeTypes, Roles } from "@shared/model/types/enums"
+import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { useInView } from "framer-motion"
 import { FC, useCallback, useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const NewsList: FC = () => {
 	const [news, setNews] = useState<Array<ListNew>>(new Array())
@@ -15,6 +17,8 @@ const NewsList: FC = () => {
 
 	const observerRef = useRef(null)
 	const isObserverVisible = useInView(observerRef)
+
+	const navigate = useNavigate()
 
 	const loadNewsPage = useCallback(() => {
 		if (isPagesEnded || isLoading) {
@@ -56,6 +60,12 @@ const NewsList: FC = () => {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="flex flex-col items-center gap-4 m-8">
+				{OwnedUser.instance?.role == Roles.Admin && (
+					<AccentButton onClick={() => navigate("/news/create")}>
+						Создать новость
+					</AccentButton>
+				)}
+
 				{news.map((aNew) => (
 					<ListNewWrapper
 						aNew={aNew}

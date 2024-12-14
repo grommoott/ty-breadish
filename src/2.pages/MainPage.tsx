@@ -10,6 +10,8 @@ import {
 	shopImage,
 } from "@assets/ui"
 import { motion, Variants } from "framer-motion"
+import { OwnedUser } from "@shared/facades"
+import { Roles } from "@shared/model/types/enums"
 
 interface MainPageItemProps {
 	imageUrl: string
@@ -59,8 +61,12 @@ const MainPage: FC = () => {
 	return (
 		<>
 			<Header compact />
+
 			<div className="flex flex-col items-center justify-center w-full bg-zinc-900">
-				<AnimatedFullLogo />
+				{/*Div for iphone7,8,9 support*/}
+				<div className="flex flex-col items-center w-[100vw] overflow-hidden">
+					<AnimatedFullLogo />
+				</div>
 
 				<motion.div
 					initial="hidden"
@@ -90,14 +96,18 @@ const MainPage: FC = () => {
 
 				<div className="h-20" />
 
-				<MainPageItem
-					title="Тестовая страница"
-					imageUrl={featuredActivatedImage}
-					buttonLink="/test"
-					description={`Страница для разработчиков "Ты Breadish!"`}
-				/>
+				{OwnedUser.instance?.role == Roles.Admin && (
+					<>
+						<MainPageItem
+							title="Тестовая страница"
+							imageUrl={featuredActivatedImage}
+							buttonLink="/test"
+							description={`Страница для разработчиков "Ты Breadish!"`}
+						/>
 
-				<div className="h-20" />
+						<div className="h-20" />
+					</>
+				)}
 			</div>
 		</>
 	)

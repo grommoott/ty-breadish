@@ -160,6 +160,12 @@ const NewWidget: FC<NewWidgetProps> = ({ aNew }) => {
 				)}
 			/>
 
+			{comments.length == 0 && (
+				<p className="text-center text-zinc-700 text-3xl py-10">
+					Комментариев нет
+				</p>
+			)}
+
 			{comments.map((comment) => (
 				<CommentWrapper
 					key={comment.id.id}

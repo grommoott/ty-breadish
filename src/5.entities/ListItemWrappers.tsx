@@ -95,8 +95,6 @@ const ItemWrapper: FC<ListItemWrapperProps> = ({
 						)}
 					</>
 				</div>
-
-				{/*There will be featured button*/}
 			</div>
 
 			<motion.div
@@ -116,7 +114,7 @@ const ItemWrapper: FC<ListItemWrapperProps> = ({
 						navigate(itemLink || "/")
 					}
 				}}
-				className="m-2 h-1/2 relative outline-none"
+				className="m-2 h-1/2 relative outline-none cursor-pointer"
 				tabIndex={0}
 			>
 				<motion.img

@@ -1,20 +1,21 @@
-import { Product } from "@shared/facades"
+import { OwnedUser, Product } from "@shared/facades"
 import {
 	useAppDispatch,
 	useAppSelector,
 	useDefaultWidgetWidth,
 } from "@shared/hooks"
 import basketSlice from "@shared/store/slices/basketSlice"
-import { Button } from "@shared/ui/Buttons"
+import { AccentButton, Button } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode } from "react"
 import Star from "@shared/ui/Star"
 import { translateCookingMethod } from "@shared/model/types/enums/itemInfo/cookingMethod"
 import Tag from "@shared/ui/Tag"
 import { translateIngredient } from "@shared/model/types/enums/itemInfo/ingredient"
-import { ItemType, ItemTypes } from "@shared/model/types/enums"
+import { ItemType, ItemTypes, Roles } from "@shared/model/types/enums"
 import { ItemId } from "@shared/model/types/primitives"
 import CountInput from "@shared/ui/Inputs/countInput"
+import { useNavigate } from "react-router-dom"
 
 interface ProductWrapperProps {
 	product?: Product
@@ -51,6 +52,8 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 			basketSlice.actions.setProduct({ productId: product.id.id, count }),
 		)
 	}
+
+	const navigate = useNavigate()
 
 	return (
 		<div
@@ -112,7 +115,7 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 
 					<div className="flex-1" />
 
-					<div className="flex flex-col items-center">
+					<div className="flex flex-row items-center">
 						{basket[product.id.id] ? (
 							<CountInput
 								onChange={setCountInBasket}
@@ -131,6 +134,18 @@ const ProductWrapper: FC<ProductWrapperProps> = ({
 							>
 								В корзину
 							</Button>
+						)}
+
+						{OwnedUser.instance?.role == Roles.Admin && (
+							<AccentButton
+								onClick={() =>
+									navigate(
+										`/products/change/id/${product.id.id}`,
+									)
+								}
+							>
+								Изменить продукт
+							</AccentButton>
 						)}
 					</div>
 				</div>

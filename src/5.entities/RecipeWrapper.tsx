@@ -1,18 +1,21 @@
-import { Recipe } from "@shared/facades"
+import { OwnedUser, Recipe } from "@shared/facades"
 import { replaceImageIds } from "@shared/helpers"
 import { useDefaultWidgetWidth } from "@shared/hooks"
 import {
 	ItemType,
 	ItemTypes,
+	Roles,
 	translateCookingMethod,
 	translateIngredient,
 } from "@shared/model/types/enums"
 import { ItemId } from "@shared/model/types/primitives"
+import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import Star from "@shared/ui/Star"
 import Tag from "@shared/ui/Tag"
 import { FC, ReactNode, useMemo } from "react"
 import Markdown from "react-markdown"
+import { useNavigate } from "react-router-dom"
 import remarkGfm from "remark-gfm"
 
 interface RecipeWrapperProps {
@@ -38,6 +41,7 @@ const RecipeWrapper: FC<RecipeWrapperProps> = ({
 	)
 
 	const width = useDefaultWidgetWidth()
+	const navigate = useNavigate()
 
 	return (
 		<div
@@ -86,6 +90,18 @@ const RecipeWrapper: FC<RecipeWrapperProps> = ({
 								</>
 							)}
 						</div>
+					)}
+
+					<div className="grow"></div>
+
+					{OwnedUser.instance?.role == Roles.Admin && (
+						<AccentButton
+							onClick={() =>
+								navigate(`/recipes/change/id/${recipe.id.id}`)
+							}
+						>
+							Изменить рецепт
+						</AccentButton>
 					)}
 				</div>
 			</div>

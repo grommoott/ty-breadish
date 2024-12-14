@@ -13,6 +13,7 @@ import { AccentButton } from "@shared/ui/Buttons"
 import { MultilineFlatInput, ValidatedInput } from "@shared/ui/Inputs"
 import { agreeWindow } from "@shared/ui/PopupWindows"
 import { ExError } from "@shared/helpers"
+import { useNavigate } from "react-router-dom"
 
 interface NewChangeFormProps {
 	aNew?: New
@@ -23,6 +24,8 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 
 	const notificate = useNotification()
 	const popupWindow = usePopupWindow()
+
+	const navigate = useNavigate()
 
 	const [formData, setFormData] = useState<FormData>({
 		image: undefined,
@@ -94,9 +97,12 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 			if (response instanceof ExError) {
 				console.error(response)
 				notificate("Произошла ошибка")
+				setChangeLoading(false)
+				return
 			}
 
 			setChangeLoading(false)
+			navigate(`/news/id/${response.id.id}`)
 		}
 	}
 
@@ -159,7 +165,10 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 							Сохранить изменения
 							{isChangeLoading && (
 								<span className="px-1">
-									<Loading inline />
+									<Loading
+										inline
+										color="black"
+									/>
 								</span>
 							)}
 						</AccentButton>
@@ -188,12 +197,16 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 								}
 
 								setDeleteLoading(false)
+								navigate("/news")
 							}}
 						>
 							Удалить новость
 							{isDeleteLoading && (
 								<span className="px-1">
-									<Loading inline />
+									<Loading
+										inline
+										color="black"
+									/>
 								</span>
 							)}
 						</AccentButton>
@@ -206,7 +219,10 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 						Создать новость
 						{isChangeLoading && (
 							<span className="px-1">
-								<Loading inline />
+								<Loading
+									inline
+									color="black"
+								/>
 							</span>
 						)}
 					</AccentButton>

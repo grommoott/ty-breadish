@@ -19,6 +19,7 @@ import { PageSizes } from "@shared/enums"
 import { ListRecipeWrapper } from "@entities/ListItemWrappers"
 import { ListRecipe } from "@shared/facades"
 import { ExError } from "@shared/helpers"
+import NewItemButton from "./NewItemButton"
 
 const RecipesListWidget: FC = () => {
 	const popupWindow = usePopupWindow()
@@ -124,7 +125,8 @@ const RecipesListWidget: FC = () => {
 					(recipe) =>
 						recipe.name
 							.toLowerCase()
-							.search(filterData.query.toLowerCase()) != -1,
+							.indexOf(filterData.query.toLowerCase().trim()) !=
+						-1,
 				),
 		[recipes, filterData],
 	)
@@ -200,6 +202,11 @@ const RecipesListWidget: FC = () => {
 						gridTemplateColumns: `repeat(${columns}, 1fr)`,
 					}}
 				>
+					<NewItemButton
+						text="Создать рецепт"
+						navigatePath="/recipes/create"
+					/>
+
 					{sortedRecipes?.map((recipe) => (
 						<ListRecipeWrapper
 							recipe={recipe}

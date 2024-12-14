@@ -7,6 +7,7 @@ import { ValidatedInput } from "@shared/ui/Inputs"
 import { ItemInfo, Price } from "@shared/model/types/primitives"
 import { ExError } from "@shared/helpers"
 import { useNotification } from "@shared/hooks"
+import { useNavigate } from "react-router-dom"
 
 interface ProductChangeFormProps {
 	product?: Product
@@ -23,6 +24,7 @@ const ProductChangeForm: FC<ProductChangeFormProps> = ({ product }) => {
 	const isChanging = product != undefined
 
 	const notificate = useNotification()
+	const navigate = useNavigate()
 
 	const [formData, setFormData] = useState<FormData>({
 		name: product?.name || "",
@@ -145,12 +147,15 @@ const ProductChangeForm: FC<ProductChangeFormProps> = ({ product }) => {
 				notificate("Произошла ошибка")
 				return
 			}
+
+			navigate(`/products/id/${response.id.id}`)
 		}
 	}
 
 	return (
 		<ItemChangeFormBase
 			subjectNameOf="продукта"
+			subjectNameWhat="продукт"
 			item={product}
 			updateOrCreateItem={updateOrCreateProduct}
 			errorData={errorData}
@@ -162,6 +167,8 @@ const ProductChangeForm: FC<ProductChangeFormProps> = ({ product }) => {
 				<h2>Цена</h2>
 
 				<ValidatedInput
+					width="100%"
+					margin="0.5rem 0"
 					error={errorData?.price}
 					placeholder="Цена в рублях"
 					value={product?.price.price.toString()}
