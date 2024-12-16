@@ -110,7 +110,9 @@ const OrderWrapper: FC<OrderWrapperProps> = ({ order, deleteButton }) => {
 				</div>
 			)}
 
-			{!isCanceled && deleteButton(() => setCanceled(true))}
+			{!isCanceled &&
+				order.orderInfo.state != "completed" &&
+				deleteButton(() => setCanceled(true))}
 		</div>
 	)
 }

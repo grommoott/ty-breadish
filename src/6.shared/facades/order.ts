@@ -3,7 +3,7 @@ import { CourierOrderState, OrderType, PaymentStatus, PickUpOrderState } from "@
 import { BakeryId, Moment, OrderId, OrderInfo, ProductId, UserId } from "@shared/model/types/primitives"
 import { Product } from "./item/product"
 import { ExError } from "@shared/helpers"
-import { changeOrderState, createOrder, deleteOrder, getOrder, getOrderByBakeryId, getOrders, markOrderAsCompleted } from "@shared/api/orders"
+import { changeOrderReadyMoment, changeOrderState, createOrder, deleteOrder, getOrder, getOrderByBakeryId, getOrders } from "@shared/api/orders"
 
 class Order {
 
@@ -87,8 +87,8 @@ class Order {
         return await changeOrderState(this.id, state)
     }
 
-    public async markAsCompleted(): Promise<void | ExError> {
-        return await markOrderAsCompleted(this.id)
+    public async changeReadyMoment(readyMoment: Moment): Promise<void | ExError> {
+        return await changeOrderReadyMoment(this.id, readyMoment)
     }
 
     public async delete(): Promise<void | ExError> {

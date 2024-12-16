@@ -3,22 +3,25 @@ import { NonStyledButton } from "@shared/ui/Buttons"
 import { FC } from "react"
 import { useNavigate } from "react-router-dom"
 
-interface OrderProductProps {
+interface OrderManagerProductProps {
 	product: Product
 	count: number
 }
 
-const OrderProduct: FC<OrderProductProps> = ({ product, count }) => {
+const OrderManagerProduct: FC<OrderManagerProductProps> = ({
+	product,
+	count,
+}) => {
 	const navigate = useNavigate()
 
 	return (
 		<NonStyledButton
-			className="flex flex-col md:flex-row items-center m-2 p-4 rounded-3xl justify-around w-full bg-zinc-900 group cursor-pointer focus-visible-default"
+			className="flex flex-col md:flex-row items-center justify-around p-4 bg-zinc-900 rounded-3xl focus-visible-default w-full"
 			onClick={() => navigate(`/products/id/${product.id}`)}
 		>
 			<img
+				className="w-32"
 				src={product.imageLink}
-				className="w-32 group-hover:scale-105 group-active:scale-95 duration-100"
 			/>
 
 			<p
@@ -35,4 +38,4 @@ const OrderProduct: FC<OrderProductProps> = ({ product, count }) => {
 	)
 }
 
-export default OrderProduct
+export default OrderManagerProduct

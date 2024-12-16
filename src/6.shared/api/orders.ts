@@ -3,7 +3,7 @@ import { Order } from "@shared/facades";
 import { errorWrapper, ExError } from "@shared/helpers";
 import { IOrder, responseDataToOrder } from "@shared/model/interfaces";
 import { CourierOrderState, OrderType, PickUpOrderState } from "@shared/model/types/enums";
-import { BakeryId, OrderId, OrderInfo, ProductId } from "@shared/model/types/primitives";
+import { BakeryId, Moment, OrderId, OrderInfo, ProductId } from "@shared/model/types/primitives";
 import axios from "axios";
 
 async function getOrder(id: BakeryId): Promise<IOrder | ExError> {
@@ -66,11 +66,11 @@ async function changeOrderState<T extends CourierOrderState | PickUpOrderState>(
     }
 }
 
-async function markOrderAsCompleted(id: OrderId): Promise<void | ExError> {
+async function changeOrderReadyMoment(id: OrderId, readyMoment: Moment) {
     try {
-        await axios.put(`${backendBaseUrl}/api/orders/markAsCompleted`, { id: id.id }, defaultAxiosRequestConfig)
+        await axios.put(`${backendBaseUrl}/api/orders/changeReadyMoment`, { id: id.id, readyMoment: readyMoment.moment }, defaultAxiosRequestConfig)
     } catch (e) {
-        return errorWrapper(e, "markOrderAsCompleted")
+        return errorWrapper(e, "changeOrderReadyMoment")
     }
 }
 
@@ -81,5 +81,5 @@ export {
     createOrder,
     deleteOrder,
     changeOrderState,
-    markOrderAsCompleted
+    changeOrderReadyMoment
 }

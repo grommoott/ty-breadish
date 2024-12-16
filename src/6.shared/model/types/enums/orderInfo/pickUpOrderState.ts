@@ -1,7 +1,8 @@
 const PickUpOrderStates = {
     RequestSent: "requestSent",
     Cooking: "cooking",
-    Waiting: "waiting"
+    Waiting: "waiting",
+    Completed: "completed"
 } as const
 
 type PickUpOrderState = typeof PickUpOrderStates[keyof typeof PickUpOrderStates]
@@ -16,6 +17,9 @@ function translatePickUpOrderState(state: PickUpOrderState) {
 
         case PickUpOrderStates.Waiting:
             return "Можно забирать"
+
+        case PickUpOrderStates.Completed:
+            return "Забран"
     }
 }
 
