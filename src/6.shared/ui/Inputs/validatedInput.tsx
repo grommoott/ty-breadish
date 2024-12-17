@@ -100,11 +100,7 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 			onBlur={() => {
 				setIsFocused(false)
 			}}
-			onChange={(e) => {
-				if (onChange) {
-					onChange(e.target.value)
-				}
-
+			onChange={async (e) => {
 				async function validate() {
 					setIsLoading(() => true)
 
@@ -126,9 +122,19 @@ const ValidatedInput: FC<ValidatedInputProps> = ({
 					}
 
 					setIsLoading(() => false)
+
+					return result
 				}
 
-				validate()
+				const result = await validate()
+
+				if (result != "") {
+					return
+				}
+
+				if (onChange) {
+					onChange(e.target.value)
+				}
 			}}
 		/>
 	)

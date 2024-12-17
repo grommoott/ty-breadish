@@ -5,13 +5,15 @@ import "./index.css"
 interface CheckboxProps {
 	children?: string
 	onValueChanged?: (value: boolean) => void
+	defaultValue?: boolean
 }
 
 const Checkbox: FC<CheckboxProps> = ({
 	children,
 	onValueChanged = () => {},
+	defaultValue = false,
 }) => {
-	const [value, setValue] = useState(false)
+	const [value, setValue] = useState(defaultValue)
 	const checkboxControls = useAnimationControls()
 
 	function setValueEx(value: boolean) {

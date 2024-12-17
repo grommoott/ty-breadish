@@ -1,5 +1,5 @@
 import { OwnedUser, User } from "@shared/facades"
-import { Email } from "@shared/model/types/primitives"
+import { Coords, Email } from "@shared/model/types/primitives"
 import { ExError } from "./error"
 
 const registerUsernameValidator:
@@ -116,6 +116,18 @@ const requiredFieldValidator: (value: string) => Promise<string> = async (value:
     return ""
 }
 
+const coordsValidator: (value: Coords) => Promise<string> = async (value: Coords) => {
+    if (value.latitude < -90 || value.latitude > 90) {
+        return "Широта должна быть больше или равна -90 и меньше или равна 90"
+    }
+
+    if (value.longitude < -180 || value.longitude > 180) {
+        return "Долгота должна быть больше или равна -180 и меньше или равна 180"
+    }
+
+    return ""
+}
+
 export {
     registerUsernameValidator,
     registerEmailValidator,
@@ -125,5 +137,6 @@ export {
     passwordValidator,
     usernameValidator,
     emailValidator,
-    requiredFieldValidator
+    requiredFieldValidator,
+    coordsValidator
 }

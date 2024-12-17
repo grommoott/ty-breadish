@@ -4,9 +4,10 @@ import { Order } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import { useDefaultWidgetWidth, useNotification } from "@shared/hooks"
 import { BakeryId } from "@shared/model/types/primitives"
+import Checkbox from "@shared/ui/Checkbox"
 import { ValidatedInput } from "@shared/ui/Inputs"
 import Loading from "@shared/ui/Loading"
-import { FC, useEffect, useState } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 
 interface OrdersManagerWidgetProps {}
 
@@ -18,6 +19,17 @@ const OrdersManagerWidget: FC<OrdersManagerWidgetProps> = () => {
 	const width = useDefaultWidgetWidth()
 
 	const notificate = useNotification()
+
+	const [hideCompleted, setHideCompleted] = useState(true)
+
+	const filteredOrders = useMemo(
+		() =>
+			orders?.filter(
+				(order) =>
+					order.orderInfo.state != "completed" || !hideCompleted,
+			),
+		[orders, hideCompleted],
+	)
 
 	useEffect(() => {
 		;(async () => {
@@ -46,8 +58,8 @@ const OrdersManagerWidget: FC<OrdersManagerWidgetProps> = () => {
 				margin="0 0"
 				width={`${width}vw`}
 				onChange={(value) => setBakeryId(new BakeryId(value))}
-				validator={(value) => {
-					if (Number(value) == undefined) {
+				validator={async (value) => {
+					if (Number.isNaN(parseInt(value))) {
 						return "Id пекарни должен представлять число"
 					}
 
@@ -55,6 +67,14 @@ const OrdersManagerWidget: FC<OrdersManagerWidgetProps> = () => {
 				}}
 				placeholder="Введите Id пекарни"
 			/>
+
+			<div className="flex flex-row items-center gap-2">
+				<Checkbox
+					defaultValue={true}
+					onValueChanged={setHideCompleted}
+					children="Скрыть выполненные"
+				/>
+			</div>
 
 			{isOrdersLoading ? (
 				<div className="m-2 p-4 rounded-3xl bg-[var(--dark-color)]">
@@ -65,13 +85,20 @@ const OrdersManagerWidget: FC<OrdersManagerWidgetProps> = () => {
 					className="flex flex-col items-center"
 					style={{ width: `${width}vw` }}
 				>
-					{orders?.length == 0 && (
+					{orders == undefined && (
+						<p className="text-center text-zinc-700 w-80">
+							Введите id пекарни, для которой хотите увидеть
+							заказы
+						</p>
+					)}
+
+					{filteredOrders?.length == 0 && (
 						<p className="text-center text-zinc-700">
 							У этой пекарни пока нет заказов
 						</p>
 					)}
 
-					{orders?.map((order) => (
+					{filteredOrders?.map((order) => (
 						<OrderManagerWrapper
 							order={order}
 							changeOrderButton={(
