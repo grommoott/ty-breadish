@@ -116,4 +116,14 @@ const userWindow = (navigate: NavigateFunction) => {
 	}
 }
 
-export { agreeWindow, loginWarningPage, userWindow }
+const cookiesAgreeWindow = (closeWindow: (value: any) => void) => {
+	return (
+		<div className="flex flex-col items-center">
+			<p>Мы используем файлы cookie</p>
+			<Button onClick={() => closeWindow(undefined)}>Смириться</Button>
+			<Button onClick={() => window.close()}>Отвергнуть</Button>
+		</div>
+	)
+}
+
+export { agreeWindow, loginWarningPage, userWindow, cookiesAgreeWindow }
