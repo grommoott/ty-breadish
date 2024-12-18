@@ -1,5 +1,4 @@
 import {
-	useAppDispatch,
 	useAppSelector,
 	useDefaultWidgetWidth,
 	useNotification,
@@ -26,12 +25,10 @@ import { ExError, requiredFieldValidator } from "@shared/helpers"
 import { bakeryIdValidator, orderTypeValidator } from "../helpers"
 import { Order } from "@shared/facades"
 import Loading from "@shared/ui/Loading"
-import basketSlice from "@shared/store/slices/basketSlice"
 
 const OrderCreationForm: FC = () => {
 	const [currentOrderType, setCurrentOrderType] = useState<OrderType>()
 
-	const dispatch = useAppDispatch()
 	const basketObject = useAppSelector((state) => state.basket)
 	const basket = useMemo(
 		() =>
@@ -183,9 +180,6 @@ const OrderCreationForm: FC = () => {
 			return
 		}
 
-		console.log("before clear")
-		dispatch(basketSlice.actions.clear(0))
-		console.log("after clear")
 		setLoading(false)
 
 		window.location.assign(response.paymentUrl)

@@ -26,11 +26,6 @@ const basketSlice = createSlice({
 
         removeProduct(state, action: { type: string, payload: number }) {
             state[action.payload] = undefined
-        },
-
-        clear(state, _) {
-            console.log("clear")
-            state = {}
         }
     }
 })
