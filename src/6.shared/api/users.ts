@@ -7,7 +7,7 @@ import axios from "axios";
 
 async function isUsernameAvailable(username: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${btoa(username)}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/usernameAvailable/${encodeURIComponent(username)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -17,7 +17,7 @@ async function isUsernameAvailable(username: string): Promise<boolean | ExError>
 
 async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${btoa(email.email)}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/emailAvailable/${encodeURIComponent(email.email)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -27,7 +27,7 @@ async function isEmailAvailable(email: Email): Promise<boolean | ExError> {
 
 async function isPasswordIsValid(password: string): Promise<boolean | ExError> {
     try {
-        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${btoa(password)}`, defaultAxiosRequestConfig)
+        const response = await axios.get(`${backendBaseUrl}/api/users/isPasswordIsValid/${encodeURIComponent(password)}`, defaultAxiosRequestConfig)
 
         return response.data
     } catch (e) {
@@ -57,7 +57,7 @@ async function getUser(): Promise<IUser | ExError> {
 
 async function deleteUser(verificationCode: number, password: string): Promise<void | ExError> {
     try {
-        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${btoa(password)}`, defaultAxiosRequestConfig)
+        await axios.delete(`${backendBaseUrl}/api/users/verificationCode/${verificationCode}/password/${encodeURIComponent(password)}`, defaultAxiosRequestConfig)
     } catch (e) {
         return errorWrapper(e, "deleteUser")
     }
