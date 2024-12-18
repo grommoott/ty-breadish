@@ -113,6 +113,7 @@ const ProductsFiltersWindow: FC<ProductsFiltersWindowProps> = ({
 								minPrice,
 								maxPrice,
 								query: "",
+								onlyFeatured: false,
 							}))
 						}
 					>

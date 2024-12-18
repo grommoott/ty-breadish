@@ -31,6 +31,7 @@ const RecipesFilterWindow: FC<RecipeFilterWindowProps> = ({
 							excludeIngredients: new Array(),
 							cookingMethods: new Array(),
 							query: "",
+							onlyFeatured: false,
 						}))
 					}
 				>

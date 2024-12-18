@@ -7,7 +7,6 @@ import store from "@shared/store"
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import Test from "@pages/Test"
 import { PageSizeProvider } from "@shared/contexts"
-import { PageSize, PageSizes } from "@shared/enums"
 import NotificationsProvider from "@shared/ui/Notification"
 import PopupWindowProvider from "@shared/ui/PopupWindow"
 import { OwnedUser } from "@shared/facades"
@@ -32,6 +31,9 @@ import ProductCreationPage from "@pages/ProductCreationPage"
 import RecipeChangingPage from "@pages/RecipeChangingPage"
 import RecipeCreationPage from "@pages/RecipeCreationPage"
 import OrdersListPage from "@pages/OrdersListPage"
+import BakeriesManagementPage from "@pages/BakeriesManagementPage"
+import OrdersManagementPage from "@pages/OrdersManagementPage"
+import { matchPageSize } from "@shared/helpers"
 
 const router = createBrowserRouter([
 	{
@@ -110,6 +112,14 @@ const router = createBrowserRouter([
 		path: "/orders/list",
 		element: <OrdersListPage />,
 	},
+	{
+		path: "/bakeries/management",
+		element: <BakeriesManagementPage />,
+	},
+	{
+		path: "/orders/management",
+		element: <OrdersManagementPage />,
+	},
 ])
 
 async function initialization(): Promise<void> {
@@ -122,28 +132,6 @@ async function initialization(): Promise<void> {
 		store.dispatch(fetchRecipes()),
 		store.dispatch(fetchBakeries()),
 	])
-}
-
-function matchPageSize(pageWidth: number): PageSize {
-	if (pageWidth < PageSizes.ExtraSmall) {
-		return PageSizes.ExtraSmall
-	} else if (pageWidth < PageSizes.IPhone) {
-		return PageSizes.ExtraSmall
-	} else if (pageWidth < PageSizes.Small) {
-		return PageSizes.IPhone
-	} else if (pageWidth < PageSizes.SmallMedium) {
-		return PageSizes.Small
-	} else if (pageWidth < PageSizes.Medium) {
-		return PageSizes.SmallMedium
-	} else if (pageWidth < PageSizes.Large) {
-		return PageSizes.Medium
-	} else if (pageWidth < PageSizes.XL) {
-		return PageSizes.Large
-	} else if (pageWidth < PageSizes.XXL) {
-		return PageSizes.XL
-	} else {
-		return PageSizes.XXL
-	}
 }
 
 const PageSizeProviderWrapper: FC = () => {

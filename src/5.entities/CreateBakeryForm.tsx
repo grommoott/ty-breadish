@@ -53,7 +53,7 @@ const CreateBakeryForm: FC<CreateBakeryFormProps> = ({
 					<p className="text-zinc-700">Адрес</p>
 
 					<ValidatedInput
-						value={address}
+						currentValue={address}
 						validator={requiredFieldValidator}
 						error={addressError}
 						onChange={(value) => {
@@ -72,7 +72,7 @@ const CreateBakeryForm: FC<CreateBakeryFormProps> = ({
 						<p className="text-[var(--main-color)]">Широта</p>
 
 						<ValidatedInput
-							value={coords.latitude.toString()}
+							currentValue={coords.latitude.toString()}
 							validator={(value) => {
 								if (Number.isNaN(parseFloat(value))) {
 									return "Широта должна представлять из себя число"
@@ -100,7 +100,7 @@ const CreateBakeryForm: FC<CreateBakeryFormProps> = ({
 						<p className="text-[var(--main-color)]">Долгота</p>
 
 						<ValidatedInput
-							value={coords.longitude.toString()}
+							currentValue={coords.longitude.toString()}
 							validator={(value) => {
 								if (Number.isNaN(parseFloat(value))) {
 									return "Долгота должна представлять из себя число"

@@ -10,6 +10,7 @@ import {
 	translateCookingMethod,
 	translateIngredient,
 } from "@shared/model/types/enums"
+import Checkbox from "@shared/ui/Checkbox"
 
 interface ItemFilterWindowBaseProps<T> {
 	filterData: T
@@ -30,6 +31,15 @@ const ItemFilterWindowBase = <T extends ItemFilterDataBase>({
 			<h1 className="text-center text-3xl pb-2 text-[var(--main-color)]">
 				Фильтры
 			</h1>
+
+			<Checkbox
+				defaultValue={filterData.onlyFeatured}
+				onValueChanged={(value) =>
+					setFilterData((prev) => ({ ...prev, onlyFeatured: value }))
+				}
+			>
+				Только избранное
+			</Checkbox>
 
 			<FoldableItem
 				width="100%"

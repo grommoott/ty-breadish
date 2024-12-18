@@ -1,4 +1,4 @@
-import { Order, Product } from "@shared/facades"
+import { Bakery, Order, Product } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import Loading from "@shared/ui/Loading"
 import { FC, ReactNode, useEffect, useMemo, useState } from "react"
@@ -12,6 +12,8 @@ import {
 	translateOrderType,
 	translatePickUpOrderState,
 } from "@shared/model/types/enums"
+import { useAppSelector } from "@shared/hooks"
+import { CourierOrderInfo } from "@shared/model/types/primitives"
 
 interface OrderWrapperProps {
 	order: Order
@@ -22,6 +24,25 @@ const OrderWrapper: FC<OrderWrapperProps> = ({ order, deleteButton }) => {
 	const [isLoading, setLoading] = useState(false)
 	const [products, setProducts] = useState<Array<Product>>()
 	const [isCanceled, setCanceled] = useState(false)
+	const { data: bakeriesSerialized } = useAppSelector(
+		(state) => state.bakeries,
+	)
+	const bakeries = useMemo(
+		() =>
+			bakeriesSerialized
+				?.map((bakery) => {
+					const result = Bakery.parse(bakery)
+
+					if (result instanceof ExError) {
+						console.error(result)
+						return
+					}
+
+					return result
+				})
+				.filter((bakery) => bakery != undefined),
+		[bakeriesSerialized],
+	)
 
 	useEffect(() => {
 		;(async () => {
@@ -88,11 +109,41 @@ const OrderWrapper: FC<OrderWrapperProps> = ({ order, deleteButton }) => {
 				</span>
 			</h3>
 
-			{/* <h3 className="text-2xl text-center m-2"> */}
-			{/*              Адрес доставки: */}
-			{/* 	<span className="text-[var(--main-color)]"> */}
-			{/* 	</span> */}
-			{/* </h3> */}
+			<h3 className="text-2xl text-center m-2">
+				{(() => {
+					switch (order.orderType) {
+						case OrderTypes.PickUp:
+							return "Адрес пекарни: "
+
+						case OrderTypes.Courier:
+							return "Адрес доставки: "
+					}
+				})()}
+
+				{bakeries == undefined ? (
+					<div className="pl-2">
+						<Loading />
+					</div>
+				) : (
+					<span className="text-[var(--main-color)]">
+						{(() => {
+							switch (order.orderType) {
+								case OrderTypes.PickUp:
+									return bakeries.find(
+										(bakery) =>
+											bakery.id.id ==
+											(order.orderInfo.bakeryId as any)
+												._id,
+									)?.address
+
+								case OrderTypes.Courier:
+									return (order.orderInfo as CourierOrderInfo)
+										.deliveryAddress
+							}
+						})()}
+					</span>
+				)}
+			</h3>
 
 			<h2 className="text-2xl text-center m-2 text-zinc-600">{status}</h2>
 

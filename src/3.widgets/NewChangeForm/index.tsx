@@ -7,13 +7,17 @@ import {
 } from "@shared/hooks"
 import ImagePicker from "@shared/ui/ImagePicker"
 import Loading from "@shared/ui/Loading"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { ErrorData, FormData } from "./types"
 import { AccentButton } from "@shared/ui/Buttons"
 import { MultilineFlatInput, ValidatedInput } from "@shared/ui/Inputs"
 import { agreeWindow } from "@shared/ui/PopupWindows"
-import { ExError } from "@shared/helpers"
+import { ExError, searchImageIds } from "@shared/helpers"
 import { useNavigate } from "react-router-dom"
+import { ImageId } from "@shared/model/types/primitives"
+import { backendBaseUrl } from "@shared/config"
+import { deleteImage, putImage } from "@shared/api/images"
+import AddImageButton from "@widgets/ItemChangeForm/ui/AddImageButton"
 
 interface NewChangeFormProps {
 	aNew?: New
@@ -106,6 +110,32 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 		}
 	}
 
+	const [images, setImages] = useState<Array<ImageId>>(new Array())
+	const [internalImages, setInternalImages] = useState<Array<ImageId>>(
+		new Array(),
+	)
+	const [externalImages, setExternalImages] = useState<Array<ImageId>>(
+		new Array(),
+	)
+
+	useEffect(() => {
+		setInternalImages(searchImageIds(formData.content || ""))
+	}, [aNew?.content])
+
+	useEffect(() => {
+		const concatedImages = new Array().concat(
+			externalImages,
+			internalImages,
+		)
+
+		setImages(
+			concatedImages.filter(
+				(id, index) =>
+					concatedImages.findIndex((val) => val.id == id.id) == index,
+			),
+		)
+	}, [internalImages, externalImages])
+
 	return (
 		<div
 			className="p-4 my-2 bg-[var(--dark-color)] rounded-3xl flex flex-col items-stretch"
@@ -151,6 +181,54 @@ const NewChangeForm: FC<NewChangeFormProps> = ({ aNew }) => {
 						}
 						className="w-full h-min"
 						autoHeight
+					/>
+				</div>
+
+				<h2>Изображения</h2>
+				<div className="flex flex-row justify-start flex-wrap">
+					{images.map((id, index) => {
+						return (
+							<div
+								className="flex flex-col items-center"
+								key={index}
+							>
+								<p className="text-white">
+									<span className="text-base text-zinc-700 select-none">
+										ID:
+									</span>{" "}
+									{id.id}
+								</p>
+
+								<ImagePicker
+									compact
+									deletable
+									defaultUrl={`${backendBaseUrl}/api/images/id/${id}`}
+									onChange={async (file) => {
+										const response = await putImage(
+											id,
+											file,
+										)
+
+										if (response instanceof ExError) {
+											console.error(response)
+										}
+									}}
+									onDelete={async () => {
+										const response = await deleteImage(id)
+
+										if (response instanceof ExError) {
+											console.error(response)
+										}
+									}}
+								/>
+							</div>
+						)
+					})}
+
+					<AddImageButton
+						onImage={(id) =>
+							setExternalImages(externalImages.concat(id))
+						}
 					/>
 				</div>
 			</div>

@@ -1,7 +1,7 @@
 import { ListProductWrapper } from "@entities/ListItemWrappers"
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
-import { ListProduct } from "@shared/facades"
+import { ListProduct, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import {
 	useAppSelector,
@@ -100,6 +100,7 @@ const ProductsListWidget: FC = () => {
 			minPrice: undefined,
 			maxPrice: undefined,
 			query: "",
+			onlyFeatured: false,
 		}
 
 		if (data != null) {
@@ -123,6 +124,13 @@ const ProductsListWidget: FC = () => {
 		() =>
 			products
 				?.filter(
+					(product) =>
+						!filterData.onlyFeatured ||
+						OwnedUser.instance?.featured?.findIndex(
+							(val) => val.target.id == product.itemId.id,
+						) != -1,
+				)
+				.filter(
 					(product) =>
 						product.price.price <=
 							(filterData.maxPrice || Infinity) &&

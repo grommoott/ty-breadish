@@ -9,6 +9,7 @@ type ItemFilterDataBase = {
     includeIngredients: Array<Ingredient>
     excludeIngredients: Array<Ingredient>
     cookingMethods: Array<CookingMethod>
+    onlyFeatured: boolean
 }
 
 interface FiltersWindowProps<T> {

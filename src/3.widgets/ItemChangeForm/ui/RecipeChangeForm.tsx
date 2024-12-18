@@ -60,11 +60,10 @@ const RecipeChangeForm: FC<RecipeChangeFormProps> = ({ recipe }) => {
 		)
 
 		setImages(
-			concatedImages.filter((id, index) => {
-				return (
-					concatedImages.findIndex((val) => val.id == id.id) == index
-				)
-			}),
+			concatedImages.filter(
+				(id, index) =>
+					concatedImages.findIndex((val) => val.id == id.id) == index,
+			),
 		)
 	}, [internalImages, externalImages])
 

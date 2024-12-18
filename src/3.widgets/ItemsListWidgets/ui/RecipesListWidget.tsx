@@ -17,7 +17,7 @@ import {
 import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
 import { ListRecipeWrapper } from "@entities/ListItemWrappers"
-import { ListRecipe } from "@shared/facades"
+import { ListRecipe, OwnedUser } from "@shared/facades"
 import { ExError } from "@shared/helpers"
 import NewItemButton from "./NewItemButton"
 
@@ -50,6 +50,7 @@ const RecipesListWidget: FC = () => {
 			excludeIngredients: new Array(),
 			cookingMethods: new Array(),
 			query: "",
+			onlyFeatured: false,
 		}
 
 		if (data != null) {
@@ -89,7 +90,14 @@ const RecipesListWidget: FC = () => {
 	const filteredRecipes = useMemo(
 		() =>
 			recipes
-				?.filter((recipe) => {
+				?.filter(
+					(recipe) =>
+						!filterData.onlyFeatured ||
+						OwnedUser.instance?.featured?.findIndex(
+							(val) => val.target.id == recipe.itemId.id,
+						) != -1,
+				)
+				.filter((recipe) => {
 					if (filterData.cookingMethods.length == 0) {
 						return true
 					}

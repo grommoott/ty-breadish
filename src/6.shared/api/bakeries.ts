@@ -28,7 +28,7 @@ async function createBakery(address: string, coords: Coords): Promise<IBakery | 
     try {
         const response = await axios.post(`${backendBaseUrl}/api/bakeries/create`, { address, coords: coords.toNormalView() }, defaultAxiosRequestConfig)
 
-        return response.data
+        return responseDataToBakery(response.data)
     } catch (e) {
         return errorWrapper(e, "createBakery")
     }

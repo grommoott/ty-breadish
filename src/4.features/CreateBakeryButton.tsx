@@ -49,8 +49,6 @@ const CreateBakeryButton: FC<CreateBakeryButtonProps> = ({
 			return
 		}
 
-		console.log(response)
-
 		notificate("Пекарня создана")
 		setLoading(false)
 		onCreate(response)

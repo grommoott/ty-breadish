@@ -3,8 +3,9 @@ import { usePageSize } from "@shared/contexts"
 import { PageSizes } from "@shared/enums"
 import { OwnedUser } from "@shared/facades"
 import { usePopupWindow } from "@shared/hooks"
-import { AccentButton, Button, SimpleButton } from "@shared/ui/Buttons"
+import { Button, SimpleButton } from "@shared/ui/Buttons"
 import { SmallLogo } from "@shared/ui/Logos"
+import { userWindow } from "@shared/ui/PopupWindows"
 import { FC } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -125,51 +126,7 @@ const Header: FC<HeaderProps> = ({ compact = false }) => {
 						<div className="flex flex-row items-center gap-2">
 							<SimpleButton
 								onClick={() => {
-									popupWindow((closeWindow) => {
-										return (
-											<div className="flex flex-col items-center px-2">
-												<Button
-													className="w-full"
-													onClick={() => {
-														navigate("/homePage")
-														closeWindow(undefined)
-													}}
-												>
-													Домашняя страница
-												</Button>
-												<Button
-													className="w-full"
-													onClick={() => {
-														navigate("/basket")
-														closeWindow(undefined)
-													}}
-												>
-													Корзина
-												</Button>
-												<Button
-													className="w-full"
-													onClick={() => {
-														navigate("/orders/list")
-														closeWindow(undefined)
-													}}
-												>
-													Заказы
-												</Button>
-												<AccentButton
-													onClick={async () => {
-														await OwnedUser.instance?.logout()
-														navigate("/", {
-															replace: true,
-														})
-														closeWindow(undefined)
-													}}
-													className="w-full"
-												>
-													Выйти из аккаунта
-												</AccentButton>
-											</div>
-										)
-									})
+									popupWindow(userWindow(navigate))
 								}}
 							>
 								<img

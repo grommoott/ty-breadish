@@ -14,6 +14,7 @@ import {
 	CourierOrderState,
 	CourierOrderStates,
 	OrderTypes,
+	PaymentStatuses,
 	PickUpOrderState,
 	PickUpOrderStates,
 	translateCourierOrderState,
@@ -52,6 +53,13 @@ const OrderManagerWrapper: FC<OrderManagerWrapperProps> = ({
 	)
 
 	const [isChanged, setChanged] = useState(false)
+
+	const isCanceled = useMemo(
+		() =>
+			order.paymentStatus == PaymentStatuses.Canceled ||
+			order.paymentStatus == PaymentStatuses.Refunded,
+		[order],
+	)
 
 	useEffect(() => {
 		;(async () => {
@@ -210,26 +218,32 @@ const OrderManagerWrapper: FC<OrderManagerWrapperProps> = ({
 				)}
 			</div>
 
-			<div className="flex flex-col lg:flex-row items-center justify-around w-full my-4 gap-4 px-4">
-				<div className="flex flex-col sm:flex-row items-center">
-					<p className="text-xl mr-2 text-[var(--main-color)]">
-						Состояние
-					</p>
-					{listBox}
+			{isCanceled ? (
+				<p className="text-zinc-700 text-3xl text-center w-full py-4">
+					Заказ отменён
+				</p>
+			) : (
+				<div className="flex flex-col lg:flex-row items-center justify-around w-full my-4 gap-4 px-4">
+					<div className="flex flex-col sm:flex-row items-center">
+						<p className="text-xl mr-2 text-[var(--main-color)]">
+							Состояние
+						</p>
+						{listBox}
+					</div>
+					<div className="flex flex-col sm:flex-row items-center">
+						<p className="text-xl mr-2 text-[var(--main-color)]">
+							Дата и время готовности
+						</p>
+						<DateTimePicker
+							defaultValue={readyMoment}
+							onChange={(value) => {
+								setReadyMoment(value)
+								setChanged(true)
+							}}
+						/>
+					</div>
 				</div>
-				<div className="flex flex-col sm:flex-row items-center">
-					<p className="text-xl mr-2 text-[var(--main-color)]">
-						Дата и время готовности
-					</p>
-					<DateTimePicker
-						defaultValue={readyMoment}
-						onChange={(value) => {
-							setReadyMoment(value)
-							setChanged(true)
-						}}
-					/>
-				</div>
-			</div>
+			)}
 
 			{isChanged &&
 				changeOrderButton(

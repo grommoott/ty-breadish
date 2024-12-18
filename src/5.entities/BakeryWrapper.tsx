@@ -138,25 +138,27 @@ const BakeryWrapper: FC<BakeryWrapperProps> = ({
 				</div>
 			</div>
 
-			{isEditing ? (
-				changeBakeryButton(
-					bakery,
-					() => address,
-					() => coords,
-					setAddressError,
-					setCoordsError,
-					setEditing,
-				)
-			) : (
-				<AccentButton
-					className="w-full"
-					onClick={() => setEditing(true)}
-				>
-					Изменить
-				</AccentButton>
-			)}
+			<div className="flex flex-col md:flex-row items-center justify-center w-full">
+				{isEditing ? (
+					changeBakeryButton(
+						bakery,
+						() => address,
+						() => coords,
+						setAddressError,
+						setCoordsError,
+						setEditing,
+					)
+				) : (
+					<AccentButton
+						className="w-full"
+						onClick={() => setEditing(true)}
+					>
+						Изменить
+					</AccentButton>
+				)}
 
-			{deleteBakeryButton(bakery)}
+				{deleteBakeryButton(bakery)}
+			</div>
 		</div>
 	)
 }
