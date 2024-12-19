@@ -7,6 +7,7 @@ import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface CreateReviewButtonProps {
 	getRate: () => Rate
@@ -22,6 +23,7 @@ const CreateReviewButton: FC<CreateReviewButtonProps> = ({
 	onReview = () => {},
 }) => {
 	const [isLoading, setLoading] = useState(false)
+	const navigate = useNavigate()
 	const popupWindow = usePopupWindow()
 
 	return (
@@ -31,6 +33,7 @@ const CreateReviewButton: FC<CreateReviewButtonProps> = ({
 					const result = await popupWindow(
 						loginWarningPage(
 							"Чтобы отправить отзыв вы должны зарегистрироваться или войти в аккаунт",
+							navigate,
 						),
 					)
 

@@ -7,6 +7,7 @@ import { Id } from "@shared/model/types/primitives"
 import { SimpleButton } from "@shared/ui/Buttons"
 import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface LikeButtonProps {
 	onChange?: (value: boolean) => void
@@ -30,12 +31,14 @@ const LikeButton: FC<LikeButtonProps> = ({
 	)
 
 	const popupWindow = usePopupWindow()
+	const navigate = useNavigate()
 
 	const onClick = async () => {
 		if (OwnedUser.instance == undefined) {
 			popupWindow(
 				loginWarningPage(
 					"Чтобы поставить лайк вы должны зарегистрироваться или войти в аккаунт",
+					navigate,
 				),
 			)
 			return

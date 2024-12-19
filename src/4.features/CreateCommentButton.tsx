@@ -6,6 +6,7 @@ import { AccentButton } from "@shared/ui/Buttons"
 import Loading from "@shared/ui/Loading"
 import { loginWarningPage } from "@shared/ui/PopupWindows"
 import { FC, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface CreateCommentButton {
 	getContent: () => string
@@ -19,6 +20,7 @@ const CreateCommentButton: FC<CreateCommentButton> = ({
 	target,
 }) => {
 	const popupWindow = usePopupWindow()
+	const navigate = useNavigate()
 	const [isLoading, setLoading] = useState(false)
 
 	return (
@@ -28,6 +30,7 @@ const CreateCommentButton: FC<CreateCommentButton> = ({
 					const result = await popupWindow(
 						loginWarningPage(
 							"Чтобы отправлять комментарии вы должны зарегистрироваться или войти в аккаунт",
+							navigate,
 						),
 					)
 
