@@ -191,10 +191,6 @@ const CommentWrapper: FC<CommentWrapperProps> = ({
 	useEffect(() => {
 		if (isLoadingChildrenComments) {
 			;(async () => {
-				if (isLoadingChildrenComments) {
-					return
-				}
-
 				const comments = await Comment.getCommentsPage(
 					comment.mediaId,
 					sortOrder,
