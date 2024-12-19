@@ -34,6 +34,7 @@ import OrdersListPage from "@pages/OrdersListPage"
 import BakeriesManagementPage from "@pages/BakeriesManagementPage"
 import OrdersManagementPage from "@pages/OrdersManagementPage"
 import { matchPageSize } from "@shared/helpers"
+import CookiesAgree from "@shared/ui/CookiesAgree"
 
 const router = createBrowserRouter([
 	{
@@ -146,6 +147,7 @@ const PageSizeProviderWrapper: FC = () => {
 			<NotificationsProvider>
 				<PopupWindowProvider>
 					<RouterProvider router={router} />
+					<CookiesAgree />
 				</PopupWindowProvider>
 			</NotificationsProvider>
 		</PageSizeProvider>

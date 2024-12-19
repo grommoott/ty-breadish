@@ -20,8 +20,9 @@ const agreeWindow = (content: ReactNode) => {
 
 const loginWarningPage: (
 	text: string,
+	navigate: NavigateFunction,
 ) => (closeWindow: (value: any) => void) => ReactNode =
-	(text) => (closeWindow) => {
+	(text, navigate) => (closeWindow) => {
 		return (
 			<div className="flex flex-col">
 				<p>{text}</p>
@@ -29,7 +30,14 @@ const loginWarningPage: (
 					<Button onClick={() => closeWindow(undefined)}>
 						Не сейчас
 					</Button>
-					<Button onClick={() => closeWindow("login")}>Войти</Button>
+					<Button
+						onClick={() => {
+							navigate("/login")
+							closeWindow("login")
+						}}
+					>
+						Войти
+					</Button>
 				</div>
 			</div>
 		)
@@ -120,8 +128,7 @@ const cookiesAgreeWindow = (closeWindow: (value: any) => void) => {
 	return (
 		<div className="flex flex-col items-center">
 			<p>Мы используем файлы cookie</p>
-			<Button onClick={() => closeWindow(undefined)}>Смириться</Button>
-			<Button onClick={() => window.close()}>Отвергнуть</Button>
+			<Button onClick={() => closeWindow("agreed")}>Смириться</Button>
 		</div>
 	)
 }
