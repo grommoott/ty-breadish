@@ -1,30 +1,31 @@
-# React + TypeScript + Vite
+# "Ty Breadish!" frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Это фронтенд сайта пекарни "Ty Breadish!", здесь представлена информация как о самом проекте в целом, так и о реализации его фронтенд части. Если хотите узнать про бэкенд, то [вот](https://github.com/grommoott/ty-breadish-backend) ссылка на репозиторий.
 
-Currently, two official plugins are available:
+Если хотите ознакомиться с самим сайтом, то прошу перейти по [ссылке](https://ty-breadish.onrender.com/), может долго грузиться из-за особенностей бесплатного тарифа на хостинге.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## "Ty Breadish!"
 
-## Expanding the ESLint configuration
+### Немного истории и цели
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Идея сделать сайт для вымышленной пекарни у меня появилась летом 2024, прямо перед путешествием на алтай, где я тщательно обдумал как он будет выглядеть, сделал зарисовки, придумал дизайн логотипа и т.д. На следующий день после приезда я начал работу. Изначально я рассчитывал на то, что это займёт у меня 2 недели, однако примерно на 10 день, когда я всё ещё писал бэкенд, с которого решил начать, я понял, что не успею и сделал себе ограничение в 1 месяц. Вот, прошло 2 недели, бэкенд уже был написан, но из-за того, что много работал, я выгорел и поэтому фронтенд пришлось писать по 2-3 часа в день, а иногда я его даже не открывал. Работа пошла во второй половине ноября, я начал регулярно работать по 4 часа и через месяц, уже 18 декабря я сделал последний коммит, конечно меня ждал небольшой баг-фикс, но это были уже мелочи.
 
-- Configure the top-level `parserOptions` property like this:
+Для чего же я вообще решил сделать его? Как то раз в июле всё того же 2024 я понял, что часто думаю о том, что в любой момент смогу устроиться на работу в IT лишь при малейшей подготовке(я в целом увлекаюсь IT, так что я думал об этом не на пустом месте, навыки у меня и правда были). Поэтому я решил проверить, смогу ли я устроиться на работу Frontend-разработчиком. Почему именно он? Просто как я считал это была одна из самых простых сфер, сейчас конечно я тоже так считаю, но всё-таки после углубления в тему оказалось, что всё не так просто как я думал тогда. Итак, я выбрал направление, но опыта у меня не было, так что я пошёл его получать, сделав несколько небольших пет-проектов([Flowers](https://github.com/grommoott/flowers), [Mortix](https://github.com/grommoott/mortix), [ZeroToOneItSchool](https://github.com/grommoott/zero-to-one)). Но делать простые одностраничные сайтики для получения реального опыта было мало, так что я решился на создание чего-то большого. Им и стал сайт для "Ty Breadish!".
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Описание проекта
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Проект представляет собой сайт для вымышленной пекарни "Ty Breadish!", здесь есть не только интернет магазин, но и книга рецептов, и лента новостей. Вы можете отправлять отзывы, ставить оценки продуктам и рецептам, писать комментарии, лайкать их, потом лайкать новости, потом отзывы, добавлять продукты и рецепты в избранное и много чего ещё. На сайте реализована админ панель, а также панель заказов для сотрудников пекарни. О деталях реализации написано ниже.
+
+## Frontend
+
+### Используемые технологии
+
+Для реализации фронтенда использовались React + ReduxToolkit + ReactRouter. React был выбран из-за его популярности на рынке(опять же я этот проект делал для трудоустройства), ReduxToolkit по такой же причине. ReactRouter как самый популярный роутер для React'a.
+
+Для экономии времени использовался TailwindCSS, хотя из-за него во многих местах пострадала читабельность кода.
+
+Для создания интерактивных карт использовался немного модифицированный мной Leaflet(кто понял тот понял). Дорабатывать пришлось из-за того, что я попросту не нашёл альтернатив. 
+
+### Пару слов об архитектуре
+
+Слишком много говорить об архитектуре нет смысла, т.к. я использовал FSD(точнее пародию на него) и человек, который знаком с данной методологией сможет разобраться со структурой приложения. Остальные могут ознакомиться по [этой](https://feature-sliced.design/) ссылке.
